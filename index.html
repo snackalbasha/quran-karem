@@ -10,9 +10,15 @@
 <style>
 :root{--bg:#F1EFE7;--paper:#FFFFFF;--page:#FBF7EA;--ink:#16231F;--muted:#62736D;--green:#0A3B34;--green2:#14695F;--deep:#062B26;--gold:#A98228;--gold2:#E3C77F;--line:#E2DDCD;--hl:#E6F0EA;--numbg:#FFFFFF;--fs:30px;--qf:"Amiri Quran",serif;--gg:linear-gradient(135deg,#EBD38F,#B8923A 55%,#8F6F26);--sh:0 1px 2px rgba(10,59,52,.04),0 10px 26px rgba(10,59,52,.08)}
 :root[data-theme="dark"]{--bg:#050E0C;--paper:#0B1814;--page:#09130F;--ink:#ECE8DA;--muted:#93A79F;--green:#08302A;--green2:#2A9484;--deep:#041F1B;--gold:#D8B765;--gold2:#F0D690;--line:#1B2D27;--hl:rgba(216,183,101,.11);--numbg:#0B1814;--gg:linear-gradient(135deg,#F3DFA0,#D8B765 55%,#B08D3C);--sh:0 1px 2px rgba(0,0,0,.3),0 10px 26px rgba(0,0,0,.35)}
+:root{--pink:#1F2A25;--phl:#EFEBD6;--pline:#E3DCC4;--rbg:var(--bg)}
+:root[data-theme="dark"]{--pink:#EDE7D2;--phl:rgba(216,183,101,.11);--pline:#1B2D27}
+:root[data-theme="light"][data-page="sage"]{--page:#EEF4EF;--pink:#12251F;--phl:#DCEBE2;--pline:#CFE0D5;--rbg:#E2EDE6}
+:root[data-theme="light"][data-page="sand"]{--page:#F6EEDC;--pink:#2B2112;--phl:#EBDDBC;--pline:#E1D2AE;--rbg:#EBE1CB}
+:root[data-page="night"]{--page:#0C1B17;--pink:#EFE8D0;--phl:rgba(216,183,101,.14);--pline:#21362F;--rbg:#07110E}
+:root[data-page="black"]{--page:#000000;--pink:#E8E0C6;--phl:rgba(216,183,101,.14);--pline:#1E1E1B;--rbg:#000000}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%}
-body{background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans Arabic","Tajawal",system-ui,sans-serif;font-size:16px;line-height:1.6;padding-top:env(safe-area-inset-top,0px)}
+body{background:radial-gradient(90% 38% at 50% 0%,rgba(20,105,95,.12),transparent 70%) fixed,var(--bg);color:var(--ink);font-family:"IBM Plex Sans Arabic","Tajawal",system-ui,sans-serif;font-size:16px;line-height:1.6;padding-top:env(safe-area-inset-top,0px)}
 button,select,input{font:inherit;color:inherit}
 button{background:none;border:0;cursor:pointer;text-align:start;transition:transform .15s}
 button:active{transform:scale(.985)}
@@ -66,7 +72,7 @@ main{padding:18px 16px calc(116px + env(safe-area-inset-bottom,0px));max-width:7
 .btnl{padding:11px 22px;border-radius:16px;border:1px solid var(--line);margin-top:12px;text-align:center;background:var(--paper)}
 select{width:100%;padding:11px 12px;border-radius:14px;border:1px solid var(--line);background:var(--paper);margin-top:4px}
 input[type=range]{width:100%;accent-color:var(--gold);margin:8px 0}
-.prev{text-align:center;font-family:var(--qf);font-size:var(--fs);line-height:2;padding:6px 0;color:var(--gold)}
+.prev{text-align:center;font-family:var(--qf);font-size:var(--fs);line-height:2;padding:10px;margin-top:8px;border-radius:16px;border:1px solid var(--gold);background:var(--page);color:var(--pink)}
 .sw{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
 .sw:last-child{border-bottom:0}
 .sw input{appearance:none;-webkit-appearance:none;width:48px;height:28px;border-radius:14px;background:var(--line);position:relative;flex:none;cursor:pointer;transition:background .2s}
@@ -88,7 +94,7 @@ input[type=range]{width:100%;accent-color:var(--gold);margin:8px 0}
 
 .ovl{position:fixed;inset:0;background:var(--bg);display:none;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
 .ovl.open{display:flex}
-#reader{z-index:10}
+#reader{z-index:10;background:var(--rbg)}
 #setpage{z-index:25}
 .rbar{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--deep);color:#fff;box-shadow:0 1px 0 rgba(227,199,127,.5)}
 .rbar .t{flex:1;text-align:center;font-family:"Aref Ruqaa",var(--qf);font-weight:700;font-size:23px;color:#F1DFA6}
@@ -97,29 +103,27 @@ input[type=range]{width:100%;accent-color:var(--gold);margin:8px 0}
 #scroll,#setbody{flex:1;overflow:auto;padding:18px 14px 130px}
 #setbody{max-width:720px;width:100%;margin:0 auto}
 .page{--numbg:var(--page);position:relative;max-width:720px;margin:0 auto;background:var(--page);border:1.5px solid var(--gold);border-radius:20px;padding:26px 20px;box-shadow:inset 0 0 0 7px var(--page),inset 0 0 0 8px rgba(176,141,60,.45),0 20px 44px rgba(10,59,52,.14)}
-.shead{position:relative;text-align:center;margin:0 auto 18px;padding:10px 30px 8px;border:1.5px solid var(--gold);border-radius:16px;background:linear-gradient(180deg,var(--hl),transparent)}
+.shead{position:relative;text-align:center;margin:0 auto 18px;padding:10px 30px 8px;border:1.5px solid var(--gold);border-radius:16px;background:linear-gradient(180deg,var(--phl),transparent)}
 .shead .q{display:block;font-family:var(--qf);font-size:32px;color:var(--gold);line-height:1.6}
 .shead small{display:block;color:var(--muted);font-size:12.5px;letter-spacing:.3px}
 .shead:before,.shead:after{content:"";position:absolute;top:50%;width:15px;height:15px;background:var(--gg);transform:translateY(-50%) rotate(45deg);border-radius:3px}
 .shead:before{inset-inline-start:-9px}
 .shead:after{inset-inline-end:-9px}
-.bism{display:flex;align-items:center;justify-content:center;gap:14px;text-align:center;font-family:var(--qf);font-size:calc(var(--fs) + 3px);margin:8px 0 16px;line-height:2;color:var(--ink)}
+.bism{display:flex;align-items:center;justify-content:center;gap:14px;text-align:center;font-family:var(--qf);font-size:calc(var(--fs) + 3px);margin:8px 0 16px;line-height:2;color:var(--pink)}
 .bism:before,.bism:after{content:"";flex:1;height:1px;background:var(--gold);opacity:.45}
-.text{font-family:var(--qf);font-size:var(--fs);line-height:2.55;text-align:justify;text-align-last:center;word-spacing:2px;color:var(--ink)}
+.text{font-family:var(--qf);font-size:var(--fs);line-height:2.55;text-align:justify;text-align-last:center;word-spacing:2px;color:var(--pink)}
 .text.inl{text-align:start;text-align-last:auto}
-.ayb{padding:14px 14px;margin:12px 0;border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,var(--hl),transparent 70%)}
+.ayb{padding:14px 14px;margin:12px 0;border:1px solid var(--pline);border-radius:22px;background:linear-gradient(180deg,var(--phl),transparent 70%)}
 .ayb .ay{display:block}
-.trn{font-family:"IBM Plex Sans Arabic","Tajawal",sans-serif;font-size:16px;line-height:1.85;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px dashed var(--line)}
+.trn{font-family:"IBM Plex Sans Arabic","Tajawal",sans-serif;font-size:16px;line-height:1.85;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px dashed var(--pline)}
 .pgm{display:flex;align-items:center;gap:10px;color:var(--gold);font-family:"IBM Plex Sans Arabic","Tajawal",sans-serif;font-size:12.5px;margin:16px 0;line-height:1.8}
-.pgm:before,.pgm:after{content:"";flex:1;height:1px;background:var(--line)}
+.pgm:before,.pgm:after{content:"";flex:1;height:1px;background:var(--pline)}
 .pgm span+span:before{content:"✦";margin-inline-end:10px}
 .ay{border-radius:12px;padding:2px 0;cursor:pointer;transition:background .25s,box-shadow .25s}
-.ay.playing{background:var(--hl);box-shadow:0 0 0 5px var(--hl)}
+.ay.playing{background:var(--phl);box-shadow:0 0 0 5px var(--phl)}
 .num{position:relative;display:inline-grid;place-items:center;width:2.2em;height:2.2em;margin:0 .4em;vertical-align:middle;background:var(--gg);clip-path:polygon(50.0% 0.0%,64.2% 15.8%,85.4% 14.6%,84.2% 35.8%,100.0% 50.0%,84.2% 64.2%,85.4% 85.4%,64.2% 84.2%,50.0% 100.0%,35.8% 84.2%,14.6% 85.4%,15.8% 64.2%,0.0% 50.0%,15.8% 35.8%,14.6% 14.6%,35.8% 15.8%);font-size:.46em;line-height:1;font-family:"IBM Plex Sans Arabic","Tajawal",sans-serif;font-weight:600}
 .num:before{content:"";position:absolute;inset:2px;background:var(--numbg);clip-path:polygon(50.0% 0.0%,64.2% 15.8%,85.4% 14.6%,84.2% 35.8%,100.0% 50.0%,84.2% 64.2%,85.4% 85.4%,64.2% 84.2%,50.0% 100.0%,35.8% 84.2%,14.6% 85.4%,15.8% 64.2%,0.0% 50.0%,15.8% 35.8%,14.6% 14.6%,35.8% 15.8%)}
 .num i{position:relative;font-style:normal;color:var(--gold)}
-.fab{position:fixed;bottom:calc(98px + env(safe-area-inset-bottom,0px));inset-inline-start:20px;width:62px;height:62px;border-radius:50%;background:var(--gg);color:#1A1405;font-size:22px;box-shadow:0 12px 26px rgba(0,0,0,.35);z-index:12;display:none;place-items:center;text-align:center}
-#reader.open ~ .fab{display:grid}
 #sheet{--numbg:var(--paper);position:fixed;inset-inline:0;bottom:0;background:var(--paper);border-radius:32px 32px 0 0;border-top:1.5px solid var(--gold);padding:14px 18px calc(18px + env(safe-area-inset-bottom,0px));z-index:20;max-height:82%;overflow:auto;transform:translateY(105%);transition:transform .3s cubic-bezier(.2,.8,.2,1);box-shadow:0 -24px 60px rgba(0,0,0,.3)}
 #sheet.open{transform:none}
 .grab{width:46px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 12px}
@@ -136,6 +140,15 @@ input[type=range]{width:100%;accent-color:var(--gold);margin:8px 0}
 .msg button{margin-top:12px;padding:10px 22px;border-radius:16px;background:var(--green2);color:#fff}
 .note{font-size:12.5px;color:var(--muted);text-align:center;padding:16px 8px}
 #toast{position:fixed;bottom:calc(104px + env(safe-area-inset-bottom,0px));inset-inline:20px;margin:auto;max-width:360px;background:var(--deep);color:#F6E8BC;border:1px solid rgba(227,199,127,.4);padding:11px 18px;border-radius:18px;text-align:center;z-index:40;display:none;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.player{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));display:none;align-items:center;gap:4px;padding:8px 12px;border-radius:36px;background:var(--deep);border:1px solid rgba(227,199,127,.55);box-shadow:0 18px 40px rgba(0,0,0,.42);z-index:12;color:#F1DFA6;white-space:nowrap}
+#reader.open ~ .player{display:flex}
+.player button{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;text-align:center}
+.player .pp{width:56px;height:56px;background:var(--gg);color:#1A1405;box-shadow:0 6px 16px rgba(0,0,0,.35)}
+.player .pp svg{width:26px;height:26px}
+.plab{min-width:78px;padding:0 10px;font-size:13px;color:#F6E8BC;text-align:center}
+.swatches{display:flex;gap:12px;margin-top:8px}
+.swatches button{width:42px;height:42px;border-radius:50%;border:2px solid var(--line);box-shadow:inset 0 0 0 3px var(--paper);padding:0}
+.swatches button.on{border-color:var(--gold);box-shadow:inset 0 0 0 3px var(--paper),0 0 0 3px rgba(169,130,40,.25)}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -169,7 +182,12 @@ input[type=range]{width:100%;accent-color:var(--gold);margin:8px 0}
   </div>
   <div id="setbody"></div>
 </section>
-<button class="fab" id="fab" aria-label="Play">▶</button>
+<div class="player" id="player" dir="ltr">
+  <button id="pPrev" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M6 5v14"/><path d="M18 5L9 12l9 7z" fill="currentColor"/></svg></button>
+  <button class="pp" id="pPlay" aria-label="Play"><svg viewBox="0 0 24 24" id="pIcon"><path d="M8 5v14l11-7z" fill="currentColor" stroke="none"/></svg></button>
+  <button id="pNext" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M18 5v14"/><path d="M6 5l9 7-9 7z" fill="currentColor"/></svg></button>
+  <span class="plab" id="plab"></span>
+</div>
 <div class="shade" id="shade"></div>
 <div id="sheet" role="dialog"></div>
 <div id="toast"></div>
@@ -188,15 +206,16 @@ async set(k,v){try{const d=await this.open();await new Promise(res=>{const t=d.t
 async clear(){try{const d=await this.open();await new Promise(res=>{const t=d.transaction("c","readwrite");t.objectStore("c").clear();t.oncomplete=res;t.onerror=res})}catch(e){}}};
 
 /* ---------- الإعدادات ---------- */
-const S=Object.assign({lang:"ar",theme:ls.get("q_theme","light"),font:"Amiri Quran",fs:ls.get("q_fs",30),trans:"none",inline:false,pg:true,rec:ls.get("q_rec","ar.alafasy"),wake:false,auto:true},ls.get("q_set",{}));
+const S=Object.assign({lang:"ar",theme:ls.get("q_theme","light"),font:"Amiri Quran",fs:ls.get("q_fs",30),trans:"none",inline:false,pg:true,rec:ls.get("q_rec","ar.alafasy"),wake:false,auto:true,page:"ivory"},ls.get("q_set",{}));
 const saveS=()=>ls.set("q_set",S);
 const T={
-ar:{title:"القرآن الكريم",ph:"ابحث عن سورة أو كلمة من آية",tS:"السور",tA:"الأذكار",tP:"الصلاة",tK:"الختمة",tB:"المحفوظات",juz:"الأجزاء",juzN:"الجزء {n}",juzStart:"يبدأ من سورة {s}، الآية {a}",meccan:"مكية",medinan:"مدنية",ayahs:"{n} آية",offTitle:"القراءة بدون إنترنت",offDone:"المصحف كاملاً محمّل على جهازك",dlSmall:"للقراءة بدون إنترنت",dlTitle:"تحميل المصحف كاملاً",dlProg:"جارٍ التحميل",dlInc:"لم تكتمل بعض السور. أعد المحاولة عند توفر اتصال أفضل.",resume:"متابعة القراءة",resumeAt:"الآية {a}",searchIn:"ابحث عن «{q}» داخل الآيات",noRes:"لا توجد نتائج.",searching:"جارٍ البحث…",searchFail:"تعذر البحث. تأكد من اتصالك بالإنترنت.",loading:"جارٍ التحميل…",netFail:"تعذر التحميل. تأكد من اتصالك بالإنترنت.",retry:"إعادة المحاولة",surahFail:"تعذر تحميل السورة. تأكد من اتصالك بالإنترنت.",page:"صفحة {n}",tafsir:"التفسير الميسر",transH:"الترجمة",reciter:"القارئ",listen:"استماع",save:"حفظ",unsave:"إزالة الحفظ",copy:"نسخ",copied:"تم النسخ",copyFail:"تعذر النسخ",noMarks:"لا توجد آيات محفوظة بعد.<br>اضغط على أي آية ثم اختر «حفظ».",markName:"{s} - الآية {a}",audioFail:"تعذر تشغيل التلاوة. تأكد من الاتصال أو غيّر القارئ.",note:"النص: المصحف العثماني (برواية حفص عن عاصم). التفسير: التفسير الميسر، مجمع الملك فهد لطباعة المصحف الشريف.",adhM:"أذكار الصباح",adhE:"أذكار المساء",rep:"التكرار: {n}",once:"مرة واحدة",resetC:"إعادة العدّاد",adhNote:"اضغط على الذكر لإنقاص العدّاد. الأذكار من حصن المسلم، وآية الكرسي والمعوذات من نص المصحف.",needNet:"يتطلب اتصالاً بالإنترنت أو تحميل المصحف.",calc:"طريقة الحساب",mUmm:"أم القرى (مكة المكرمة)",mMwl:"رابطة العالم الإسلامي",mEgy:"الهيئة المصرية العامة للمساحة",locBtn:"تحديد موقعي",locUpd:"تحديث موقعي",geoUn:"المتصفح لا يدعم تحديد الموقع",geoFail:"تعذر تحديد الموقع. اسمح للمتصفح بالوصول إلى موقعك.",locHint:"اضغط «تحديد موقعي» لعرض أوقات الصلاة واتجاه القبلة.",ptFail:"تعذر جلب الأوقات. تأكد من اتصالك بالإنترنت.",next:"الصلاة القادمة: {p}",ptNote:"لا يمكن لصفحة ويب إصدار الأذان وهي مغلقة، فاستخدم منبّه الهاتف للتنبيه.",p_Fajr:"الفجر",p_Sunrise:"الشروق",p_Dhuhr:"الظهر",p_Asr:"العصر",p_Maghrib:"المغرب",p_Isha:"العشاء",am:"ص",pm:"م",qibla:"اتجاه القبلة",deg:"{n}° من الشمال",cmpOn:"تشغيل البوصلة",cmpRun:"البوصلة تعمل",cmpNote:"ضع الهاتف أفقياً بعيداً عن المعادن. السهم يشير إلى القبلة.",cmpFail:"تعذر تشغيل البوصلة على هذا الجهاز",khPlan:"خطة الختمة",khQ:"في كم يوماً تريد أن تختم القرآن؟",days:"{n} يوماً",khStart:"ابدأ الختمة",khDay:"ورد اليوم {d} من {t} ({n} آية)",khFrom:"من {s} آية {a}",khTo:"إلى {s} آية {a}",khGo:"ابدأ من هنا",khDone:"انتهت مدة الخطة",khProg:"تقدمك في المصحف حسب آخر موضع قرأته",khCancel:"إلغاء الخطة",set:"الإعدادات",sLang:"اللغة",sTheme:"المظهر",thL:"فاتح",thD:"داكن",thA:"تلقائي",sFont:"خط المصحف",sSize:"حجم الخط",sTrans:"ترجمة معاني القرآن",sInline:"عرض الترجمة تحت كل آية",sPg:"إظهار أرقام الصفحات والأجزاء",sWake:"إبقاء الشاشة مضاءة أثناء القراءة",sAuto:"الانتقال تلقائياً للآية التالية عند التلاوة",sReset:"حذف البيانات المحفوظة",sResetQ:"سيتم حذف المحفوظات والمصحف المحمّل والإعدادات. هل تريد المتابعة؟",off:"بدون"},
-en:{title:"The Noble Quran",ph:"Search a surah or a word in the verses",tS:"Surahs",tA:"Adhkar",tP:"Prayer",tK:"Khatma",tB:"Saved",juz:"Juz",juzN:"Juz {n}",juzStart:"Starts at {s}, verse {a}",meccan:"Meccan",medinan:"Medinan",ayahs:"{n} verses",offTitle:"Offline reading",offDone:"The full Quran is saved on your device",dlSmall:"For offline reading",dlTitle:"Download the full Quran",dlProg:"Downloading",dlInc:"Some surahs did not finish. Try again with a better connection.",resume:"Continue reading",resumeAt:"Verse {a}",searchIn:"Search for “{q}” in the verses",noRes:"No results.",searching:"Searching…",searchFail:"Search failed. Check your connection.",loading:"Loading…",netFail:"Could not load. Check your connection.",retry:"Try again",surahFail:"Could not load this surah. Check your connection.",page:"Page {n}",tafsir:"Al-Tafsir Al-Muyassar (Arabic)",transH:"Translation",reciter:"Reciter",listen:"Listen",save:"Save",unsave:"Remove",copy:"Copy",copied:"Copied",copyFail:"Could not copy",noMarks:"Nothing saved yet.<br>Tap any verse, then choose “Save”.",markName:"{s} - Verse {a}",audioFail:"Could not play the recitation. Check your connection or change the reciter.",note:"Text: Uthmani script (Hafs from Asim). Tafsir: Al-Muyassar, King Fahd Complex for the Printing of the Holy Quran.",adhM:"Morning adhkar",adhE:"Evening adhkar",rep:"Repeat: {n}",once:"Once",resetC:"Reset counter",adhNote:"Tap a dhikr to count down. Adhkar are from Hisn al-Muslim; Ayat al-Kursi and the Mu'awwidhat come from the Quran text.",needNet:"Needs an internet connection or the downloaded Quran.",calc:"Calculation method",mUmm:"Umm al-Qura (Makkah)",mMwl:"Muslim World League",mEgy:"Egyptian General Authority of Survey",locBtn:"Find my location",locUpd:"Update my location",geoUn:"Location is not supported",geoFail:"Could not get your location. Allow location access for your browser.",locHint:"Tap “Find my location” to see prayer times and the qibla direction.",ptFail:"Could not load prayer times. Check your connection.",next:"Next prayer: {p}",ptNote:"A web page cannot play the adhan while closed. Use your phone alarm for reminders.",p_Fajr:"Fajr",p_Sunrise:"Sunrise",p_Dhuhr:"Dhuhr",p_Asr:"Asr",p_Maghrib:"Maghrib",p_Isha:"Isha",am:"AM",pm:"PM",qibla:"Qibla direction",deg:"{n}° from north",cmpOn:"Start compass",cmpRun:"Compass running",cmpNote:"Hold the phone flat, away from metal. The arrow points to the qibla.",cmpFail:"The compass is not available on this device",khPlan:"Khatma plan",khQ:"In how many days do you want to finish the Quran?",days:"{n} days",khStart:"Start",khDay:"Day {d} of {t} ({n} verses)",khFrom:"From {s}, verse {a}",khTo:"To {s}, verse {a}",khGo:"Start here",khDone:"The plan has ended",khProg:"Your progress, based on your last reading position",khCancel:"Cancel plan",set:"Settings",sLang:"Language",sTheme:"Appearance",thL:"Light",thD:"Dark",thA:"Auto",sFont:"Quran font",sSize:"Text size",sTrans:"Translation of the meanings",sInline:"Show translation under each verse",sPg:"Show page and juz markers",sWake:"Keep the screen on while reading",sAuto:"Play the next verse automatically",sReset:"Delete saved data",sResetQ:"This will delete your saved verses, the downloaded Quran and your settings. Continue?",off:"Off"}
+ar:{title:"القرآن الكريم",ph:"ابحث عن سورة أو كلمة من آية",tS:"السور",tA:"الأذكار",tP:"الصلاة",tK:"الختمة",tB:"المحفوظات",juz:"الأجزاء",juzN:"الجزء {n}",juzStart:"يبدأ من سورة {s}، الآية {a}",meccan:"مكية",medinan:"مدنية",ayahs:"{n} آية",offTitle:"القراءة بدون إنترنت",offDone:"المصحف كاملاً محمّل على جهازك",dlSmall:"للقراءة بدون إنترنت",dlTitle:"تحميل المصحف كاملاً",dlProg:"جارٍ التحميل",dlInc:"لم تكتمل بعض السور. أعد المحاولة عند توفر اتصال أفضل.",resume:"متابعة القراءة",resumeAt:"الآية {a}",searchIn:"ابحث عن «{q}» داخل الآيات",noRes:"لا توجد نتائج.",searching:"جارٍ البحث…",searchFail:"تعذر البحث. تأكد من اتصالك بالإنترنت.",loading:"جارٍ التحميل…",netFail:"تعذر التحميل. تأكد من اتصالك بالإنترنت.",retry:"إعادة المحاولة",surahFail:"تعذر تحميل السورة. تأكد من اتصالك بالإنترنت.",page:"صفحة {n}",tafsir:"التفسير الميسر",transH:"الترجمة",reciter:"القارئ",listen:"استماع",save:"حفظ",unsave:"إزالة الحفظ",copy:"نسخ",copied:"تم النسخ",copyFail:"تعذر النسخ",noMarks:"لا توجد آيات محفوظة بعد.<br>اضغط على أي آية ثم اختر «حفظ».",markName:"{s} - الآية {a}",audioFail:"تعذر تشغيل التلاوة. تأكد من الاتصال أو غيّر القارئ.",note:"النص: المصحف العثماني (برواية حفص عن عاصم). التفسير: التفسير الميسر، مجمع الملك فهد لطباعة المصحف الشريف.",adhM:"أذكار الصباح",adhE:"أذكار المساء",rep:"التكرار: {n}",once:"مرة واحدة",resetC:"إعادة العدّاد",adhNote:"اضغط على الذكر لإنقاص العدّاد. الأذكار من حصن المسلم، وآية الكرسي والمعوذات من نص المصحف.",needNet:"يتطلب اتصالاً بالإنترنت أو تحميل المصحف.",calc:"طريقة الحساب",mUmm:"أم القرى (مكة المكرمة)",mMwl:"رابطة العالم الإسلامي",mEgy:"الهيئة المصرية العامة للمساحة",locBtn:"تحديد موقعي",locUpd:"تحديث موقعي",geoUn:"المتصفح لا يدعم تحديد الموقع",geoFail:"تعذر تحديد الموقع. اسمح للمتصفح بالوصول إلى موقعك.",locHint:"اضغط «تحديد موقعي» لعرض أوقات الصلاة واتجاه القبلة.",ptFail:"تعذر جلب الأوقات. تأكد من اتصالك بالإنترنت.",next:"الصلاة القادمة: {p}",ptNote:"لا يمكن لصفحة ويب إصدار الأذان وهي مغلقة، فاستخدم منبّه الهاتف للتنبيه.",p_Fajr:"الفجر",p_Sunrise:"الشروق",p_Dhuhr:"الظهر",p_Asr:"العصر",p_Maghrib:"المغرب",p_Isha:"العشاء",am:"ص",pm:"م",qibla:"اتجاه القبلة",deg:"{n}° من الشمال",cmpOn:"تشغيل البوصلة",cmpRun:"البوصلة تعمل",cmpNote:"ضع الهاتف أفقياً بعيداً عن المعادن. السهم يشير إلى القبلة.",cmpFail:"تعذر تشغيل البوصلة على هذا الجهاز",khPlan:"خطة الختمة",khQ:"في كم يوماً تريد أن تختم القرآن؟",days:"{n} يوماً",khStart:"ابدأ الختمة",khDay:"ورد اليوم {d} من {t} ({n} آية)",khFrom:"من {s} آية {a}",khTo:"إلى {s} آية {a}",khGo:"ابدأ من هنا",khDone:"انتهت مدة الخطة",khProg:"تقدمك في المصحف حسب آخر موضع قرأته",khCancel:"إلغاء الخطة",set:"الإعدادات",sLang:"اللغة",sTheme:"المظهر",thL:"فاتح",thD:"داكن",thA:"تلقائي",sFont:"خط المصحف",sSize:"حجم الخط",sTrans:"ترجمة معاني القرآن",sInline:"عرض الترجمة تحت كل آية",sPg:"إظهار أرقام الصفحات والأجزاء",sWake:"إبقاء الشاشة مضاءة أثناء القراءة",sAuto:"الانتقال تلقائياً للآية التالية عند التلاوة",sReset:"حذف البيانات المحفوظة",sResetQ:"سيتم حذف المحفوظات والمصحف المحمّل والإعدادات. هل تريد المتابعة؟",off:"بدون",sPage:"خلفية القراءة",listenOne:"استماع لهذه الآية فقط",listenFrom:"تشغيل متواصل من هنا"},
+en:{title:"The Noble Quran",ph:"Search a surah or a word in the verses",tS:"Surahs",tA:"Adhkar",tP:"Prayer",tK:"Khatma",tB:"Saved",juz:"Juz",juzN:"Juz {n}",juzStart:"Starts at {s}, verse {a}",meccan:"Meccan",medinan:"Medinan",ayahs:"{n} verses",offTitle:"Offline reading",offDone:"The full Quran is saved on your device",dlSmall:"For offline reading",dlTitle:"Download the full Quran",dlProg:"Downloading",dlInc:"Some surahs did not finish. Try again with a better connection.",resume:"Continue reading",resumeAt:"Verse {a}",searchIn:"Search for “{q}” in the verses",noRes:"No results.",searching:"Searching…",searchFail:"Search failed. Check your connection.",loading:"Loading…",netFail:"Could not load. Check your connection.",retry:"Try again",surahFail:"Could not load this surah. Check your connection.",page:"Page {n}",tafsir:"Al-Tafsir Al-Muyassar (Arabic)",transH:"Translation",reciter:"Reciter",listen:"Listen",save:"Save",unsave:"Remove",copy:"Copy",copied:"Copied",copyFail:"Could not copy",noMarks:"Nothing saved yet.<br>Tap any verse, then choose “Save”.",markName:"{s} - Verse {a}",audioFail:"Could not play the recitation. Check your connection or change the reciter.",note:"Text: Uthmani script (Hafs from Asim). Tafsir: Al-Muyassar, King Fahd Complex for the Printing of the Holy Quran.",adhM:"Morning adhkar",adhE:"Evening adhkar",rep:"Repeat: {n}",once:"Once",resetC:"Reset counter",adhNote:"Tap a dhikr to count down. Adhkar are from Hisn al-Muslim; Ayat al-Kursi and the Mu'awwidhat come from the Quran text.",needNet:"Needs an internet connection or the downloaded Quran.",calc:"Calculation method",mUmm:"Umm al-Qura (Makkah)",mMwl:"Muslim World League",mEgy:"Egyptian General Authority of Survey",locBtn:"Find my location",locUpd:"Update my location",geoUn:"Location is not supported",geoFail:"Could not get your location. Allow location access for your browser.",locHint:"Tap “Find my location” to see prayer times and the qibla direction.",ptFail:"Could not load prayer times. Check your connection.",next:"Next prayer: {p}",ptNote:"A web page cannot play the adhan while closed. Use your phone alarm for reminders.",p_Fajr:"Fajr",p_Sunrise:"Sunrise",p_Dhuhr:"Dhuhr",p_Asr:"Asr",p_Maghrib:"Maghrib",p_Isha:"Isha",am:"AM",pm:"PM",qibla:"Qibla direction",deg:"{n}° from north",cmpOn:"Start compass",cmpRun:"Compass running",cmpNote:"Hold the phone flat, away from metal. The arrow points to the qibla.",cmpFail:"The compass is not available on this device",khPlan:"Khatma plan",khQ:"In how many days do you want to finish the Quran?",days:"{n} days",khStart:"Start",khDay:"Day {d} of {t} ({n} verses)",khFrom:"From {s}, verse {a}",khTo:"To {s}, verse {a}",khGo:"Start here",khDone:"The plan has ended",khProg:"Your progress, based on your last reading position",khCancel:"Cancel plan",set:"Settings",sLang:"Language",sTheme:"Appearance",thL:"Light",thD:"Dark",thA:"Auto",sFont:"Quran font",sSize:"Text size",sTrans:"Translation of the meanings",sInline:"Show translation under each verse",sPg:"Show page and juz markers",sWake:"Keep the screen on while reading",sAuto:"Play the next verse automatically",sReset:"Delete saved data",sResetQ:"This will delete your saved verses, the downloaded Quran and your settings. Continue?",off:"Off",sPage:"Reading background",listenOne:"Listen to this verse only",listenFrom:"Play continuously from here"}
 };
 const t=(k,v)=>{let s=(T[S.lang]&&T[S.lang][k])||T.ar[k]||k;if(v)for(const x in v)s=s.replace("{"+x+"}",v[x]);return s};
 const N=n=>S.lang==="ar"?AR(n):String(n);
 const TR=[["none","","ltr"],["en.sahih","English — Saheeh International","ltr"],["fr.hamidullah","Français — Hamidullah","ltr"],["tr.diyanet","Türkçe — Diyanet","ltr"],["ur.jalandhry","اردو — جالندھری","rtl"],["id.indonesian","Bahasa Indonesia","ltr"],["es.cortes","Español — Cortes","ltr"],["de.bubenheim","Deutsch — Bubenheim","ltr"],["ru.kuliev","Русский — Кулиев","ltr"]];
+const PAGES=[["ivory","#FBF7EA"],["sage","#EEF4EF"],["sand","#F6EEDC"],["night","#0C1B17"],["black","#000000"]];
 const FONTS=[["Amiri Quran","أميري قرآن"],["Scheherazade New","شهرزاد"],["Noto Naskh Arabic","نسخ"]];
 const RECS=[["ar.alafasy","مشاري العفاسي"],["ar.abdurrahmaansudais","عبد الرحمن السديس"],["ar.saoodshuraym","سعود الشريم"],["ar.mahermuaiqly","ماهر المعيقلي"],["ar.husary","محمود خليل الحصري"],["ar.minshawi","محمد صديق المنشاوي"],["ar.abdulbasitmurattal","عبد الباسط عبد الصمد"],["ar.hudhaify","علي الحذيفي"]];
 const JUZ=[[1,1],[2,142],[2,253],[3,93],[4,24],[4,148],[5,82],[6,111],[7,88],[8,41],[9,93],[11,6],[12,53],[15,2],[17,1],[18,75],[21,1],[23,1],[25,21],[27,56],[29,46],[33,31],[36,28],[39,32],[41,47],[46,1],[51,31],[58,1],[67,1],[78,1]];
@@ -211,6 +230,7 @@ function applyLook(){
   r.lang=S.lang;r.dir=S.lang==="ar"?"rtl":"ltr";
   r.style.setProperty("--fs",S.fs+"px");
   r.style.setProperty("--qf",`"${S.font}",serif`);
+  r.dataset.page=S.page;
   applyTheme();
   $("#appT").textContent=t("title");
   $("#q").placeholder=t("ph");
@@ -309,7 +329,7 @@ async function wakeOn(){try{if(S.wake&&navigator.wakeLock)wl=await navigator.wak
 function wakeOff(){try{wl&&wl.release()}catch(e){}wl=null}
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&cur)wakeOn()});
 
-async function openSurah(n,ayah){
+async function openSurah(n,ayah,autoPlay){
   stop();closeSheet();
   $("#reader").classList.add("open");
   const sc=$("#scroll");sc.innerHTML=`<div class="msg">${t("loading")}</div>`;
@@ -339,6 +359,7 @@ async function openSurah(n,ayah){
     sc.querySelectorAll(".ay").forEach(el=>el.onclick=()=>openSheet(+el.dataset.k));
     sc.scrollTop=0;
     if(ayah){const el=sc.querySelector(`[data-k="${ayah-1}"]`);if(el)el.scrollIntoView({block:"center"})}
+    if(autoPlay){single=false;startAt(0,0)}
   }catch(e){sc.innerHTML=`<div class="msg">${t("surahFail")}<br><button id="r2">${t("retry")}</button></div>`;$("#r2").onclick=()=>openSurah(n,ayah)}
 }
 let st;
@@ -355,9 +376,10 @@ function bindRec(){$("#recSel").onchange=e=>{S.rec=e.target.value;saveS()}}
 function openSheet(k){
   const a=cur.ayahs[k];saveLast(k);
   const dirT=(TR.find(x=>x[0]===S.trans)||[])[2]||"ltr";
-  $("#sheet").innerHTML=`<div class="grab"></div><div class="at q">${esc(a.text)} <span class="num"><i>${AR(a.i)}</i></span></div><div class="box"><h3>${t("tafsir")}</h3><p class="q">${esc(a.tafsir)}</p></div>${a.tr?`<div class="box"><h3>${t("transH")}</h3><p dir="${dirT}">${esc(a.tr)}</p></div>`:""}<div class="box">${recSelect()}</div><div class="acts"><button class="pri" id="aPlay">${t("listen")}</button><button id="aMark">${isMarked(k)?t("unsave"):t("save")}</button><button id="aCopy">${t("copy")}</button></div>`;
+  $("#sheet").innerHTML=`<div class="grab"></div><div class="at q">${esc(a.text)} <span class="num"><i>${AR(a.i)}</i></span></div><div class="box"><h3>${t("tafsir")}</h3><p class="q">${esc(a.tafsir)}</p></div>${a.tr?`<div class="box"><h3>${t("transH")}</h3><p dir="${dirT}">${esc(a.tr)}</p></div>`:""}<div class="box">${recSelect()}</div><div class="acts"><button class="pri" id="aOne">${t("listenOne")}</button><button id="aPlay">${t("listenFrom")}</button><button id="aMark">${isMarked(k)?t("unsave"):t("save")}</button><button id="aCopy">${t("copy")}</button></div>`;
   showSheet();bindRec();
-  $("#aPlay").onclick=()=>{closeSheet();play(k)};
+  $("#aOne").onclick=()=>{closeSheet();single=true;startAt(k,0)};
+  $("#aPlay").onclick=()=>{closeSheet();single=false;startAt(k,0)};
   $("#aMark").onclick=()=>{
     if(isMarked(k))marks=marks.filter(b=>!(b.s===cur.n&&b.a===a.i));
     else marks.unshift({s:cur.n,a:a.i,name:`${cur.name} - ${AR(a.i)}`,text:a.text});
@@ -371,26 +393,71 @@ $("#shade").onclick=closeSheet;
 
 /* ---------- التلاوة ---------- */
 const BR=[128,192,64];
-function markAy(k){document.querySelectorAll(".ay.playing").forEach(e=>e.classList.remove("playing"));if(k>=0){const el=document.querySelector(`.ay[data-k="${k}"]`);if(el){el.classList.add("playing");el.scrollIntoView({block:"center",behavior:"smooth"})}}}
-function play(k,a){
-  if(!cur||k>=cur.ayahs.length){stop();return}
-  playing=k;att=a||0;markAy(k);saveLast(k);
-  audio.src=`${CDN}${BR[att]}/${S.rec}/${cur.ayahs[k].num}.mp3`;
-  audio.play().then(()=>{$("#fab").textContent="❚❚"}).catch(()=>{});
+let single=false;
+const IC_PLAY='<path d="M8 5v14l11-7z" fill="currentColor" stroke="none"/>',IC_PAUSE='<path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor" stroke="none"/>';
+const urlG=(g,a)=>`${CDN}${BR[a]}/${S.rec}/${g}.mp3`;
+const pre={};
+async function prefetch(g,a){
+  const key=S.rec+":"+g;
+  if(g>6236||(key in pre))return;
+  pre[key]=null;
+  try{const r=await fetch(urlG(g,a));if(!r.ok)throw 0;pre[key]=URL.createObjectURL(await r.blob())}catch(e){pre[key]=false}
 }
-function stop(){audio.pause();playing=-1;markAy(-1);$("#fab").textContent="▶"}
-audio.onended=()=>{if(S.auto)play(playing+1);else stop()};
+function clearPre(g){for(const key in pre){const n=+key.split(":")[1];if(n<g){if(typeof pre[key]==="string")URL.revokeObjectURL(pre[key]);delete pre[key]}}}
+function markAy(k){document.querySelectorAll(".ay.playing").forEach(e=>e.classList.remove("playing"));if(k>=0){const el=document.querySelector(`.ay[data-k="${k}"]`);if(el){el.classList.add("playing");el.scrollIntoView({block:"center",behavior:"smooth"})}}}
+function updPlayer(){
+  const on=playing>=0&&!audio.paused;
+  $("#pIcon").innerHTML=on?IC_PAUSE:IC_PLAY;
+  $("#plab").textContent=(playing>=0&&cur)?t("resumeAt",{a:N(cur.ayahs[playing].i)}):"";
+}
+function setMedia(){
+  if(!("mediaSession" in navigator)||!cur)return;
+  try{
+    navigator.mediaSession.metadata=new MediaMetadata({title:cur.name,artist:(RECS.find(r=>r[0]===S.rec)||[])[1]||"",album:t("title")});
+    navigator.mediaSession.setActionHandler("play",playPause);
+    navigator.mediaSession.setActionHandler("pause",playPause);
+    navigator.mediaSession.setActionHandler("nexttrack",()=>jump(1));
+    navigator.mediaSession.setActionHandler("previoustrack",()=>jump(-1));
+  }catch(e){}
+}
+function startAt(k,a){
+  if(!cur)return;
+  playing=k;att=a||0;markAy(k);saveLast(k);setMedia();
+  const g=cur.ayahs[k].num;
+  audio.src=pre[S.rec+":"+g]||urlG(g,att);
+  audio.play().catch(()=>{});
+  updPlayer();
+  if(!single){prefetch(g+1,att);prefetch(g+2,att)}
+  clearPre(g);
+}
+function stop(){audio.pause();playing=-1;single=false;markAy(-1);updPlayer()}
+function visK(){for(const el of document.querySelectorAll("#scroll .ay")){if(el.getBoundingClientRect().top>90)return +el.dataset.k}return 0}
+function playPause(){
+  if(!cur)return;
+  if(playing>=0){if(audio.paused)audio.play().catch(()=>{});else audio.pause();updPlayer();return}
+  single=false;startAt(visK(),0);
+}
+function jump(d){
+  if(!cur)return;
+  let k=(playing>=0?playing:visK())+d;
+  k=Math.max(0,Math.min(cur.ayahs.length-1,k));
+  startAt(k,0);
+}
+audio.onended=()=>{
+  if(single||!cur){stop();return}
+  const k=playing+1;
+  if(k<cur.ayahs.length)startAt(k,att);
+  else{const n=cur.n;stop();if(n<114)openSurah(n+1,null,true)}
+};
 audio.onerror=()=>{
   if(playing<0)return;
-  if(att<BR.length-1)play(playing,att+1);
-  else{$("#fab").textContent="▶";toast(t("audioFail"));playing=-1}
+  if(att<BR.length-1)startAt(playing,att+1);
+  else{toast(t("audioFail"));stop()}
 };
-$("#fab").onclick=()=>{
-  if(!cur)return;
-  if(playing>=0&&!audio.paused){audio.pause();$("#fab").textContent="▶"}
-  else if(playing>=0){audio.play();$("#fab").textContent="❚❚"}
-  else play(0);
-};
+audio.onplay=audio.onpause=updPlayer;
+$("#pPlay").onclick=playPause;
+$("#pPrev").onclick=()=>jump(-1);
+$("#pNext").onclick=()=>jump(1);
 $("#back").onclick=()=>{stop();closeSheet();wakeOff();$("#reader").classList.remove("open");cur=null;renderMain()};
 function setFs(d){S.fs=Math.min(48,Math.max(22,S.fs+d));document.documentElement.style.setProperty("--fs",S.fs+"px");saveS()}
 $("#fp").onclick=()=>setFs(2);$("#fm").onclick=()=>setFs(-2);
@@ -532,10 +599,10 @@ function openSettings(){
   <div class="card"><label style="margin-top:0">${t("sLang")}</label><select id="sLang"><option value="ar" ${S.lang==="ar"?"selected":""}>العربية</option><option value="en" ${S.lang==="en"?"selected":""}>English</option></select>
   <label>${t("sTheme")}</label><div class="seg" id="sTh"><button data-v="light">${t("thL")}</button><button data-v="dark">${t("thD")}</button><button data-v="auto">${t("thA")}</button></div></div>
   <div class="card"><label style="margin-top:0">${t("sFont")}</label><select id="sFont">${opt(FONTS,S.font)}</select>
-  <label>${t("sSize")}</label><input type="range" id="sSize" min="22" max="48" step="2" value="${S.fs}"><div class="prev q" id="sPrev">${surahs.length?esc(surahs[0].name):""}</div></div>
+  <label>${t("sSize")}</label><input type="range" id="sSize" min="22" max="48" step="2" value="${S.fs}"><label>${t("sPage")}</label><div class="swatches" id="sPage">${PAGES.map(p=>`<button data-v="${p[0]}" style="background:${p[1]}" aria-label="${p[0]}"></button>`).join("")}</div><div class="prev q" id="sPrev">${surahs.length?esc(surahs[0].name):""}</div></div>
   <div class="card"><label style="margin-top:0">${t("sTrans")}</label><select id="sTrans">${opt(trOpts,S.trans)}</select>
   ${sw("sInline",t("sInline"),S.inline)}</div>
-  <div class="card">${sw("sPg",t("sPg"),S.pg)}${sw("sWake",t("sWake"),S.wake)}${sw("sAuto",t("sAuto"),S.auto)}
+  <div class="card">${sw("sPg",t("sPg"),S.pg)}${sw("sWake",t("sWake"),S.wake)}
   <label>${t("reciter")}</label><select id="sRec">${opt(RECS,S.rec)}</select></div>
   <button class="btnl" id="sReset" style="width:100%;color:#B3392F">${t("sReset")}</button>`;
   const mark=()=>document.querySelectorAll("#sTh button").forEach(b=>b.classList.toggle("on",b.dataset.v===S.theme));
@@ -545,7 +612,9 @@ function openSettings(){
   $("#sFont").onchange=e=>{S.font=e.target.value;saveS();document.documentElement.style.setProperty("--qf",`"${S.font}",serif`)};
   $("#sSize").oninput=e=>{S.fs=+e.target.value;saveS();document.documentElement.style.setProperty("--fs",S.fs+"px")};
   $("#sTrans").onchange=e=>{S.trans=e.target.value;saveS()};
-  [["sInline","inline"],["sPg","pg"],["sWake","wake"],["sAuto","auto"]].forEach(([id,k])=>$("#"+id).onchange=e=>{S[k]=e.target.checked;saveS()});
+  const markP=()=>document.querySelectorAll("#sPage button").forEach(b=>b.classList.toggle("on",b.dataset.v===S.page));markP();
+  document.querySelectorAll("#sPage button").forEach(b=>b.onclick=()=>{S.page=b.dataset.v;saveS();document.documentElement.dataset.page=S.page;markP()});
+  [["sInline","inline"],["sPg","pg"],["sWake","wake"]].forEach(([id,k])=>$("#"+id).onchange=e=>{S[k]=e.target.checked;saveS()});
   $("#sRec").onchange=e=>{S.rec=e.target.value;saveS()};
   $("#sReset").onclick=async()=>{
     if(!confirm(t("sResetQ")))return;
