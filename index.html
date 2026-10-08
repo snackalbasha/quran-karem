@@ -140,15 +140,52 @@ input[type=range]{width:100%;accent-color:var(--gold);margin:8px 0}
 .msg button{margin-top:12px;padding:10px 22px;border-radius:16px;background:var(--green2);color:#fff}
 .note{font-size:12.5px;color:var(--muted);text-align:center;padding:16px 8px}
 #toast{position:fixed;bottom:calc(104px + env(safe-area-inset-bottom,0px));inset-inline:20px;margin:auto;max-width:360px;background:var(--deep);color:#F6E8BC;border:1px solid rgba(227,199,127,.4);padding:11px 18px;border-radius:18px;text-align:center;z-index:40;display:none;box-shadow:0 12px 30px rgba(0,0,0,.35)}
-.player{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));display:none;align-items:center;gap:4px;padding:8px 12px;border-radius:36px;background:var(--deep);border:1px solid rgba(227,199,127,.55);box-shadow:0 18px 40px rgba(0,0,0,.42);z-index:12;color:#F1DFA6;white-space:nowrap}
-#reader.open ~ .player{display:flex}
-.player button{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;text-align:center}
-.player .pp{width:56px;height:56px;background:var(--gg);color:#1A1405;box-shadow:0 6px 16px rgba(0,0,0,.35)}
-.player .pp svg{width:26px;height:26px}
-.plab{min-width:78px;padding:0 10px;font-size:13px;color:#F6E8BC;text-align:center}
 .swatches{display:flex;gap:12px;margin-top:8px}
 .swatches button{width:42px;height:42px;border-radius:50%;border:2px solid var(--line);box-shadow:inset 0 0 0 3px var(--paper);padding:0}
 .swatches button.on{border-color:var(--gold);box-shadow:inset 0 0 0 3px var(--paper),0 0 0 3px rgba(169,130,40,.25)}
+#qpage{z-index:26}
+#qbody{flex:1;overflow:auto;padding:18px 16px 50px;max-width:560px;width:100%;margin:0 auto}
+.qentry{display:flex;align-items:center;gap:14px;width:100%;margin-bottom:14px;padding:16px 18px;border-radius:26px;border:1px solid rgba(227,199,127,.55);background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cpath d='M28 5l5.5 12.5L46 12l-5.5 12.5L53 28l-12.5 3.5L46 44l-12.5-5.5L28 51l-5.5-12.5L10 44l5.5-12.5L3 28l12.5-3.5L10 12l12.5 5.5z' fill='none' stroke='%23E3C77F' stroke-opacity='.12'/%3E%3C/svg%3E"),linear-gradient(135deg,var(--deep),var(--green2));color:#fff;box-shadow:0 14px 30px rgba(6,43,38,.28);animation:up .4s both}
+.qentry b{display:block;font-size:20px;color:#FBF1CF}
+.qentry small{display:block;color:rgba(255,255,255,.8)}
+.qic{flex:none;width:54px;height:54px;border-radius:50%;background:var(--gg);color:#1A1405;display:grid;place-items:center}
+.qic svg{width:28px;height:28px}
+.qdial{max-width:340px;margin:10px auto 0}
+.qdial svg{width:100%;height:auto;fill:currentColor;stroke:none;display:block;transition:filter .3s}
+.qring{fill:var(--paper);stroke:var(--gold);stroke-width:3}
+.qin{fill:none;stroke:var(--line);stroke-width:1.5}
+.qt{stroke:var(--gold)}
+.qcard{fill:var(--gold);font-weight:700;font-size:20px;text-anchor:middle;font-family:"IBM Plex Sans Arabic","Tajawal",sans-serif}
+.qn{fill:var(--muted);font-size:9.5px;text-anchor:middle;font-family:"IBM Plex Sans Arabic","Tajawal",sans-serif}
+.qline{stroke:var(--gold);stroke-width:2;stroke-dasharray:4 5}
+.qbadge{fill:#0B0B0B;stroke:var(--gold2);stroke-width:2}
+.qk{fill:var(--gold2)}
+.qhub{fill:var(--gold)}
+.qptr{fill:var(--gold)}
+.qok .qring{stroke:#2FBF8F}
+.qok .qdial svg{filter:drop-shadow(0 0 16px rgba(47,191,143,.55))}
+.qstat{text-align:center;margin-top:14px}
+.qstat .qmsg{font-size:20px;font-weight:600;color:var(--gold)}
+.qok .qstat .qmsg{color:#2FBF8F}
+.qstat small{display:block;color:var(--muted)}
+.player{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));width:min(92vw,430px);display:none;align-items:center;justify-content:space-between;gap:10px;padding:16px 14px 12px;border-radius:32px;background:linear-gradient(135deg,var(--deep),var(--green));border:1px solid rgba(227,199,127,.6);box-shadow:0 20px 44px rgba(0,0,0,.45);z-index:12;color:#F1DFA6;overflow:hidden}
+#reader.open ~ .player{display:flex}
+.pbar{position:absolute;top:0;inset-inline:0;height:3px;background:rgba(255,255,255,.12)}
+.pbar i{display:block;height:100%;width:0;background:var(--gg)}
+.pinfo{min-width:0;flex:1}
+.pinfo b{display:block;font-family:"Aref Ruqaa",var(--qf);font-weight:700;font-size:21px;color:#F6E8BC;line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pinfo small{display:block;color:rgba(255,255,255,.78);font-size:12.5px;min-height:20px}
+.pinfo .mode{display:inline-block;margin-inline-start:8px;padding:0 9px;border-radius:9px;background:rgba(227,199,127,.2);color:#F6E8BC}
+.pctl{display:flex;align-items:center;gap:8px;flex:none}
+.pctl button{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;text-align:center;border:1px solid rgba(227,199,127,.45);color:#F1DFA6}
+.pctl .pp{width:60px;height:60px;background:var(--gg);color:#1A1405;border:0;box-shadow:0 0 0 5px rgba(227,199,127,.18),0 8px 18px rgba(0,0,0,.4)}
+.pctl .pp svg{width:28px;height:28px}
+.tapchip{display:flex;align-items:center;justify-content:center;gap:10px;margin:-2px auto 18px;padding:9px 14px;border-radius:18px;background:var(--phl);color:var(--muted);font-family:"IBM Plex Sans Arabic","Tajawal",sans-serif;font-size:13px;line-height:1.7;text-align:center}
+.tapchip svg{width:20px;height:20px;color:var(--gold);flex:none}
+.ay.hint{animation:pulse 1.6s ease-in-out 3}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 0 7px var(--phl);background:var(--phl)}}
+.acts button.wide{flex:1 1 100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px}
+.acts button svg{width:18px;height:18px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -182,11 +219,22 @@ input[type=range]{width:100%;accent-color:var(--gold);margin:8px 0}
   </div>
   <div id="setbody"></div>
 </section>
-<div class="player" id="player" dir="ltr">
-  <button id="pPrev" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M6 5v14"/><path d="M18 5L9 12l9 7z" fill="currentColor"/></svg></button>
-  <button class="pp" id="pPlay" aria-label="Play"><svg viewBox="0 0 24 24" id="pIcon"><path d="M8 5v14l11-7z" fill="currentColor" stroke="none"/></svg></button>
-  <button id="pNext" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M18 5v14"/><path d="M6 5l9 7-9 7z" fill="currentColor"/></svg></button>
-  <span class="plab" id="plab"></span>
+<section class="ovl" id="qpage">
+  <div class="rbar">
+    <button class="ico" id="qback" aria-label="Back"><svg class="flip" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+    <div class="t" id="qtitle" style="font-family:'IBM Plex Sans Arabic',Tajawal,sans-serif;font-weight:700;font-size:18px"></div>
+    <span style="width:38px"></span>
+  </div>
+  <div id="qbody"></div>
+</section>
+<div class="player" id="player">
+  <div class="pbar"><i id="pbar"></i></div>
+  <div class="pinfo"><b id="pname" class="q"></b><small id="plab"></small></div>
+  <div class="pctl" dir="ltr">
+    <button id="pPrev" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M6 5v14"/><path d="M18 5L9 12l9 7z" fill="currentColor"/></svg></button>
+    <button class="pp" id="pPlay" aria-label="Play"><svg viewBox="0 0 24 24" id="pIcon"><path d="M8 5v14l11-7z" fill="currentColor" stroke="none"/></svg></button>
+    <button id="pNext" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M18 5v14"/><path d="M6 5l9 7-9 7z" fill="currentColor"/></svg></button>
+  </div>
 </div>
 <div class="shade" id="shade"></div>
 <div id="sheet" role="dialog"></div>
@@ -209,8 +257,8 @@ async clear(){try{const d=await this.open();await new Promise(res=>{const t=d.tr
 const S=Object.assign({lang:"ar",theme:ls.get("q_theme","light"),font:"Amiri Quran",fs:ls.get("q_fs",30),trans:"none",inline:false,pg:true,rec:ls.get("q_rec","ar.alafasy"),wake:false,auto:true,page:"ivory"},ls.get("q_set",{}));
 const saveS=()=>ls.set("q_set",S);
 const T={
-ar:{title:"القرآن الكريم",ph:"ابحث عن سورة أو كلمة من آية",tS:"السور",tA:"الأذكار",tP:"الصلاة",tK:"الختمة",tB:"المحفوظات",juz:"الأجزاء",juzN:"الجزء {n}",juzStart:"يبدأ من سورة {s}، الآية {a}",meccan:"مكية",medinan:"مدنية",ayahs:"{n} آية",offTitle:"القراءة بدون إنترنت",offDone:"المصحف كاملاً محمّل على جهازك",dlSmall:"للقراءة بدون إنترنت",dlTitle:"تحميل المصحف كاملاً",dlProg:"جارٍ التحميل",dlInc:"لم تكتمل بعض السور. أعد المحاولة عند توفر اتصال أفضل.",resume:"متابعة القراءة",resumeAt:"الآية {a}",searchIn:"ابحث عن «{q}» داخل الآيات",noRes:"لا توجد نتائج.",searching:"جارٍ البحث…",searchFail:"تعذر البحث. تأكد من اتصالك بالإنترنت.",loading:"جارٍ التحميل…",netFail:"تعذر التحميل. تأكد من اتصالك بالإنترنت.",retry:"إعادة المحاولة",surahFail:"تعذر تحميل السورة. تأكد من اتصالك بالإنترنت.",page:"صفحة {n}",tafsir:"التفسير الميسر",transH:"الترجمة",reciter:"القارئ",listen:"استماع",save:"حفظ",unsave:"إزالة الحفظ",copy:"نسخ",copied:"تم النسخ",copyFail:"تعذر النسخ",noMarks:"لا توجد آيات محفوظة بعد.<br>اضغط على أي آية ثم اختر «حفظ».",markName:"{s} - الآية {a}",audioFail:"تعذر تشغيل التلاوة. تأكد من الاتصال أو غيّر القارئ.",note:"النص: المصحف العثماني (برواية حفص عن عاصم). التفسير: التفسير الميسر، مجمع الملك فهد لطباعة المصحف الشريف.",adhM:"أذكار الصباح",adhE:"أذكار المساء",rep:"التكرار: {n}",once:"مرة واحدة",resetC:"إعادة العدّاد",adhNote:"اضغط على الذكر لإنقاص العدّاد. الأذكار من حصن المسلم، وآية الكرسي والمعوذات من نص المصحف.",needNet:"يتطلب اتصالاً بالإنترنت أو تحميل المصحف.",calc:"طريقة الحساب",mUmm:"أم القرى (مكة المكرمة)",mMwl:"رابطة العالم الإسلامي",mEgy:"الهيئة المصرية العامة للمساحة",locBtn:"تحديد موقعي",locUpd:"تحديث موقعي",geoUn:"المتصفح لا يدعم تحديد الموقع",geoFail:"تعذر تحديد الموقع. اسمح للمتصفح بالوصول إلى موقعك.",locHint:"اضغط «تحديد موقعي» لعرض أوقات الصلاة واتجاه القبلة.",ptFail:"تعذر جلب الأوقات. تأكد من اتصالك بالإنترنت.",next:"الصلاة القادمة: {p}",ptNote:"لا يمكن لصفحة ويب إصدار الأذان وهي مغلقة، فاستخدم منبّه الهاتف للتنبيه.",p_Fajr:"الفجر",p_Sunrise:"الشروق",p_Dhuhr:"الظهر",p_Asr:"العصر",p_Maghrib:"المغرب",p_Isha:"العشاء",am:"ص",pm:"م",qibla:"اتجاه القبلة",deg:"{n}° من الشمال",cmpOn:"تشغيل البوصلة",cmpRun:"البوصلة تعمل",cmpNote:"ضع الهاتف أفقياً بعيداً عن المعادن. السهم يشير إلى القبلة.",cmpFail:"تعذر تشغيل البوصلة على هذا الجهاز",khPlan:"خطة الختمة",khQ:"في كم يوماً تريد أن تختم القرآن؟",days:"{n} يوماً",khStart:"ابدأ الختمة",khDay:"ورد اليوم {d} من {t} ({n} آية)",khFrom:"من {s} آية {a}",khTo:"إلى {s} آية {a}",khGo:"ابدأ من هنا",khDone:"انتهت مدة الخطة",khProg:"تقدمك في المصحف حسب آخر موضع قرأته",khCancel:"إلغاء الخطة",set:"الإعدادات",sLang:"اللغة",sTheme:"المظهر",thL:"فاتح",thD:"داكن",thA:"تلقائي",sFont:"خط المصحف",sSize:"حجم الخط",sTrans:"ترجمة معاني القرآن",sInline:"عرض الترجمة تحت كل آية",sPg:"إظهار أرقام الصفحات والأجزاء",sWake:"إبقاء الشاشة مضاءة أثناء القراءة",sAuto:"الانتقال تلقائياً للآية التالية عند التلاوة",sReset:"حذف البيانات المحفوظة",sResetQ:"سيتم حذف المحفوظات والمصحف المحمّل والإعدادات. هل تريد المتابعة؟",off:"بدون",sPage:"خلفية القراءة",listenOne:"استماع لهذه الآية فقط",listenFrom:"تشغيل متواصل من هنا"},
-en:{title:"The Noble Quran",ph:"Search a surah or a word in the verses",tS:"Surahs",tA:"Adhkar",tP:"Prayer",tK:"Khatma",tB:"Saved",juz:"Juz",juzN:"Juz {n}",juzStart:"Starts at {s}, verse {a}",meccan:"Meccan",medinan:"Medinan",ayahs:"{n} verses",offTitle:"Offline reading",offDone:"The full Quran is saved on your device",dlSmall:"For offline reading",dlTitle:"Download the full Quran",dlProg:"Downloading",dlInc:"Some surahs did not finish. Try again with a better connection.",resume:"Continue reading",resumeAt:"Verse {a}",searchIn:"Search for “{q}” in the verses",noRes:"No results.",searching:"Searching…",searchFail:"Search failed. Check your connection.",loading:"Loading…",netFail:"Could not load. Check your connection.",retry:"Try again",surahFail:"Could not load this surah. Check your connection.",page:"Page {n}",tafsir:"Al-Tafsir Al-Muyassar (Arabic)",transH:"Translation",reciter:"Reciter",listen:"Listen",save:"Save",unsave:"Remove",copy:"Copy",copied:"Copied",copyFail:"Could not copy",noMarks:"Nothing saved yet.<br>Tap any verse, then choose “Save”.",markName:"{s} - Verse {a}",audioFail:"Could not play the recitation. Check your connection or change the reciter.",note:"Text: Uthmani script (Hafs from Asim). Tafsir: Al-Muyassar, King Fahd Complex for the Printing of the Holy Quran.",adhM:"Morning adhkar",adhE:"Evening adhkar",rep:"Repeat: {n}",once:"Once",resetC:"Reset counter",adhNote:"Tap a dhikr to count down. Adhkar are from Hisn al-Muslim; Ayat al-Kursi and the Mu'awwidhat come from the Quran text.",needNet:"Needs an internet connection or the downloaded Quran.",calc:"Calculation method",mUmm:"Umm al-Qura (Makkah)",mMwl:"Muslim World League",mEgy:"Egyptian General Authority of Survey",locBtn:"Find my location",locUpd:"Update my location",geoUn:"Location is not supported",geoFail:"Could not get your location. Allow location access for your browser.",locHint:"Tap “Find my location” to see prayer times and the qibla direction.",ptFail:"Could not load prayer times. Check your connection.",next:"Next prayer: {p}",ptNote:"A web page cannot play the adhan while closed. Use your phone alarm for reminders.",p_Fajr:"Fajr",p_Sunrise:"Sunrise",p_Dhuhr:"Dhuhr",p_Asr:"Asr",p_Maghrib:"Maghrib",p_Isha:"Isha",am:"AM",pm:"PM",qibla:"Qibla direction",deg:"{n}° from north",cmpOn:"Start compass",cmpRun:"Compass running",cmpNote:"Hold the phone flat, away from metal. The arrow points to the qibla.",cmpFail:"The compass is not available on this device",khPlan:"Khatma plan",khQ:"In how many days do you want to finish the Quran?",days:"{n} days",khStart:"Start",khDay:"Day {d} of {t} ({n} verses)",khFrom:"From {s}, verse {a}",khTo:"To {s}, verse {a}",khGo:"Start here",khDone:"The plan has ended",khProg:"Your progress, based on your last reading position",khCancel:"Cancel plan",set:"Settings",sLang:"Language",sTheme:"Appearance",thL:"Light",thD:"Dark",thA:"Auto",sFont:"Quran font",sSize:"Text size",sTrans:"Translation of the meanings",sInline:"Show translation under each verse",sPg:"Show page and juz markers",sWake:"Keep the screen on while reading",sAuto:"Play the next verse automatically",sReset:"Delete saved data",sResetQ:"This will delete your saved verses, the downloaded Quran and your settings. Continue?",off:"Off",sPage:"Reading background",listenOne:"Listen to this verse only",listenFrom:"Play continuously from here"}
+ar:{title:"القرآن الكريم",ph:"ابحث عن سورة أو كلمة من آية",tS:"السور",tA:"الأذكار",tP:"الصلاة",tK:"الختمة",tB:"المحفوظات",juz:"الأجزاء",juzN:"الجزء {n}",juzStart:"يبدأ من سورة {s}، الآية {a}",meccan:"مكية",medinan:"مدنية",ayahs:"{n} آية",offTitle:"القراءة بدون إنترنت",offDone:"المصحف كاملاً محمّل على جهازك",dlSmall:"للقراءة بدون إنترنت",dlTitle:"تحميل المصحف كاملاً",dlProg:"جارٍ التحميل",dlInc:"لم تكتمل بعض السور. أعد المحاولة عند توفر اتصال أفضل.",resume:"متابعة القراءة",resumeAt:"الآية {a}",searchIn:"ابحث عن «{q}» داخل الآيات",noRes:"لا توجد نتائج.",searching:"جارٍ البحث…",searchFail:"تعذر البحث. تأكد من اتصالك بالإنترنت.",loading:"جارٍ التحميل…",netFail:"تعذر التحميل. تأكد من اتصالك بالإنترنت.",retry:"إعادة المحاولة",surahFail:"تعذر تحميل السورة. تأكد من اتصالك بالإنترنت.",page:"صفحة {n}",tafsir:"التفسير الميسر",transH:"الترجمة",reciter:"القارئ",listen:"استماع",save:"حفظ",unsave:"إزالة الحفظ",copy:"نسخ",copied:"تم النسخ",copyFail:"تعذر النسخ",noMarks:"لا توجد آيات محفوظة بعد.<br>اضغط على أي آية ثم اختر «حفظ».",markName:"{s} - الآية {a}",audioFail:"تعذر تشغيل التلاوة. تأكد من الاتصال أو غيّر القارئ.",note:"النص: المصحف العثماني (برواية حفص عن عاصم). التفسير: التفسير الميسر، مجمع الملك فهد لطباعة المصحف الشريف.",adhM:"أذكار الصباح",adhE:"أذكار المساء",rep:"التكرار: {n}",once:"مرة واحدة",resetC:"إعادة العدّاد",adhNote:"اضغط على الذكر لإنقاص العدّاد. الأذكار من حصن المسلم، وآية الكرسي والمعوذات من نص المصحف.",needNet:"يتطلب اتصالاً بالإنترنت أو تحميل المصحف.",calc:"طريقة الحساب",mUmm:"أم القرى (مكة المكرمة)",mMwl:"رابطة العالم الإسلامي",mEgy:"الهيئة المصرية العامة للمساحة",locBtn:"تحديد موقعي",locUpd:"تحديث موقعي",geoUn:"المتصفح لا يدعم تحديد الموقع",geoFail:"تعذر تحديد الموقع. اسمح للمتصفح بالوصول إلى موقعك.",locHint:"اضغط «تحديد موقعي» لعرض أوقات الصلاة واتجاه القبلة.",ptFail:"تعذر جلب الأوقات. تأكد من اتصالك بالإنترنت.",next:"الصلاة القادمة: {p}",ptNote:"لا يمكن لصفحة ويب إصدار الأذان وهي مغلقة، فاستخدم منبّه الهاتف للتنبيه.",p_Fajr:"الفجر",p_Sunrise:"الشروق",p_Dhuhr:"الظهر",p_Asr:"العصر",p_Maghrib:"المغرب",p_Isha:"العشاء",am:"ص",pm:"م",qibla:"اتجاه القبلة",deg:"{n}° من الشمال",cmpOn:"تشغيل البوصلة",cmpRun:"البوصلة تعمل",cmpNote:"ضع الهاتف أفقياً بعيداً عن المعادن. السهم يشير إلى القبلة.",cmpFail:"تعذر تشغيل البوصلة على هذا الجهاز",khPlan:"خطة الختمة",khQ:"في كم يوماً تريد أن تختم القرآن؟",days:"{n} يوماً",khStart:"ابدأ الختمة",khDay:"ورد اليوم {d} من {t} ({n} آية)",khFrom:"من {s} آية {a}",khTo:"إلى {s} آية {a}",khGo:"ابدأ من هنا",khDone:"انتهت مدة الخطة",khProg:"تقدمك في المصحف حسب آخر موضع قرأته",khCancel:"إلغاء الخطة",set:"الإعدادات",sLang:"اللغة",sTheme:"المظهر",thL:"فاتح",thD:"داكن",thA:"تلقائي",sFont:"خط المصحف",sSize:"حجم الخط",sTrans:"ترجمة معاني القرآن",sInline:"عرض الترجمة تحت كل آية",sPg:"إظهار أرقام الصفحات والأجزاء",sWake:"إبقاء الشاشة مضاءة أثناء القراءة",sAuto:"الانتقال تلقائياً للآية التالية عند التلاوة",sReset:"حذف البيانات المحفوظة",sResetQ:"سيتم حذف المحفوظات والمصحف المحمّل والإعدادات. هل تريد المتابعة؟",off:"بدون",sPage:"خلفية القراءة",tapHint:"اضغط على أي آية لتسمعها وحدها، أو لتبدأ القراءة المتواصلة منها، أو لتقرأ تفسيرها",modeOne:"آية واحدة",modeCont:"متواصل",qTitle:"تحديد القبلة",qGps:"موقعي (GPS)",qCity:"اختيار مدينة",qCityPh:"اختر المدينة",qDist:"المسافة إلى الكعبة: {n} كم",qHead:"اتجاهك: {n}°",qOk:"أنت باتجاه القبلة",qRight:"أدر الهاتف يميناً {n}°",qLeft:"أدر الهاتف يساراً {n}°",qNoLoc:"حدّد موقعك أولاً لمعرفة اتجاه القبلة.",qEntryNo:"اضغط لتحديد اتجاه القبلة",qCalib:"إذا كانت القراءة غير دقيقة، حرّك الهاتف على شكل ٨ لمعايرة البوصلة.",listenOne:"استماع لهذه الآية فقط",listenFrom:"تشغيل متواصل من هنا"},
+en:{title:"The Noble Quran",ph:"Search a surah or a word in the verses",tS:"Surahs",tA:"Adhkar",tP:"Prayer",tK:"Khatma",tB:"Saved",juz:"Juz",juzN:"Juz {n}",juzStart:"Starts at {s}, verse {a}",meccan:"Meccan",medinan:"Medinan",ayahs:"{n} verses",offTitle:"Offline reading",offDone:"The full Quran is saved on your device",dlSmall:"For offline reading",dlTitle:"Download the full Quran",dlProg:"Downloading",dlInc:"Some surahs did not finish. Try again with a better connection.",resume:"Continue reading",resumeAt:"Verse {a}",searchIn:"Search for “{q}” in the verses",noRes:"No results.",searching:"Searching…",searchFail:"Search failed. Check your connection.",loading:"Loading…",netFail:"Could not load. Check your connection.",retry:"Try again",surahFail:"Could not load this surah. Check your connection.",page:"Page {n}",tafsir:"Al-Tafsir Al-Muyassar (Arabic)",transH:"Translation",reciter:"Reciter",listen:"Listen",save:"Save",unsave:"Remove",copy:"Copy",copied:"Copied",copyFail:"Could not copy",noMarks:"Nothing saved yet.<br>Tap any verse, then choose “Save”.",markName:"{s} - Verse {a}",audioFail:"Could not play the recitation. Check your connection or change the reciter.",note:"Text: Uthmani script (Hafs from Asim). Tafsir: Al-Muyassar, King Fahd Complex for the Printing of the Holy Quran.",adhM:"Morning adhkar",adhE:"Evening adhkar",rep:"Repeat: {n}",once:"Once",resetC:"Reset counter",adhNote:"Tap a dhikr to count down. Adhkar are from Hisn al-Muslim; Ayat al-Kursi and the Mu'awwidhat come from the Quran text.",needNet:"Needs an internet connection or the downloaded Quran.",calc:"Calculation method",mUmm:"Umm al-Qura (Makkah)",mMwl:"Muslim World League",mEgy:"Egyptian General Authority of Survey",locBtn:"Find my location",locUpd:"Update my location",geoUn:"Location is not supported",geoFail:"Could not get your location. Allow location access for your browser.",locHint:"Tap “Find my location” to see prayer times and the qibla direction.",ptFail:"Could not load prayer times. Check your connection.",next:"Next prayer: {p}",ptNote:"A web page cannot play the adhan while closed. Use your phone alarm for reminders.",p_Fajr:"Fajr",p_Sunrise:"Sunrise",p_Dhuhr:"Dhuhr",p_Asr:"Asr",p_Maghrib:"Maghrib",p_Isha:"Isha",am:"AM",pm:"PM",qibla:"Qibla direction",deg:"{n}° from north",cmpOn:"Start compass",cmpRun:"Compass running",cmpNote:"Hold the phone flat, away from metal. The arrow points to the qibla.",cmpFail:"The compass is not available on this device",khPlan:"Khatma plan",khQ:"In how many days do you want to finish the Quran?",days:"{n} days",khStart:"Start",khDay:"Day {d} of {t} ({n} verses)",khFrom:"From {s}, verse {a}",khTo:"To {s}, verse {a}",khGo:"Start here",khDone:"The plan has ended",khProg:"Your progress, based on your last reading position",khCancel:"Cancel plan",set:"Settings",sLang:"Language",sTheme:"Appearance",thL:"Light",thD:"Dark",thA:"Auto",sFont:"Quran font",sSize:"Text size",sTrans:"Translation of the meanings",sInline:"Show translation under each verse",sPg:"Show page and juz markers",sWake:"Keep the screen on while reading",sAuto:"Play the next verse automatically",sReset:"Delete saved data",sResetQ:"This will delete your saved verses, the downloaded Quran and your settings. Continue?",off:"Off",sPage:"Reading background",tapHint:"Tap any verse to hear it on its own, start continuous playback from it, or read its tafsir",modeOne:"Single verse",modeCont:"Continuous",qTitle:"Find the Qibla",qGps:"My location (GPS)",qCity:"Choose a city",qCityPh:"Select a city",qDist:"Distance to the Kaaba: {n} km",qHead:"Your heading: {n}°",qOk:"You are facing the Qibla",qRight:"Turn right {n}°",qLeft:"Turn left {n}°",qNoLoc:"Set your location first to find the Qibla direction.",qEntryNo:"Tap to find the Qibla direction",qCalib:"If the reading is off, move the phone in a figure 8 to calibrate the compass.",listenOne:"Listen to this verse only",listenFrom:"Play continuously from here"}
 };
 const t=(k,v)=>{let s=(T[S.lang]&&T[S.lang][k])||T.ar[k]||k;if(v)for(const x in v)s=s.replace("{"+x+"}",v[x]);return s};
 const N=n=>S.lang==="ar"?AR(n):String(n);
@@ -329,10 +377,11 @@ async function wakeOn(){try{if(S.wake&&navigator.wakeLock)wl=await navigator.wak
 function wakeOff(){try{wl&&wl.release()}catch(e){}wl=null}
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&cur)wakeOn()});
 
-async function openSurah(n,ayah,autoPlay){
-  stop();closeSheet();
+async function openSurah(n,ayah,opts){
+  const keep=!!(opts&&opts.keep);
+  if(!keep){stop();closeSheet()}
   $("#reader").classList.add("open");
-  const sc=$("#scroll");sc.innerHTML=`<div class="msg">${t("loading")}</div>`;
+  const sc=$("#scroll");if(!keep)sc.innerHTML=`<div class="msg">${t("loading")}</div>`;
   const info=surahs.find(s=>s.number===n);
   $("#rt").textContent=sname(info.name);
   wakeOn();
@@ -355,11 +404,11 @@ async function openSurah(n,ayah,autoPlay){
       const ay=`<span class="ay" data-k="${k}">${esc(a.text)} <span class="num"><i>${AR(a.i)}</i></span></span> `;
       body+=inl?`<div class="ayb">${ay}<div class="trn" dir="${dirT}">${esc(a.tr)}</div></div>`:ay;
     });
-    sc.innerHTML=`<div class="page"><div class="shead"><span class="q">${esc(q.name)}</span><small>${info.revelationType==="Meccan"?t("meccan"):t("medinan")} · ${t("ayahs",{n:N(info.numberOfAyahs)})}</small></div>${bism?`<div class="bism q">${esc(bism)}</div>`:""}<div class="text q ${inl?"inl":""}">${body}</div></div><div class="note">${t("note")}</div>`;
+    sc.innerHTML=`<div class="page"><div class="shead"><span class="q">${esc(q.name)}</span><small>${info.revelationType==="Meccan"?t("meccan"):t("medinan")} · ${t("ayahs",{n:N(info.numberOfAyahs)})}</small></div><div class="tapchip"><svg viewBox="0 0 24 24"><path d="M9 11V5.5a1.8 1.8 0 0 1 3.6 0V10M12.6 9.5a1.8 1.8 0 0 1 3.6 0V11M16.2 10.8a1.8 1.8 0 0 1 3.6 0V15a7 7 0 0 1-7 7h-.8a7 7 0 0 1-5.9-3.2L3.8 13.6a1.8 1.8 0 0 1 3-2L9 13.5"/></svg><span>${t("tapHint")}</span></div>${bism?`<div class="bism q">${esc(bism)}</div>`:""}<div class="text q ${inl?"inl":""}">${body}</div></div><div class="note">${t("note")}</div>`;
     sc.querySelectorAll(".ay").forEach(el=>el.onclick=()=>openSheet(+el.dataset.k));
+    if(!ls.get("q_tapped",false)){const f=sc.querySelector(".ay");if(f)f.classList.add("hint")}
     sc.scrollTop=0;
     if(ayah){const el=sc.querySelector(`[data-k="${ayah-1}"]`);if(el)el.scrollIntoView({block:"center"})}
-    if(autoPlay){single=false;startAt(0,0)}
   }catch(e){sc.innerHTML=`<div class="msg">${t("surahFail")}<br><button id="r2">${t("retry")}</button></div>`;$("#r2").onclick=()=>openSurah(n,ayah)}
 }
 let st;
@@ -374,12 +423,12 @@ function isMarked(k){return marks.some(b=>b.s===cur.n&&b.a===cur.ayahs[k].i)}
 function recSelect(){return `<h3>${t("reciter")}</h3><select id="recSel">${RECS.map(r=>`<option value="${r[0]}" ${r[0]===S.rec?"selected":""}>${r[1]}</option>`).join("")}</select>`}
 function bindRec(){$("#recSel").onchange=e=>{S.rec=e.target.value;saveS()}}
 function openSheet(k){
-  const a=cur.ayahs[k];saveLast(k);
+  const a=cur.ayahs[k];saveLast(k);ls.set("q_tapped",true);document.querySelectorAll(".ay.hint").forEach(e=>e.classList.remove("hint"));
   const dirT=(TR.find(x=>x[0]===S.trans)||[])[2]||"ltr";
-  $("#sheet").innerHTML=`<div class="grab"></div><div class="at q">${esc(a.text)} <span class="num"><i>${AR(a.i)}</i></span></div><div class="box"><h3>${t("tafsir")}</h3><p class="q">${esc(a.tafsir)}</p></div>${a.tr?`<div class="box"><h3>${t("transH")}</h3><p dir="${dirT}">${esc(a.tr)}</p></div>`:""}<div class="box">${recSelect()}</div><div class="acts"><button class="pri" id="aOne">${t("listenOne")}</button><button id="aPlay">${t("listenFrom")}</button><button id="aMark">${isMarked(k)?t("unsave"):t("save")}</button><button id="aCopy">${t("copy")}</button></div>`;
+  $("#sheet").innerHTML=`<div class="grab"></div><div class="at q">${esc(a.text)} <span class="num"><i>${AR(a.i)}</i></span></div><div class="box"><h3>${t("tafsir")}</h3><p class="q">${esc(a.tafsir)}</p></div>${a.tr?`<div class="box"><h3>${t("transH")}</h3><p dir="${dirT}">${esc(a.tr)}</p></div>`:""}<div class="box">${recSelect()}</div><div class="acts"><button class="pri wide" id="aOne"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor" stroke="none"/></svg>${t("listenOne")}</button><button class="wide" id="aPlay"><svg viewBox="0 0 24 24"><path d="M4 5v14l8-7zM12 5v14l8-7z" fill="currentColor" stroke="none"/></svg>${t("listenFrom")}</button><button id="aMark">${isMarked(k)?t("unsave"):t("save")}</button><button id="aCopy">${t("copy")}</button></div>`;
   showSheet();bindRec();
-  $("#aOne").onclick=()=>{closeSheet();single=true;startAt(k,0)};
-  $("#aPlay").onclick=()=>{closeSheet();single=false;startAt(k,0)};
+  $("#aOne").onclick=()=>{closeSheet();single=true;startAtG(a.num,0,true)};
+  $("#aPlay").onclick=()=>{closeSheet();single=false;startAtG(a.num,0,true)};
   $("#aMark").onclick=()=>{
     if(isMarked(k))marks=marks.filter(b=>!(b.s===cur.n&&b.a===a.i));
     else marks.unshift({s:cur.n,a:a.i,name:`${cur.name} - ${AR(a.i)}`,text:a.text});
@@ -393,68 +442,109 @@ $("#shade").onclick=closeSheet;
 
 /* ---------- التلاوة ---------- */
 const BR=[128,192,64];
-let single=false;
+let single=false,playingG=0,stagedG=0,unlocked=false,ai=0,uiLoading=false,CUMc=null;
+const ELS=[audio,new Audio()];
+ELS.forEach(e=>{e.preload="auto"});
 const IC_PLAY='<path d="M8 5v14l11-7z" fill="currentColor" stroke="none"/>',IC_PAUSE='<path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor" stroke="none"/>';
+const cumA=()=>CUMc||(CUMc=cum());
 const urlG=(g,a)=>`${CDN}${BR[a]}/${S.rec}/${g}.mp3`;
-const pre={};
-async function prefetch(g,a){
-  const key=S.rec+":"+g;
-  if(g>6236||(key in pre))return;
-  pre[key]=null;
-  try{const r=await fetch(urlG(g,a));if(!r.ok)throw 0;pre[key]=URL.createObjectURL(await r.blob())}catch(e){pre[key]=false}
+const pkey=g=>S.rec+":"+g;
+const preP={},preU={};
+function getBlob(g,a){
+  const k=pkey(g);
+  if(g<1||g>6236)return Promise.resolve(false);
+  if(!preP[k]){preP[k]=fetch(urlG(g,a)).then(r=>{if(!r.ok)throw 0;return r.blob()}).then(b=>{const u=URL.createObjectURL(b);preU[k]=u;return u}).catch(()=>{preU[k]=false;return false})}
+  return preP[k];
 }
-function clearPre(g){for(const key in pre){const n=+key.split(":")[1];if(n<g){if(typeof pre[key]==="string")URL.revokeObjectURL(pre[key]);delete pre[key]}}}
+function clearPre(g){for(const k in preP){const n=+k.split(":")[1];if(n<g){const u=preU[k];if(typeof u==="string")URL.revokeObjectURL(u);delete preP[k];delete preU[k]}}}
+async function stageNext(g){
+  if(single||g>6236)return;
+  const u=await getBlob(g,att);
+  if(typeof u==="string"&&playingG===g-1&&!single){const o=ELS[1-ai];o.src=u;o.load();stagedG=g}
+}
 function markAy(k){document.querySelectorAll(".ay.playing").forEach(e=>e.classList.remove("playing"));if(k>=0){const el=document.querySelector(`.ay[data-k="${k}"]`);if(el){el.classList.add("playing");el.scrollIntoView({block:"center",behavior:"smooth"})}}}
 function updPlayer(){
-  const on=playing>=0&&!audio.paused;
+  const el=ELS[ai],on=playingG&&!el.paused;
   $("#pIcon").innerHTML=on?IC_PAUSE:IC_PLAY;
-  $("#plab").textContent=(playing>=0&&cur)?t("resumeAt",{a:N(cur.ayahs[playing].i)}):"";
+  let name=cur?cur.name:"",lab="";
+  if(playingG&&surahs.length){const lc=locOf(playingG,cumA());name=sname(surahs[lc.s-1].name);lab=`${t("resumeAt",{a:N(lc.a)})}<span class="mode">${single?t("modeOne"):t("modeCont")}</span>`}
+  $("#pname").textContent=name;$("#plab").innerHTML=lab;
 }
 function setMedia(){
-  if(!("mediaSession" in navigator)||!cur)return;
+  if(!("mediaSession" in navigator)||!playingG||!surahs.length)return;
   try{
-    navigator.mediaSession.metadata=new MediaMetadata({title:cur.name,artist:(RECS.find(r=>r[0]===S.rec)||[])[1]||"",album:t("title")});
+    const lc=locOf(playingG,cumA());
+    navigator.mediaSession.metadata=new MediaMetadata({title:sname(surahs[lc.s-1].name)+" - "+N(lc.a),artist:(RECS.find(r=>r[0]===S.rec)||[])[1]||"",album:t("title")});
     navigator.mediaSession.setActionHandler("play",playPause);
     navigator.mediaSession.setActionHandler("pause",playPause);
     navigator.mediaSession.setActionHandler("nexttrack",()=>jump(1));
     navigator.mediaSession.setActionHandler("previoustrack",()=>jump(-1));
   }catch(e){}
 }
-function startAt(k,a){
-  if(!cur)return;
-  playing=k;att=a||0;markAy(k);saveLast(k);setMedia();
-  const g=cur.ayahs[k].num;
-  audio.src=pre[S.rec+":"+g]||urlG(g,att);
-  audio.play().catch(()=>{});
-  updPlayer();
-  if(!single){prefetch(g+1,att);prefetch(g+2,att)}
+function syncUI(g){
+  const lc=locOf(g,cumA());
+  if(cur&&cur.n===lc.s){
+    if(!cur.ayahs[lc.a-1]){setMedia();updPlayer();return}
+    playing=lc.a-1;markAy(playing);saveLast(playing);
+    if(playing>=cur.ayahs.length-4&&cur.n<114)getJSON(`${API}/surah/${cur.n+1}/editions/quran-uthmani,ar.muyassar`,"q_s"+(cur.n+1)).catch(()=>{});
+  }else{
+    playing=-1;markAy(-1);
+    if(!uiLoading){uiLoading=true;openSurah(lc.s,null,{keep:true}).finally(()=>{uiLoading=false;if(playingG)syncUI(playingG)})}
+  }
+  setMedia();updPlayer();
+}
+function startAtG(g,a,user){
+  if(g<1||g>6236)return;
+  att=a||0;playingG=g;stagedG=0;
+  const el=ELS[ai];
+  ELS[1-ai].pause();
+  const u=preU[pkey(g)];
+  el.src=(typeof u==="string")?u:urlG(g,att);
+  el.play().catch(()=>{});
+  if(user&&!unlocked){
+    unlocked=true;
+    const o=ELS[1-ai];
+    try{o.muted=true;o.src=el.src;o.play().then(()=>{o.pause();o.muted=false}).catch(()=>{o.muted=false})}catch(e){o.muted=false}
+  }
+  syncUI(g);
+  if(!single){stageNext(g+1);getBlob(g+2,att)}
   clearPre(g);
 }
-function stop(){audio.pause();playing=-1;single=false;markAy(-1);updPlayer()}
+function stop(){ELS.forEach(e=>e.pause());playingG=0;stagedG=0;single=false;playing=-1;markAy(-1);updPlayer();$("#pbar").style.width="0"}
 function visK(){for(const el of document.querySelectorAll("#scroll .ay")){if(el.getBoundingClientRect().top>90)return +el.dataset.k}return 0}
+const visG=()=>cur?cur.ayahs[visK()].num:1;
 function playPause(){
+  if(playingG){const el=ELS[ai];if(el.paused)el.play().catch(()=>{});else el.pause();updPlayer();return}
   if(!cur)return;
-  if(playing>=0){if(audio.paused)audio.play().catch(()=>{});else audio.pause();updPlayer();return}
-  single=false;startAt(visK(),0);
+  single=false;startAtG(visG(),0,true);
 }
 function jump(d){
-  if(!cur)return;
-  let k=(playing>=0?playing:visK())+d;
-  k=Math.max(0,Math.min(cur.ayahs.length-1,k));
-  startAt(k,0);
+  if(!cur&&!playingG)return;
+  startAtG(Math.max(1,Math.min(6236,(playingG||visG())+d)),0,true);
 }
-audio.onended=()=>{
-  if(single||!cur){stop();return}
-  const k=playing+1;
-  if(k<cur.ayahs.length)startAt(k,att);
-  else{const n=cur.n;stop();if(n<114)openSurah(n+1,null,true)}
-};
-audio.onerror=()=>{
-  if(playing<0)return;
-  if(att<BR.length-1)startAt(playing,att+1);
-  else{toast(t("audioFail"));stop()}
-};
-audio.onplay=audio.onpause=updPlayer;
+function onEnd(i){
+  if(i!==ai)return;
+  if(single||!playingG){stop();return}
+  const g=playingG+1;
+  if(g>6236){stop();return}
+  if(stagedG===g&&!ELS[1-ai].error){
+    ai=1-ai;playingG=g;stagedG=0;
+    const el=ELS[ai];
+    el.play().catch(()=>{const u=preU[pkey(g)];el.src=(typeof u==="string")?u:urlG(g,att);el.play().catch(()=>{})});
+    syncUI(g);
+    stageNext(g+1);getBlob(g+2,att);clearPre(g);
+  }else startAtG(g,att);
+}
+ELS.forEach((el,i)=>{
+  el.onended=()=>onEnd(i);
+  el.onplay=el.onpause=()=>{if(i===ai)updPlayer()};
+  el.ontimeupdate=()=>{if(i===ai&&el.duration)$("#pbar").style.width=(100*el.currentTime/el.duration)+"%"};
+  el.onerror=()=>{
+    if(i!==ai||!playingG)return;
+    if(att<BR.length-1)startAtG(playingG,att+1);
+    else{toast(t("audioFail"));stop()}
+  };
+});
 $("#pPlay").onclick=playPause;
 $("#pPrev").onclick=()=>jump(-1);
 $("#pNext").onclick=()=>jump(1);
@@ -513,8 +603,9 @@ const pad=n=>String(n).padStart(2,"0");
 const t12=h=>{const [a,b]=h.split(":").map(Number);return `${N((a%12)||12)}:${N(pad(b))} ${a<12?t("am"):t("pm")}`};
 async function viewPrayer(){
   const m=$("#main"),loc=ls.get("q_loc",null),meth=ls.get("q_meth",4);
-  m.innerHTML=`<div class="card"><small>${t("calc")}</small><select id="meth"><option value="4">${t("mUmm")}</option><option value="3">${t("mMwl")}</option><option value="5">${t("mEgy")}</option></select><button class="btnp" id="locBtn">${loc?t("locUpd"):t("locBtn")}</button></div><div id="pt"></div><div id="qb"></div>`;
+  m.innerHTML=`<div class="card"><small>${t("calc")}</small><select id="meth"><option value="4">${t("mUmm")}</option><option value="3">${t("mMwl")}</option><option value="5">${t("mEgy")}</option></select><button class="btnp" id="locBtn">${loc?t("locUpd"):t("locBtn")}</button></div><div id="qb"></div><div id="pt"></div>`;
   $("#meth").value=meth;
+  drawQibla();
   $("#meth").onchange=e=>{ls.set("q_meth",+e.target.value);viewPrayer()};
   $("#locBtn").onclick=()=>{
     if(!navigator.geolocation){toast(t("geoUn"));return}
@@ -528,7 +619,7 @@ async function viewPrayer(){
       const r=await fetch(`https://api.aladhan.com/v1/timings/${ds}?latitude=${loc.lat}&longitude=${loc.lon}&method=${meth}`);
       const j=await r.json();if(j.code!==200)throw 0;
       tm={key,t:Object.fromEntries(PN.map(p=>[p,j.data.timings[p].slice(0,5)]))};ls.set("q_pt",tm);
-    }catch(e){$("#pt").innerHTML=`<div class="msg">${t("ptFail")}</div>`;drawQibla(loc);return}
+    }catch(e){$("#pt").innerHTML=`<div class="msg">${t("ptFail")}</div>`;return}
   }
   const TM=tm.t;
   function nextP(){
@@ -542,24 +633,110 @@ async function viewPrayer(){
     el.innerHTML=`<div class="card"><small>${t("next",{p:t("p_"+nk)})}</small><div class="big" dir="ltr">${N(pad(hh))}:${N(pad(mm))}:${N(pad(ss))}</div></div>`+PN.map(p=>`<div class="prow ${p===nk?"next":""}"><span>${t("p_"+p)}</span><span>${t12(TM[p])}</span></div>`).join("")+`<div class="note">${t("ptNote")}</div>`;
   }
   draw();pTimer=setInterval(draw,1000);
-  drawQibla(loc);
 }
 function qiblaAngle(lat,lon){
   const r=Math.PI/180,p1=lat*r,p2=21.4225*r,dl=(39.8262-lon)*r;
   const y=Math.sin(dl)*Math.cos(p2),x=Math.cos(p1)*Math.sin(p2)-Math.sin(p1)*Math.cos(p2)*Math.cos(dl);
   return (Math.atan2(y,x)/r+360)%360;
 }
-function drawQibla(loc){
-  const qa=qiblaAngle(loc.lat,loc.lon),box=$("#qb");
-  box.innerHTML=`<div class="card" style="text-align:center"><small>${t("qibla")}</small><div class="big">${t("deg",{n:N(Math.round(qa))})}</div><div class="compass"><div id="arrow" style="transform:rotate(${qa}deg)">▲</div></div><button class="btnp" id="cmp">${t("cmpOn")}</button><div class="note">${t("cmpNote")}</div></div>`;
-  $("#cmp").onclick=async()=>{
-    try{
-      if(typeof DeviceOrientationEvent!=="undefined"&&DeviceOrientationEvent.requestPermission){const r=await DeviceOrientationEvent.requestPermission();if(r!=="granted")throw 0}
-      const h=e=>{const hd=e.webkitCompassHeading!=null?e.webkitCompassHeading:(e.alpha!=null?360-e.alpha:null);if(hd==null)return;const a=$("#arrow");if(a)a.style.transform=`rotate(${qa-hd}deg)`};
-      window.addEventListener("deviceorientationabsolute",h,true);window.addEventListener("deviceorientation",h,true);
-      $("#cmp").textContent=t("cmpRun");
-    }catch(e){toast(t("cmpFail"))}
+function drawQibla(){
+  const loc=ls.get("q_loc",null),box=$("#qb");
+  if(!box)return;
+  const sub=loc?t("deg",{n:N(Math.round(qiblaAngle(loc.lat,loc.lon)))}):t("qEntryNo");
+  box.innerHTML=`<button class="qentry" id="qgo"><span class="qic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z" fill="currentColor"/></svg></span><span><b>${t("qTitle")}</b><small>${sub}</small></span></button>`;
+  $("#qgo").onclick=qOpen;
+}
+const CITIES=[["makkah","مكة المكرمة","Makkah",21.4225,39.8262],["madinah","المدينة المنورة","Madinah",24.4686,39.6142],["riyadh","الرياض","Riyadh",24.7136,46.6753],["jeddah","جدة","Jeddah",21.4858,39.1925],["cairo","القاهرة","Cairo",30.0444,31.2357],["damascus","دمشق","Damascus",33.5138,36.2765],["beirut","بيروت","Beirut",33.8938,35.5018],["amman","عمّان","Amman",31.9454,35.9284],["jerusalem","القدس","Jerusalem",31.7683,35.2137],["baghdad","بغداد","Baghdad",33.3152,44.3661],["istanbul","إسطنبول","Istanbul",41.0082,28.9784],["dubai","دبي","Dubai",25.2048,55.2708]];
+function distKm(lat,lon){
+  const r=Math.PI/180,R=6371,dp=(21.4225-lat)*r,dl=(39.8262-lon)*r;
+  const a=Math.sin(dp/2)**2+Math.cos(lat*r)*Math.cos(21.4225*r)*Math.sin(dl/2)**2;
+  return 2*R*Math.asin(Math.sqrt(a));
+}
+function dialSVG(qa){
+  let tk="",lb="";
+  for(let d=0;d<360;d+=5){
+    const maj=d%30===0,a=d*Math.PI/180,r1=136,r2=r1-(maj?14:7);
+    tk+=`<line class="qt" x1="${(160+r1*Math.sin(a)).toFixed(1)}" y1="${(160-r1*Math.cos(a)).toFixed(1)}" x2="${(160+r2*Math.sin(a)).toFixed(1)}" y2="${(160-r2*Math.cos(a)).toFixed(1)}" stroke-width="${maj?2:1}" opacity="${maj?1:.5}"/>`;
+  }
+  const L=S.lang==="ar"?["ش","ق","ج","غ"]:["N","E","S","W"];
+  [0,90,180,270].forEach((d,i)=>{lb+=`<text class="qcard" x="160" y="68" transform="rotate(${d} 160 160)">${L[i]}</text>`});
+  [30,60,120,150,210,240,300,330].forEach(d=>{lb+=`<text class="qn" x="160" y="80" transform="rotate(${d} 160 160)">${d}</text>`});
+  return `<svg viewBox="0 -14 320 334" aria-hidden="true">
+    <circle class="qring" cx="160" cy="160" r="140"/><circle class="qin" cx="160" cy="160" r="96"/><circle class="qin" cx="160" cy="160" r="52"/>
+    <g id="dial">${tk}${lb}
+      <g transform="rotate(${qa} 160 160)"><line class="qline" x1="160" y1="150" x2="160" y2="44"/>
+        <circle class="qbadge" cx="160" cy="24" r="17"/><rect x="152" y="15" width="16" height="17" rx="2" fill="#000" stroke="#E3C77F" stroke-width="1"/><rect class="qk" x="152" y="20" width="16" height="3.5"/><rect class="qk" x="158" y="25" width="4" height="7"/>
+      </g>
+    </g>
+    <circle class="qhub" cx="160" cy="160" r="7"/><path class="qptr" d="M148 -14h24l-12 17z"/>
+  </svg>`;
+}
+let qHandler=null,qRaf=0;
+function qStop(){
+  if(qHandler){window.removeEventListener("deviceorientationabsolute",qHandler,true);window.removeEventListener("deviceorientation",qHandler,true);qHandler=null}
+  cancelAnimationFrame(qRaf);
+}
+function qOpen(){$("#qtitle").textContent=t("qTitle");$("#qpage").classList.add("open");qDraw()}
+function qClose(){$("#qpage").classList.remove("open");qStop();if(tab==="p")viewPrayer()}
+$("#qback").onclick=qClose;
+function qDraw(){
+  qStop();
+  const loc=ls.get("q_loc",null),mode=ls.get("q_qm",loc&&loc.city?"city":"gps");
+  const qa=loc?qiblaAngle(loc.lat,loc.lon):null;
+  let h=`<div class="seg"><button data-qm="gps" class="${mode==="gps"?"on":""}">${t("qGps")}</button><button data-qm="city" class="${mode==="city"?"on":""}">${t("qCity")}</button></div>`;
+  h+=mode==="gps"
+    ?`<button class="btnp" id="qloc" style="width:100%;margin-top:0">${loc&&!loc.city?t("locUpd"):t("locBtn")}</button>`
+    :`<select id="qcity"><option value="">${t("qCityPh")}</option>${CITIES.map(c=>`<option value="${c[0]}" ${loc&&loc.city===c[0]?"selected":""}>${S.lang==="ar"?c[1]:c[2]}</option>`).join("")}</select>`;
+  if(loc){
+    h+=`<div class="qdial" id="qd">${dialSVG(qa)}</div>
+    <div class="qstat"><div class="qmsg" id="qmsg">${t("deg",{n:N(Math.round(qa))})}</div><small id="qhead"></small><small>${t("qDist",{n:N(Math.round(distKm(loc.lat,loc.lon)))})}</small></div>
+    <div style="text-align:center"><button class="btnp" id="qstart">${t("cmpOn")}</button></div>
+    <div class="note">${t("cmpNote")}<br>${t("qCalib")}</div>`;
+  }else h+=`<div class="empty">${t("qNoLoc")}</div>`;
+  $("#qbody").innerHTML=h;
+  $("#qbody").classList.remove("qok");
+  document.querySelectorAll("[data-qm]").forEach(b=>b.onclick=()=>{ls.set("q_qm",b.dataset.qm);qDraw()});
+  const lb=$("#qloc");
+  if(lb)lb.onclick=()=>{
+    if(!navigator.geolocation){toast(t("geoUn"));return}
+    navigator.geolocation.getCurrentPosition(p=>{ls.set("q_loc",{lat:p.coords.latitude,lon:p.coords.longitude});qDraw()},()=>toast(t("geoFail")),{enableHighAccuracy:false,timeout:15000});
   };
+  const cs=$("#qcity");
+  if(cs)cs.onchange=e=>{const c=CITIES.find(x=>x[0]===e.target.value);if(c){ls.set("q_loc",{lat:c[3],lon:c[4],city:c[0]});qDraw()}};
+  const st=$("#qstart");
+  if(st)st.onclick=()=>qStart(qa,st);
+}
+async function qStart(qa,btn){
+  try{
+    if(typeof DeviceOrientationEvent!=="undefined"&&DeviceOrientationEvent.requestPermission){const r=await DeviceOrientationEvent.requestPermission();if(r!=="granted")throw 0}
+  }catch(e){toast(t("cmpFail"));return}
+  qStop();
+  let hs=0,target=null,abs=false,wasOk=false;
+  qHandler=e=>{
+    if(e.type==="deviceorientationabsolute")abs=true;else if(abs)return;
+    const hd=e.webkitCompassHeading!=null?e.webkitCompassHeading:(e.alpha!=null?(360-e.alpha)%360:null);
+    if(hd!=null)target=hd;
+  };
+  window.addEventListener("deviceorientationabsolute",qHandler,true);
+  window.addEventListener("deviceorientation",qHandler,true);
+  btn.textContent=t("cmpRun");
+  const tick=()=>{
+    const dial=$("#dial");
+    if(!dial){qStop();return}
+    if(target!=null){
+      const d=((target-hs+540)%360)-180;
+      hs=(hs+d*0.2+360)%360;
+      dial.setAttribute("transform",`rotate(${(-hs).toFixed(1)} 160 160)`);
+      const diff=((qa-hs+540)%360)-180,ok=Math.abs(diff)<=3;
+      $("#qbody").classList.toggle("qok",ok);
+      $("#qmsg").textContent=ok?t("qOk"):(diff>0?t("qRight",{n:N(Math.round(diff))}):t("qLeft",{n:N(Math.round(-diff))}));
+      $("#qhead").textContent=t("qHead",{n:N(Math.round(hs))});
+      if(ok&&!wasOk&&navigator.vibrate)navigator.vibrate(40);
+      wasOk=ok;
+    }
+    qRaf=requestAnimationFrame(tick);
+  };
+  tick();
 }
 
 /* ---------- الختمة ---------- */
