@@ -270,8 +270,8 @@ async clear(){try{const d=await this.open();await new Promise(res=>{const t=d.tr
 const S=Object.assign({lang:"ar",theme:ls.get("q_theme","light"),font:"Amiri Quran",fs:ls.get("q_fs",30),trans:"none",inline:false,pg:true,rec:ls.get("q_rec","ar.alafasy"),wake:false,auto:true,page:"ivory"},ls.get("q_set",{}));
 const saveS=()=>ls.set("q_set",S);
 const T={
-ar:{title:"القرآن الكريم",ph:"ابحث عن سورة أو كلمة من آية",tS:"السور",tA:"الأذكار",tP:"الصلاة",tK:"الختمة",tB:"المحفوظات",juz:"الأجزاء",juzN:"الجزء {n}",juzStart:"يبدأ من سورة {s}، الآية {a}",meccan:"مكية",medinan:"مدنية",ayahs:"{n} آية",offTitle:"القراءة بدون إنترنت",offDone:"المصحف كاملاً محمّل على جهازك",dlSmall:"للقراءة بدون إنترنت",dlTitle:"تحميل المصحف كاملاً",dlProg:"جارٍ التحميل",dlInc:"لم تكتمل بعض السور. أعد المحاولة عند توفر اتصال أفضل.",resume:"متابعة القراءة",resumeAt:"الآية {a}",searchIn:"ابحث عن «{q}» داخل الآيات",noRes:"لا توجد نتائج.",searching:"جارٍ البحث…",searchFail:"تعذر البحث. تأكد من اتصالك بالإنترنت.",loading:"جارٍ التحميل…",netFail:"تعذر التحميل. تأكد من اتصالك بالإنترنت.",retry:"إعادة المحاولة",surahFail:"تعذر تحميل السورة. تأكد من اتصالك بالإنترنت.",page:"صفحة {n}",tafsir:"التفسير الميسر",transH:"الترجمة",reciter:"القارئ",listen:"استماع",save:"حفظ",unsave:"إزالة الحفظ",copy:"نسخ",copied:"تم النسخ",copyFail:"تعذر النسخ",noMarks:"لا توجد آيات محفوظة بعد.<br>اضغط على أي آية ثم اختر «حفظ».",markName:"{s} - الآية {a}",audioFail:"تعذر تشغيل التلاوة. تأكد من الاتصال أو غيّر القارئ.",note:"النص: المصحف العثماني (برواية حفص عن عاصم). التفسير: التفسير الميسر، مجمع الملك فهد لطباعة المصحف الشريف.",adhM:"أذكار الصباح",adhE:"أذكار المساء",rep:"التكرار: {n}",once:"مرة واحدة",resetC:"إعادة العدّاد",adhNote:"اضغط على الذكر لإنقاص العدّاد. الأذكار من حصن المسلم، وآية الكرسي والمعوذات من نص المصحف.",needNet:"يتطلب اتصالاً بالإنترنت أو تحميل المصحف.",calc:"طريقة الحساب",mUmm:"أم القرى (مكة المكرمة)",mMwl:"رابطة العالم الإسلامي",mEgy:"الهيئة المصرية العامة للمساحة",locBtn:"تحديد موقعي",locUpd:"تحديث موقعي",geoUn:"المتصفح لا يدعم تحديد الموقع",geoFail:"تعذر تحديد الموقع. اسمح للمتصفح بالوصول إلى موقعك.",locHint:"اضغط «تحديد موقعي» لعرض أوقات الصلاة واتجاه القبلة.",ptFail:"تعذر جلب الأوقات. تأكد من اتصالك بالإنترنت.",next:"الصلاة القادمة: {p}",ptNote:"لا يمكن لصفحة ويب إصدار الأذان وهي مغلقة، فاستخدم منبّه الهاتف للتنبيه.",p_Fajr:"الفجر",p_Sunrise:"الشروق",p_Dhuhr:"الظهر",p_Asr:"العصر",p_Maghrib:"المغرب",p_Isha:"العشاء",am:"ص",pm:"م",qibla:"اتجاه القبلة",deg:"{n}° من الشمال",cmpOn:"تشغيل البوصلة",cmpRun:"البوصلة تعمل",cmpNote:"ضع الهاتف أفقياً بعيداً عن المعادن. السهم يشير إلى القبلة.",cmpFail:"تعذر تشغيل البوصلة على هذا الجهاز",khPlan:"خطة الختمة",khQ:"في كم يوماً تريد أن تختم القرآن؟",days:"{n} يوماً",khStart:"ابدأ الختمة",khDay:"ورد اليوم {d} من {t} ({n} آية)",khFrom:"من {s} آية {a}",khTo:"إلى {s} آية {a}",khGo:"ابدأ من هنا",khDone:"انتهت مدة الخطة",khProg:"تقدمك في المصحف حسب آخر موضع قرأته",khCancel:"إلغاء الخطة",set:"الإعدادات",sLang:"اللغة",sTheme:"المظهر",thL:"فاتح",thD:"داكن",thA:"تلقائي",sFont:"خط المصحف",sSize:"حجم الخط",sTrans:"ترجمة معاني القرآن",sInline:"عرض الترجمة تحت كل آية",sPg:"إظهار أرقام الصفحات والأجزاء",sWake:"إبقاء الشاشة مضاءة أثناء القراءة",sAuto:"الانتقال تلقائياً للآية التالية عند التلاوة",sReset:"حذف البيانات المحفوظة",sResetQ:"سيتم حذف المحفوظات والمصحف المحمّل والإعدادات. هل تريد المتابعة؟",off:"بدون",sPage:"خلفية القراءة",tapHint:"اضغط على أي آية لتسمعها وحدها، أو لتبدأ القراءة المتواصلة منها، أو لتقرأ تفسيرها",modeOne:"آية واحدة",modeCont:"متواصل",listenAll:"استماع متواصل",qLocating:"جارٍ تحديد موقعك…",qDeny:"لم يُسمح باستخدام البوصلة. اضغط «تشغيل البوصلة» ثم اختر «سماح»، أو أعد تحميل الصفحة وحاول مرة أخرى.",qTitle:"تحديد القبلة",qGps:"موقعي (GPS)",qCity:"اختيار مدينة",qCityPh:"اختر المدينة",qDist:"المسافة إلى الكعبة: {n} كم",qHead:"اتجاهك: {n}°",qOk:"أنت باتجاه القبلة",qRight:"أدر الهاتف يميناً {n}°",qLeft:"أدر الهاتف يساراً {n}°",qNoLoc:"حدّد موقعك أولاً لمعرفة اتجاه القبلة.",qEntryNo:"اضغط لتحديد اتجاه القبلة",qCalib:"إذا كانت القراءة غير دقيقة، حرّك الهاتف على شكل ٨ لمعايرة البوصلة.",listenOne:"استماع لهذه الآية فقط",listenFrom:"تشغيل متواصل من هنا"},
-en:{title:"The Noble Quran",ph:"Search a surah or a word in the verses",tS:"Surahs",tA:"Adhkar",tP:"Prayer",tK:"Khatma",tB:"Saved",juz:"Juz",juzN:"Juz {n}",juzStart:"Starts at {s}, verse {a}",meccan:"Meccan",medinan:"Medinan",ayahs:"{n} verses",offTitle:"Offline reading",offDone:"The full Quran is saved on your device",dlSmall:"For offline reading",dlTitle:"Download the full Quran",dlProg:"Downloading",dlInc:"Some surahs did not finish. Try again with a better connection.",resume:"Continue reading",resumeAt:"Verse {a}",searchIn:"Search for “{q}” in the verses",noRes:"No results.",searching:"Searching…",searchFail:"Search failed. Check your connection.",loading:"Loading…",netFail:"Could not load. Check your connection.",retry:"Try again",surahFail:"Could not load this surah. Check your connection.",page:"Page {n}",tafsir:"Al-Tafsir Al-Muyassar (Arabic)",transH:"Translation",reciter:"Reciter",listen:"Listen",save:"Save",unsave:"Remove",copy:"Copy",copied:"Copied",copyFail:"Could not copy",noMarks:"Nothing saved yet.<br>Tap any verse, then choose “Save”.",markName:"{s} - Verse {a}",audioFail:"Could not play the recitation. Check your connection or change the reciter.",note:"Text: Uthmani script (Hafs from Asim). Tafsir: Al-Muyassar, King Fahd Complex for the Printing of the Holy Quran.",adhM:"Morning adhkar",adhE:"Evening adhkar",rep:"Repeat: {n}",once:"Once",resetC:"Reset counter",adhNote:"Tap a dhikr to count down. Adhkar are from Hisn al-Muslim; Ayat al-Kursi and the Mu'awwidhat come from the Quran text.",needNet:"Needs an internet connection or the downloaded Quran.",calc:"Calculation method",mUmm:"Umm al-Qura (Makkah)",mMwl:"Muslim World League",mEgy:"Egyptian General Authority of Survey",locBtn:"Find my location",locUpd:"Update my location",geoUn:"Location is not supported",geoFail:"Could not get your location. Allow location access for your browser.",locHint:"Tap “Find my location” to see prayer times and the qibla direction.",ptFail:"Could not load prayer times. Check your connection.",next:"Next prayer: {p}",ptNote:"A web page cannot play the adhan while closed. Use your phone alarm for reminders.",p_Fajr:"Fajr",p_Sunrise:"Sunrise",p_Dhuhr:"Dhuhr",p_Asr:"Asr",p_Maghrib:"Maghrib",p_Isha:"Isha",am:"AM",pm:"PM",qibla:"Qibla direction",deg:"{n}° from north",cmpOn:"Start compass",cmpRun:"Compass running",cmpNote:"Hold the phone flat, away from metal. The arrow points to the qibla.",cmpFail:"The compass is not available on this device",khPlan:"Khatma plan",khQ:"In how many days do you want to finish the Quran?",days:"{n} days",khStart:"Start",khDay:"Day {d} of {t} ({n} verses)",khFrom:"From {s}, verse {a}",khTo:"To {s}, verse {a}",khGo:"Start here",khDone:"The plan has ended",khProg:"Your progress, based on your last reading position",khCancel:"Cancel plan",set:"Settings",sLang:"Language",sTheme:"Appearance",thL:"Light",thD:"Dark",thA:"Auto",sFont:"Quran font",sSize:"Text size",sTrans:"Translation of the meanings",sInline:"Show translation under each verse",sPg:"Show page and juz markers",sWake:"Keep the screen on while reading",sAuto:"Play the next verse automatically",sReset:"Delete saved data",sResetQ:"This will delete your saved verses, the downloaded Quran and your settings. Continue?",off:"Off",sPage:"Reading background",tapHint:"Tap any verse to hear it on its own, start continuous playback from it, or read its tafsir",modeOne:"Single verse",modeCont:"Continuous",listenAll:"Continuous playback",qLocating:"Finding your location…",qDeny:"Compass access was not allowed. Tap “Start compass” and choose Allow, or reload the page and try again.",qTitle:"Find the Qibla",qGps:"My location (GPS)",qCity:"Choose a city",qCityPh:"Select a city",qDist:"Distance to the Kaaba: {n} km",qHead:"Your heading: {n}°",qOk:"You are facing the Qibla",qRight:"Turn right {n}°",qLeft:"Turn left {n}°",qNoLoc:"Set your location first to find the Qibla direction.",qEntryNo:"Tap to find the Qibla direction",qCalib:"If the reading is off, move the phone in a figure 8 to calibrate the compass.",listenOne:"Listen to this verse only",listenFrom:"Play continuously from here"}
+ar:{title:"القرآن الكريم",ph:"ابحث عن سورة أو كلمة من آية",tS:"السور",tA:"الأذكار",tP:"الصلاة",tK:"الختمة",tB:"المحفوظات",juz:"الأجزاء",juzN:"الجزء {n}",juzStart:"يبدأ من سورة {s}، الآية {a}",meccan:"مكية",medinan:"مدنية",ayahs:"{n} آية",offTitle:"القراءة بدون إنترنت",offDone:"المصحف كاملاً محمّل على جهازك",dlSmall:"للقراءة بدون إنترنت",dlTitle:"تحميل المصحف كاملاً",dlProg:"جارٍ التحميل",dlInc:"لم تكتمل بعض السور. أعد المحاولة عند توفر اتصال أفضل.",resume:"متابعة القراءة",resumeAt:"الآية {a}",searchIn:"ابحث عن «{q}» داخل الآيات",noRes:"لا توجد نتائج.",searching:"جارٍ البحث…",searchFail:"تعذر البحث. تأكد من اتصالك بالإنترنت.",loading:"جارٍ التحميل…",netFail:"تعذر التحميل. تأكد من اتصالك بالإنترنت.",retry:"إعادة المحاولة",surahFail:"تعذر تحميل السورة. تأكد من اتصالك بالإنترنت.",page:"صفحة {n}",tafsir:"التفسير الميسر",transH:"الترجمة",reciter:"القارئ",listen:"استماع",save:"حفظ",unsave:"إزالة الحفظ",copy:"نسخ",copied:"تم النسخ",copyFail:"تعذر النسخ",noMarks:"لا توجد آيات محفوظة بعد.<br>اضغط على أي آية ثم اختر «حفظ».",markName:"{s} - الآية {a}",audioFail:"تعذر تشغيل التلاوة. تأكد من الاتصال أو غيّر القارئ.",note:"النص: المصحف العثماني (برواية حفص عن عاصم). التفسير: التفسير الميسر، مجمع الملك فهد لطباعة المصحف الشريف.",adhM:"أذكار الصباح",adhE:"أذكار المساء",rep:"التكرار: {n}",once:"مرة واحدة",resetC:"إعادة العدّاد",adhNote:"اضغط على الذكر لإنقاص العدّاد. الأذكار من حصن المسلم، وآية الكرسي والمعوذات من نص المصحف.",needNet:"يتطلب اتصالاً بالإنترنت أو تحميل المصحف.",calc:"طريقة الحساب",mUmm:"أم القرى (مكة المكرمة)",mMwl:"رابطة العالم الإسلامي",mEgy:"الهيئة المصرية العامة للمساحة",locBtn:"تحديد موقعي",locUpd:"تحديث موقعي",geoUn:"المتصفح لا يدعم تحديد الموقع",geoFail:"تعذر تحديد الموقع. اسمح للمتصفح بالوصول إلى موقعك.",locHint:"اضغط «تحديد موقعي» لعرض أوقات الصلاة واتجاه القبلة.",ptFail:"تعذر جلب الأوقات. تأكد من اتصالك بالإنترنت.",next:"الصلاة القادمة: {p}",ptNote:"لا يمكن لصفحة ويب إصدار الأذان وهي مغلقة، فاستخدم منبّه الهاتف للتنبيه.",p_Fajr:"الفجر",p_Sunrise:"الشروق",p_Dhuhr:"الظهر",p_Asr:"العصر",p_Maghrib:"المغرب",p_Isha:"العشاء",am:"ص",pm:"م",qibla:"اتجاه القبلة",deg:"{n}° من الشمال",cmpOn:"تشغيل البوصلة",cmpRun:"البوصلة تعمل",cmpNote:"ضع الهاتف أفقياً بعيداً عن المعادن. السهم يشير إلى القبلة.",cmpFail:"تعذر تشغيل البوصلة على هذا الجهاز",khPlan:"خطة الختمة",khQ:"في كم يوماً تريد أن تختم القرآن؟",days:"{n} يوماً",khStart:"ابدأ الختمة",khDay:"ورد اليوم {d} من {t} ({n} آية)",khFrom:"من {s} آية {a}",khTo:"إلى {s} آية {a}",khGo:"ابدأ من هنا",khDone:"انتهت مدة الخطة",khProg:"تقدمك في المصحف حسب آخر موضع قرأته",khCancel:"إلغاء الخطة",set:"الإعدادات",sLang:"اللغة",sTheme:"المظهر",thL:"فاتح",thD:"داكن",thA:"تلقائي",sFont:"خط المصحف",sSize:"حجم الخط",sTrans:"ترجمة معاني القرآن",sInline:"عرض الترجمة تحت كل آية",sPg:"إظهار أرقام الصفحات والأجزاء",sWake:"إبقاء الشاشة مضاءة أثناء القراءة",sAuto:"الانتقال تلقائياً للآية التالية عند التلاوة",sReset:"حذف البيانات المحفوظة",sResetQ:"سيتم حذف المحفوظات والمصحف المحمّل والإعدادات. هل تريد المتابعة؟",off:"بدون",sPage:"خلفية القراءة",tapHint:"اضغط على أي آية لتسمعها وحدها، أو لتبدأ القراءة المتواصلة منها، أو لتقرأ تفسيرها",modeOne:"آية واحدة",modeCont:"متواصل",listenAll:"استماع متواصل",nowAt:"الوقت الآن حسب موقعك:",tzDiff:"تنبيه: توقيت هذا الموقع يختلف عن توقيت هاتفك، والعدّاد يحسب حسب توقيت الموقع.",qLocating:"جارٍ تحديد موقعك…",qDeny:"لم يُسمح باستخدام البوصلة. اضغط «تشغيل البوصلة» ثم اختر «سماح»، أو أعد تحميل الصفحة وحاول مرة أخرى.",qTitle:"تحديد القبلة",qGps:"موقعي (GPS)",qCity:"اختيار مدينة",qCityPh:"اختر المدينة",qDist:"المسافة إلى الكعبة: {n} كم",qHead:"اتجاهك: {n}°",qOk:"أنت باتجاه القبلة",qRight:"أدر الهاتف يميناً {n}°",qLeft:"أدر الهاتف يساراً {n}°",qNoLoc:"حدّد موقعك أولاً لمعرفة اتجاه القبلة.",qEntryNo:"اضغط لتحديد اتجاه القبلة",qCalib:"إذا كانت القراءة غير دقيقة، حرّك الهاتف على شكل ٨ لمعايرة البوصلة.",listenOne:"استماع لهذه الآية فقط",listenFrom:"تشغيل متواصل من هنا"},
+en:{title:"The Noble Quran",ph:"Search a surah or a word in the verses",tS:"Surahs",tA:"Adhkar",tP:"Prayer",tK:"Khatma",tB:"Saved",juz:"Juz",juzN:"Juz {n}",juzStart:"Starts at {s}, verse {a}",meccan:"Meccan",medinan:"Medinan",ayahs:"{n} verses",offTitle:"Offline reading",offDone:"The full Quran is saved on your device",dlSmall:"For offline reading",dlTitle:"Download the full Quran",dlProg:"Downloading",dlInc:"Some surahs did not finish. Try again with a better connection.",resume:"Continue reading",resumeAt:"Verse {a}",searchIn:"Search for “{q}” in the verses",noRes:"No results.",searching:"Searching…",searchFail:"Search failed. Check your connection.",loading:"Loading…",netFail:"Could not load. Check your connection.",retry:"Try again",surahFail:"Could not load this surah. Check your connection.",page:"Page {n}",tafsir:"Al-Tafsir Al-Muyassar (Arabic)",transH:"Translation",reciter:"Reciter",listen:"Listen",save:"Save",unsave:"Remove",copy:"Copy",copied:"Copied",copyFail:"Could not copy",noMarks:"Nothing saved yet.<br>Tap any verse, then choose “Save”.",markName:"{s} - Verse {a}",audioFail:"Could not play the recitation. Check your connection or change the reciter.",note:"Text: Uthmani script (Hafs from Asim). Tafsir: Al-Muyassar, King Fahd Complex for the Printing of the Holy Quran.",adhM:"Morning adhkar",adhE:"Evening adhkar",rep:"Repeat: {n}",once:"Once",resetC:"Reset counter",adhNote:"Tap a dhikr to count down. Adhkar are from Hisn al-Muslim; Ayat al-Kursi and the Mu'awwidhat come from the Quran text.",needNet:"Needs an internet connection or the downloaded Quran.",calc:"Calculation method",mUmm:"Umm al-Qura (Makkah)",mMwl:"Muslim World League",mEgy:"Egyptian General Authority of Survey",locBtn:"Find my location",locUpd:"Update my location",geoUn:"Location is not supported",geoFail:"Could not get your location. Allow location access for your browser.",locHint:"Tap “Find my location” to see prayer times and the qibla direction.",ptFail:"Could not load prayer times. Check your connection.",next:"Next prayer: {p}",ptNote:"A web page cannot play the adhan while closed. Use your phone alarm for reminders.",p_Fajr:"Fajr",p_Sunrise:"Sunrise",p_Dhuhr:"Dhuhr",p_Asr:"Asr",p_Maghrib:"Maghrib",p_Isha:"Isha",am:"AM",pm:"PM",qibla:"Qibla direction",deg:"{n}° from north",cmpOn:"Start compass",cmpRun:"Compass running",cmpNote:"Hold the phone flat, away from metal. The arrow points to the qibla.",cmpFail:"The compass is not available on this device",khPlan:"Khatma plan",khQ:"In how many days do you want to finish the Quran?",days:"{n} days",khStart:"Start",khDay:"Day {d} of {t} ({n} verses)",khFrom:"From {s}, verse {a}",khTo:"To {s}, verse {a}",khGo:"Start here",khDone:"The plan has ended",khProg:"Your progress, based on your last reading position",khCancel:"Cancel plan",set:"Settings",sLang:"Language",sTheme:"Appearance",thL:"Light",thD:"Dark",thA:"Auto",sFont:"Quran font",sSize:"Text size",sTrans:"Translation of the meanings",sInline:"Show translation under each verse",sPg:"Show page and juz markers",sWake:"Keep the screen on while reading",sAuto:"Play the next verse automatically",sReset:"Delete saved data",sResetQ:"This will delete your saved verses, the downloaded Quran and your settings. Continue?",off:"Off",sPage:"Reading background",tapHint:"Tap any verse to hear it on its own, start continuous playback from it, or read its tafsir",modeOne:"Single verse",modeCont:"Continuous",listenAll:"Continuous playback",nowAt:"Current time at your location:",tzDiff:"Note: this location uses a different time zone from your phone. The countdown follows the location time.",qLocating:"Finding your location…",qDeny:"Compass access was not allowed. Tap “Start compass” and choose Allow, or reload the page and try again.",qTitle:"Find the Qibla",qGps:"My location (GPS)",qCity:"Choose a city",qCityPh:"Select a city",qDist:"Distance to the Kaaba: {n} km",qHead:"Your heading: {n}°",qOk:"You are facing the Qibla",qRight:"Turn right {n}°",qLeft:"Turn left {n}°",qNoLoc:"Set your location first to find the Qibla direction.",qEntryNo:"Tap to find the Qibla direction",qCalib:"If the reading is off, move the phone in a figure 8 to calibrate the compass.",listenOne:"Listen to this verse only",listenFrom:"Play continuously from here"}
 };
 const t=(k,v)=>{let s=(T[S.lang]&&T[S.lang][k])||T.ar[k]||k;if(v)for(const x in v)s=s.replace("{"+x+"}",v[x]);return s};
 const N=n=>S.lang==="ar"?AR(n):String(n);
@@ -421,6 +421,7 @@ async function openSurah(n,ayah,opts){
     sc.querySelectorAll(".ay").forEach(el=>el.onclick=()=>openSheet(+el.dataset.k));
     if(!ls.get("q_tapped",false)){const f=sc.querySelector(".ay");if(f)f.classList.add("hint")}
     sc.scrollTop=0;
+    warmSM(n);warmSM(n+1);
     if(ayah){const el=sc.querySelector(`[data-k="${ayah-1}"]`);if(el)el.scrollIntoView({block:"center"})}
   }catch(e){sc.innerHTML=`<div class="msg">${t("surahFail")}<br><button id="r2">${t("retry")}</button></div>`;$("#r2").onclick=()=>openSurah(n,ayah)}
 }
@@ -434,14 +435,14 @@ $("#scroll").addEventListener("scroll",()=>{
 function saveLast(k){last={s:cur.n,a:cur.ayahs[k].i};ls.set("q_last",last)}
 function isMarked(k){return marks.some(b=>b.s===cur.n&&b.a===cur.ayahs[k].i)}
 function recSelect(){return `<h3>${t("reciter")}</h3><select id="recSel">${RECS.map(r=>`<option value="${r[0]}" ${r[0]===S.rec?"selected":""}>${r[1]}</option>`).join("")}</select>`}
-function bindRec(){$("#recSel").onchange=e=>{S.rec=e.target.value;saveS();if(playingG)startAtG(playingG,0,true);else updPlayer()}}
+function bindRec(){$("#recSel").onchange=e=>{S.rec=e.target.value;saveS();if(playingG){single?startAtG(playingG,0,true):startCont(playingG,true)}else updPlayer()}}
 function openSheet(k){
   const a=cur.ayahs[k];saveLast(k);ls.set("q_tapped",true);document.querySelectorAll(".ay.hint").forEach(e=>e.classList.remove("hint"));
   const dirT=(TR.find(x=>x[0]===S.trans)||[])[2]||"ltr";
   $("#sheet").innerHTML=`<div class="grab"></div><div class="at q">${esc(a.text)} <span class="num"><i>${AR(a.i)}</i></span></div><div class="box"><h3>${t("tafsir")}</h3><p class="q">${esc(a.tafsir)}</p></div>${a.tr?`<div class="box"><h3>${t("transH")}</h3><p dir="${dirT}">${esc(a.tr)}</p></div>`:""}<div class="box">${recSelect()}</div><div class="acts"><button class="pri wide" id="aOne"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor" stroke="none"/></svg>${t("listenOne")}</button><button class="wide" id="aPlay"><svg viewBox="0 0 24 24"><path d="M4 5v14l8-7zM12 5v14l8-7z" fill="currentColor" stroke="none"/></svg>${t("listenFrom")}</button><button id="aMark">${isMarked(k)?t("unsave"):t("save")}</button><button id="aCopy">${t("copy")}</button></div>`;
   showSheet();bindRec();
   $("#aOne").onclick=()=>{closeSheet();single=true;startAtG(a.num,0,true)};
-  $("#aPlay").onclick=()=>{closeSheet();single=false;startAtG(a.num,0,true)};
+  $("#aPlay").onclick=()=>{closeSheet();single=false;startCont(a.num,true)};
   $("#aMark").onclick=()=>{
     if(isMarked(k))marks=marks.filter(b=>!(b.s===cur.n&&b.a===a.i));
     else marks.unshift({s:cur.n,a:a.i,name:`${cur.name} - ${AR(a.i)}`,text:a.text});
@@ -487,7 +488,7 @@ function stageNext(g){
 }
 function markAy(k){document.querySelectorAll(".ay.playing").forEach(e=>e.classList.remove("playing"));if(k>=0){const el=document.querySelector(`.ay[data-k="${k}"]`);if(el){el.classList.add("playing");el.scrollIntoView({block:"center",behavior:"smooth"})}}}
 function updPlayer(){
-  const el=ELS[ai],on=playingG&&!el.paused;
+  const el=act(),on=playingG&&!el.paused;
   $("#player").dataset.s=playingG?"play":"idle";
   $("#pIcon").innerHTML=on?IC_PAUSE:IC_PLAY;
   $("#pStartT").textContent=t("listenAll");
@@ -534,6 +535,7 @@ function scheduleSwap(){
 function swapNext(){
   if(single||!playingG)return false;
   const g=playingG+1;
+  if(g<=6236&&maybeHandover(g))return true;
   if(g>6236||stagedG!==g)return false;
   const old=ELS[ai],o=ELS[1-ai];
   if(o.error)return false;
@@ -551,6 +553,7 @@ function swapNext(){
 }
 function startAtG(g,a,user){
   if(g<1||g>6236)return;
+  if(smOn)smStop();
   clearTimeout(swapT);
   att=a||0;playingG=g;stagedG=0;stagedWarm=false;
   const el=ELS[ai],o=ELS[1-ai];
@@ -561,23 +564,24 @@ function startAtG(g,a,user){
   el.play().catch(()=>{});
   if(user&&!unlocked){
     unlocked=true;
-    try{o.muted=true;o.src=el.src;o.play().then(()=>{o.pause();o.muted=false}).catch(()=>{o.muted=false})}catch(e){o.muted=false}
+    prime(o,el.src);prime(SA[0],el.src);prime(SA[1],el.src);smUnlocked=true;
   }
   syncUI(g);
   if(!single){stageNext(g+1);getBlob(g+2,att)}
   clearPre(g);
 }
-function stop(){clearTimeout(swapT);ELS.forEach(e=>e.pause());playingG=0;stagedG=0;stagedWarm=false;single=false;playing=-1;markAy(-1);updPlayer();$("#pbar").style.width="0"}
+function stop(){smStop();clearTimeout(swapT);ELS.forEach(e=>e.pause());playingG=0;stagedG=0;stagedWarm=false;single=false;playing=-1;markAy(-1);updPlayer();$("#pbar").style.width="0"}
 function visK(){for(const el of document.querySelectorAll("#scroll .ay")){if(el.getBoundingClientRect().top>90)return +el.dataset.k}return 0}
 const visG=()=>cur?cur.ayahs[visK()].num:1;
 function playPause(){
-  if(playingG){const el=ELS[ai];if(el.paused){el.play().catch(()=>{})}else el.pause();updPlayer();return}
+  if(playingG){const el=act();if(el.paused){el.play().catch(()=>{})}else el.pause();updPlayer();return}
   if(!cur)return;
-  single=false;startAtG(visG(),0,true);
+  single=false;startCont(visG(),true);
 }
 function jump(d){
   if(!cur&&!playingG)return;
-  startAtG(Math.max(1,Math.min(6236,(playingG||visG())+d)),0,true);
+  const g=Math.max(1,Math.min(6236,(playingG||visG())+d));
+  if(single)startAtG(g,0,true);else if(smOn)smSeek(g);else startCont(g,true);
 }
 function onEnd(i){
   if(i!==ai)return;
@@ -609,6 +613,164 @@ $("#pStart").onclick=playPause;
 $("#pPrev").onclick=()=>jump(-1);
 $("#pNext").onclick=()=>jump(1);
 $("#pStop").onclick=stop;
+
+/* ---------- وضع السورة الكاملة (تلاوة متواصلة بلا فواصل) ---------- */
+const QAPI="https://api.quran.com/api/v4";
+const RMATCH={"ar.alafasy":/afasy|afasi|العفاسي/i,"ar.abdurrahmaansudais":/sudais|sudays|السديس/i,"ar.saoodshuraym":/shuraim|shuraym|الشريم/i,"ar.mahermuaiqly":/muaiqly|mueaqly|muayqly|maher|المعيقلي/i,"ar.husary":/husary|hussary|husari|الحصري/i,"ar.minshawi":/minshawi|minshawy|المنشاوي/i,"ar.abdulbasitmurattal":/abdul\s?-?ba[sc]i?t|عبد الباسط/i,"ar.hudhaify":/hudhaify|hudhayfi|huthaify|الحذيفي/i};
+const SA=[new Audio(),new Audio()];
+SA.forEach(e=>{e.preload="auto"});
+let smOn=false,sai=0,sm=null,smPoll=null,smSwapT=null,smFail={},QR=null,smUnlocked=false,smWarm=false;
+const CAm={};
+const act=()=>smOn?SA[sai]:ELS[ai];
+const gOf=(s,a)=>cumA()[s-1]+a;
+const smBad=rec=>smFail[rec]&&(Date.now()-smFail[rec])<300000;
+function prime(o,src){try{o.muted=true;o.src=src;o.play().then(()=>{o.pause();o.muted=false}).catch(()=>{o.muted=false})}catch(e){o.muted=false}}
+async function qrId(rec){
+  const c=ls.get("q_rid",{});
+  if(c[rec])return c[rec];
+  if(!QR)QR=fetch(`${QAPI}/resources/chapter_reciters`).then(r=>{if(!r.ok)throw 0;return r.json()}).then(j=>j.reciters||[]).catch(e=>{QR=null;throw e});
+  const list=await QR;
+  let m=list.filter(x=>RMATCH[rec].test((x.name||"")+" "+(x.arabic_name||"")));
+  if(/minshawi|abdulbasit/.test(rec)){const mu=m.filter(x=>/murattal|مرتل/i.test((x.name||"")+" "+(x.arabic_name||"")+" "+(x.style||"")+" "+(x.relative_path||"")));if(mu.length)m=mu}
+  if(!m.length)throw 0;
+  c[rec]=m[0].id;ls.set("q_rid",c);
+  return m[0].id;
+}
+async function chapterAudio(rec,n){
+  const key=rec+":"+n;
+  if(CAm[key])return CAm[key];
+  const id=await qrId(rec);
+  const ck=`ca:${id}:${n}`;
+  let d=await idb.get(ck);
+  if(!d){
+    const r=await fetch(`${QAPI}/chapter_recitations/${id}/${n}?segments=true`);
+    if(!r.ok)throw 0;
+    const j=await r.json(),af=j&&j.audio_file;
+    if(!af||!af.audio_url||!Array.isArray(af.timestamps))throw 0;
+    let url=af.audio_url;if(url.startsWith("//"))url="https:"+url;if(!/^https?:/.test(url))throw 0;
+    const ts=af.timestamps.map(x=>({k:+String(x.verse_key).split(":")[1],from:x.timestamp_from/1000,to:x.timestamp_to/1000}));
+    if(ts.length!==surahs[n-1].numberOfAyahs||ts.some(x=>!isFinite(x.from)||!isFinite(x.to)))throw 0;
+    d={url,ts};await idb.set(ck,d);
+  }
+  CAm[key]=d;return d;
+}
+function warmSM(n){
+  if(n<1||n>114||smBad(S.rec)||!surahs.length)return;
+  const rec=S.rec;
+  chapterAudio(rec,n).catch(()=>{smFail[rec]=Date.now()});
+}
+function startCont(g,user){
+  const lc=locOf(g,cumA()),d=CAm[S.rec+":"+lc.s];
+  if(d&&!smBad(S.rec)&&!single){startSM(lc.s,lc.a-1,d,user);return}
+  warmSM(lc.s);warmSM(lc.s+1);
+  startAtG(g,0,user);
+}
+function maybeHandover(g){
+  if(single||!smUnlocked||smBad(S.rec))return false;
+  const lc=locOf(g,cumA()),d=CAm[S.rec+":"+lc.s];
+  if(!d)return false;
+  startSM(lc.s,lc.a-1,d,false);
+  return true;
+}
+function startSM(n,k,d,user){
+  smOn=true;
+  clearTimeout(swapT);ELS.forEach(e=>e.pause());stagedG=0;stagedWarm=false;
+  clearTimeout(smSwapT);
+  const el=SA[sai],o=SA[1-sai];
+  o.pause();el.muted=false;
+  sm={n,d,k};
+  const t0=d.ts[k].from;
+  if(el._u!==d.url){
+    el._u=d.url;el.src=d.url;
+    el.addEventListener("loadedmetadata",()=>{try{el.currentTime=t0}catch(e){}},{once:true});
+  }else{try{el.currentTime=t0}catch(e){}}
+  el.play().catch(()=>{});
+  if(user&&!smUnlocked){smUnlocked=true;prime(o,d.url)}
+  playingG=gOf(n,k+1);
+  smWarm=false;
+  smPollStart();
+  smStage(n);
+  smSchedule();
+  syncUI(playingG);
+}
+function smStage(n){
+  if(n>=114)return;
+  const apply=nd=>{
+    if(!smOn||!sm||sm.n!==n)return;
+    const o=SA[1-sai];o.muted=false;
+    if(o._u!==nd.url){o._u=nd.url;o.src=nd.url;o.load()}
+    smWarm=false;
+  };
+  const nd=CAm[S.rec+":"+(n+1)];
+  if(nd)apply(nd);else chapterAudio(S.rec,n+1).then(apply).catch(()=>{});
+}
+function smPollStart(){
+  clearInterval(smPoll);
+  smPoll=setInterval(()=>{
+    if(!smOn||!sm)return;
+    const el=SA[sai],ts=sm.d.ts,tm=el.currentTime;
+    if(el.duration){
+      $("#pbar").style.width=(100*tm/el.duration)+"%";
+      if(!smWarm&&!el.paused&&el.duration-tm<3&&CAm[S.rec+":"+(sm.n+1)]){smWarm=true;const o=SA[1-sai];o.muted=true;o.play().catch(()=>{})}
+    }
+    let k=sm.k;
+    if(tm<ts[k].from-0.02||tm>=ts[k].to+0.02){k=0;for(let i=0;i<ts.length;i++){if(ts[i].from<=tm+0.02)k=i;else break}}
+    if(k!==sm.k){sm.k=k;playingG=gOf(sm.n,k+1);syncUI(playingG)}
+  },100);
+}
+function smSchedule(){
+  clearTimeout(smSwapT);
+  if(!smOn)return;
+  const el=SA[sai];
+  const go=()=>{
+    clearTimeout(smSwapT);
+    if(!smOn||SA[sai]!==el||!isFinite(el.duration)||!el.duration)return;
+    smSwapT=setTimeout(smNext,Math.max(0,(el.duration-el.currentTime)*1000-LEAD));
+  };
+  if(el.readyState>=1)go();else el.addEventListener("loadedmetadata",go,{once:true});
+}
+function smNext(){
+  if(!smOn||!sm)return;
+  const el=SA[sai];
+  if(el.paused&&!el.ended)return;
+  const n=sm.n+1;
+  if(n>114){stop();return}
+  const nd=CAm[S.rec+":"+n];
+  if(!nd){smStop();startAtG(gOf(n,1),0,false);return}
+  const o=SA[1-sai],old=el;
+  sai=1-sai;sm={n,d:nd,k:0};
+  if(smWarm){try{o.currentTime=0}catch(e){}}
+  smWarm=false;o.muted=false;
+  if(o._u!==nd.url){o._u=nd.url;o.src=nd.url}
+  o.play().catch(()=>{});
+  setTimeout(()=>{if(old!==SA[sai])old.pause()},300);
+  playingG=gOf(n,1);
+  syncUI(playingG);
+  setTimeout(()=>{if(smOn&&sm&&sm.n===n)smStage(n)},400);
+  smSchedule();
+}
+function smSeek(g){
+  const lc=locOf(g,cumA());
+  if(sm&&sm.n===lc.s){
+    const el=SA[sai];sm.k=lc.a-1;playingG=g;
+    try{el.currentTime=sm.d.ts[lc.a-1].from}catch(e){}
+    if(el.paused)el.play().catch(()=>{});
+    syncUI(g);smSchedule();
+  }else startCont(g,true);
+}
+function smStop(){
+  smOn=false;clearInterval(smPoll);clearTimeout(smSwapT);
+  SA.forEach(e=>e.pause());sm=null;smWarm=false;
+}
+SA.forEach((el,i)=>{
+  el.onended=()=>{if(i===sai&&smOn)smNext()};
+  el.onplay=()=>{if(i===sai&&smOn){updPlayer();smSchedule()}};
+  el.onpause=()=>{if(i===sai&&smOn){clearTimeout(smSwapT);updPlayer()}};
+  el.onerror=()=>{
+    if(i!==sai||!smOn)return;
+    const g=playingG;smFail[S.rec]=Date.now();smStop();startAtG(g,0,false);
+  };
+});
 $("#back").onclick=()=>{stop();closeSheet();wakeOff();$("#reader").classList.remove("open");cur=null;renderMain()};
 function setFs(d){S.fs=Math.min(48,Math.max(22,S.fs+d));document.documentElement.style.setProperty("--fs",S.fs+"px");saveS()}
 $("#fp").onclick=()=>setFs(2);$("#fm").onclick=()=>setFs(-2);
@@ -674,32 +836,51 @@ async function viewPrayer(){
   };
   if(!loc){$("#pt").innerHTML=`<div class="empty">${t("locHint")}</div>`;return}
   const now=new Date(),ds=`${pad(now.getDate())}-${pad(now.getMonth()+1)}-${now.getFullYear()}`,key=`${loc.lat.toFixed(2)},${loc.lon.toFixed(2)},${meth},${ds}`;
+  const dayAtRender=now.getDate();
   let tm=ls.get("q_pt",null);
-  if(!tm||tm.key!==key){
+  if(!tm||tm.key!==key||!tm.tz){
     try{
-      const r=await fetch(`https://api.aladhan.com/v1/timings/${ds}?latitude=${loc.lat}&longitude=${loc.lon}&method=${meth}`);
+      const base=`latitude=${loc.lat}&longitude=${loc.lon}&method=${meth}`;
+      const r=await fetch(`https://api.aladhan.com/v1/timings/${ds}?${base}`);
       const j=await r.json();if(j.code!==200)throw 0;
-      tm={key,t:Object.fromEntries(PN.map(p=>[p,j.data.timings[p].slice(0,5)]))};ls.set("q_pt",tm);
-    }catch(e){$("#pt").innerHTML=`<div class="msg">${t("ptFail")}</div>`;return}
+      const tw=new Date(now.getTime()+86400000),dt=`${pad(tw.getDate())}-${pad(tw.getMonth()+1)}-${tw.getFullYear()}`;
+      let nf=null;
+      try{const r2=await fetch(`https://api.aladhan.com/v1/timings/${dt}?${base}`);const j2=await r2.json();if(j2.code===200)nf=j2.data.timings.Fajr.slice(0,5)}catch(e){}
+      tm={key,tz:(j.data.meta&&j.data.meta.timezone)||"local",nf,t:Object.fromEntries(PN.map(p=>[p,j.data.timings[p].slice(0,5)]))};ls.set("q_pt",tm);
+    }catch(e){if($("#pt"))$("#pt").innerHTML=`<div class="msg">${t("ptFail")}</div>`;return}
   }
-  const TM=tm.t;
+  if(tab!=="p"||!$("#pt"))return;
+  const TM=tm.t,tzn=tm.tz==="local"?undefined:tm.tz;
   function nextP(){
-    const n=new Date();
-    for(const k of ["Fajr","Dhuhr","Asr","Maghrib","Isha"]){const [h,mi]=TM[k].split(":").map(Number);const d=new Date(n);d.setHours(h,mi,0,0);if(d>n)return [k,d]}
-    const [h,mi]=TM.Fajr.split(":").map(Number);const d=new Date(n);d.setDate(d.getDate()+1);d.setHours(h,mi,0,0);return ["Fajr",d];
+    const n=nowIn(tzn),ns=n.h*3600+n.m*60+n.s;
+    for(const k of ["Fajr","Dhuhr","Asr","Maghrib","Isha"]){const [h,mi]=TM[k].split(":").map(Number);const ps=h*3600+mi*60;if(ps>ns)return [k,ps-ns,n]}
+    const f=(tm.nf||TM.Fajr).split(":").map(Number);
+    return ["Fajr",86400-ns+f[0]*3600+f[1]*60,n];
   }
   let lastNk="";
   function draw(){
-    const [nk,nd]=nextP(),diff=Math.max(0,Math.floor((nd-new Date())/1000)),hh=Math.floor(diff/3600),mm=Math.floor(diff%3600/60),ss=diff%60;
+    if(new Date().getDate()!==dayAtRender){clearInterval(pTimer);viewPrayer();return}
+    const [nk,diff,n]=nextP(),hh=Math.floor(diff/3600),mm=Math.floor(diff%3600/60),ss=diff%60;
     const el=$("#pt");if(!el)return;
     if(!$("#pcd")){
-      el.innerHTML=`<div class="card"><small id="pnx"></small><div class="big" dir="ltr" id="pcd"></div></div>`+PN.map(p=>`<div class="prow" id="pr_${p}"><span>${t("p_"+p)}</span><span>${t12(TM[p])}</span></div>`).join("")+`<div class="note">${t("ptNote")}</div>`;
+      el.innerHTML=`<div class="card"><small id="pnx"></small><div class="big" dir="ltr" id="pcd"></div><small id="pnow" style="margin-top:6px"></small></div><div class="note" id="ptz" style="color:#B3392F;padding-top:0"></div>`+PN.map(p=>`<div class="prow" id="pr_${p}"><span>${t("p_"+p)}</span><span>${t12(TM[p])}</span></div>`).join("")+`<div class="note">${t("ptNote")}</div>`;
       lastNk="";
     }
     if(nk!==lastNk){lastNk=nk;$("#pnx").textContent=t("next",{p:t("p_"+nk)});PN.forEach(x=>{const r=$("#pr_"+x);if(r)r.classList.toggle("next",x===nk)})}
     $("#pcd").textContent=`${N(pad(hh))}:${N(pad(mm))}:${N(pad(ss))}`;
+    $("#pnow").textContent=`${t("nowAt")} ${t12(pad(n.h)+":"+pad(n.m))}`;
+    const dv=new Date();let df=(dv.getHours()*60+dv.getMinutes())-(n.h*60+n.m);df=((df+2160)%1440)-720;
+    $("#ptz").textContent=Math.abs(df)>2?t("tzDiff"):"";
   }
   draw();pTimer=setInterval(draw,1000);
+}
+
+function nowIn(tz){
+  try{
+    const f=new Intl.DateTimeFormat("en-GB",{timeZone:tz,hourCycle:"h23",hour:"2-digit",minute:"2-digit",second:"2-digit"});
+    const o={};f.formatToParts(new Date()).forEach(x=>{if(x.type!=="literal")o[x.type]=+x.value});
+    return {h:o.hour%24,m:o.minute,s:o.second};
+  }catch(e){const d=new Date();return{h:d.getHours(),m:d.getMinutes(),s:d.getSeconds()}}
 }
 function qiblaAngle(lat,lon){
   const r=Math.PI/180,p1=lat*r,p2=21.4225*r,dl=(39.8262-lon)*r;
@@ -874,7 +1055,7 @@ function openSettings(){
   const markP=()=>document.querySelectorAll("#sPage button").forEach(b=>b.classList.toggle("on",b.dataset.v===S.page));markP();
   document.querySelectorAll("#sPage button").forEach(b=>b.onclick=()=>{S.page=b.dataset.v;saveS();document.documentElement.dataset.page=S.page;markP()});
   [["sInline","inline"],["sPg","pg"],["sWake","wake"]].forEach(([id,k])=>$("#"+id).onchange=e=>{S[k]=e.target.checked;saveS()});
-  $("#sRec").onchange=e=>{S.rec=e.target.value;saveS();if(playingG)startAtG(playingG,0,true);else updPlayer()};
+  $("#sRec").onchange=e=>{S.rec=e.target.value;saveS();if(playingG){single?startAtG(playingG,0,true):startCont(playingG,true)}else updPlayer()};
   $("#sReset").onclick=async()=>{
     if(!confirm(t("sResetQ")))return;
     try{localStorage.clear()}catch(e){}
