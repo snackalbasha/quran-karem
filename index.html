@@ -359,11 +359,12 @@ async set(k,v){try{const d=await this.open();await new Promise(res=>{const t=d.t
 async clear(){try{const d=await this.open();await new Promise(res=>{const t=d.transaction("c","readwrite");t.objectStore("c").clear();t.oncomplete=res;t.onerror=res})}catch(e){}}};
 
 /* ---------- الإعدادات ---------- */
-const S=Object.assign({lang:"ar",theme:ls.get("q_theme","light"),font:"Amiri Quran",fs:ls.get("q_fs",30),trans:"none",inline:false,pg:true,rec:ls.get("q_rec","ar.alafasy"),wake:false,auto:true,page:"ivory",engine:"surah",book:true,fit:true,anim:true,rate:1,tafsir:"muyassar",goal:2},ls.get("q_set",{}));
+const S=Object.assign({lang:"ar",theme:ls.get("q_theme","light"),font:"Amiri Quran",fs:ls.get("q_fs",30),trans:"none",inline:false,pg:true,rec:ls.get("q_rec","ar.alafasy"),wake:false,auto:true,page:"ivory",engine:"surah",book:true,fit:true,anim:true,rate:1,tafsir:"muyassar",goal:2,ev2:0},ls.get("q_set",{}));
 const saveS=()=>ls.set("q_set",S);
+if(!S.ev3){S.engine="surah";S.ev3=1;saveS()}
 const T={
-ar:{title:"القرآن الكريم",ph:"ابحث عن سورة أو كلمة من آية",tS:"السور",tA:"الأذكار",tP:"الصلاة",tK:"الختمة",tB:"المحفوظات",juz:"الأجزاء",juzN:"الجزء {n}",juzStart:"يبدأ من سورة {s}، الآية {a}",meccan:"مكية",medinan:"مدنية",ayahs:"{n} آية",offTitle:"القراءة بدون إنترنت",offDone:"المصحف كاملاً محمّل على جهازك",dlSmall:"للقراءة بدون إنترنت",dlTitle:"تحميل المصحف كاملاً",dlProg:"جارٍ التحميل",dlInc:"لم تكتمل بعض السور. أعد المحاولة عند توفر اتصال أفضل.",resume:"متابعة القراءة",resumeAt:"الآية {a}",searchIn:"ابحث عن «{q}» داخل الآيات",noRes:"لا توجد نتائج.",searching:"جارٍ البحث…",searchFail:"تعذر البحث. تأكد من اتصالك بالإنترنت.",loading:"جارٍ التحميل…",netFail:"تعذر التحميل. تأكد من اتصالك بالإنترنت.",retry:"إعادة المحاولة",surahFail:"تعذر تحميل السورة. تأكد من اتصالك بالإنترنت.",page:"صفحة {n}",tafsir:"التفسير الميسر",transH:"الترجمة",reciter:"القارئ",listen:"استماع",save:"حفظ",unsave:"إزالة الحفظ",copy:"نسخ",copied:"تم النسخ",copyFail:"تعذر النسخ",noMarks:"لا توجد آيات محفوظة بعد.<br>اضغط على أي آية ثم اختر «حفظ».",markName:"{s} - الآية {a}",audioFail:"تعذر تشغيل التلاوة. تأكد من الاتصال أو غيّر القارئ.",note:"النص: المصحف العثماني (برواية حفص عن عاصم). التفسير: التفسير الميسر، مجمع الملك فهد لطباعة المصحف الشريف.",adhM:"أذكار الصباح",adhE:"أذكار المساء",rep:"التكرار: {n}",once:"مرة واحدة",resetC:"إعادة العدّاد",adhNote:"اضغط على الذكر لإنقاص العدّاد. الأذكار من حصن المسلم، وآية الكرسي والمعوذات من نص المصحف.",needNet:"يتطلب اتصالاً بالإنترنت أو تحميل المصحف.",calc:"طريقة الحساب",mUmm:"أم القرى (مكة المكرمة)",mMwl:"رابطة العالم الإسلامي",mEgy:"الهيئة المصرية العامة للمساحة",locBtn:"تحديد موقعي",locUpd:"تحديث موقعي",geoUn:"المتصفح لا يدعم تحديد الموقع",geoFail:"تعذر تحديد الموقع. اسمح للمتصفح بالوصول إلى موقعك.",locHint:"اضغط «تحديد موقعي» لعرض أوقات الصلاة واتجاه القبلة.",ptFail:"تعذر جلب الأوقات. تأكد من اتصالك بالإنترنت.",next:"الصلاة القادمة: {p}",ptNote:"لا يمكن لصفحة ويب إصدار الأذان وهي مغلقة، فاستخدم منبّه الهاتف للتنبيه.",p_Fajr:"الفجر",p_Sunrise:"الشروق",p_Dhuhr:"الظهر",p_Asr:"العصر",p_Maghrib:"المغرب",p_Isha:"العشاء",am:"ص",pm:"م",qibla:"اتجاه القبلة",deg:"{n}° من الشمال",cmpOn:"تشغيل البوصلة",cmpRun:"البوصلة تعمل",cmpNote:"ضع الهاتف أفقياً بعيداً عن المعادن. السهم يشير إلى القبلة.",cmpFail:"تعذر تشغيل البوصلة على هذا الجهاز",khPlan:"خطة الختمة",khQ:"في كم يوماً تريد أن تختم القرآن؟",days:"{n} يوماً",khStart:"ابدأ الختمة",khDay:"ورد اليوم {d} من {t} ({n} آية)",khFrom:"من {s} آية {a}",khTo:"إلى {s} آية {a}",khGo:"ابدأ من هنا",khDone:"انتهت مدة الخطة",khProg:"تقدمك في المصحف حسب آخر موضع قرأته",khCancel:"إلغاء الخطة",set:"الإعدادات",sLang:"اللغة",sTheme:"المظهر",thL:"فاتح",thD:"داكن",thA:"تلقائي",sFont:"خط المصحف",sSize:"حجم الخط",sTrans:"ترجمة معاني القرآن",sInline:"عرض الترجمة تحت كل آية",sPg:"إظهار أرقام الصفحات والأجزاء",sWake:"إبقاء الشاشة مضاءة أثناء القراءة",sAuto:"الانتقال تلقائياً للآية التالية عند التلاوة",sReset:"حذف البيانات المحفوظة",sResetQ:"سيتم حذف المحفوظات والمصحف المحمّل والإعدادات. هل تريد المتابعة؟",off:"بدون",sPage:"خلفية القراءة",tapHint:"اضغط على أي آية لتسمعها وحدها، أو لتبدأ القراءة المتواصلة منها، أو لتقرأ تفسيرها",modeOne:"آية واحدة",modeCont:"متواصل",listenAll:"استماع متواصل",preparing:"جارٍ التحضير…",tM:"المزيد",mSaved:"الآيات المحفوظة",mSavedS:"{n} آية",mTasbih:"السبحة",mTasbihS:"عدّاد التسبيح",mHijri:"التقويم الهجري",mHifz:"الحفظ",mHifzS:"{n} سورة محفوظة",mInstall:"إضافة التطبيق للشاشة الرئيسية",mInstallS:"يعمل كتطبيق وبدون إنترنت",insIos:"على الآيفون: افتح الرابط في Safari، اضغط زر المشاركة، ثم «إضافة إلى الشاشة الرئيسية».",insAnd:"على أندرويد: افتح قائمة المتصفح ثم اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».",insNow:"تثبيت الآن",okK:"حسناً",tReset:"تصفير العدّاد",tDone:"اكتمل العدد",tToday:"إجمالي اليوم: {n}",hAH:"هـ",hNote:"التقويم حسب أم القرى، وقد تختلف التواريخ بيوم حسب رؤية الهلال في بلدك.",hOcc:"مناسبات هذا الشهر",hFast:"يُستحب صيام الإثنين والخميس من كل أسبوع.",o_new:"رأس السنة الهجرية",o_tas:"تاسوعاء (يُستحب صيامه)",o_ash:"عاشوراء (يُستحب صيامه)",o_ram:"بداية شهر رمضان",o_last:"العشر الأواخر من رمضان",o_fit:"عيد الفطر",o_ten:"العشر الأول من ذي الحجة",o_arf:"يوم عرفة",o_adh:"عيد الأضحى",o_tash:"أيام التشريق",o_white:"الأيام البيض (يُستحب صيامها)",hzProg:"حفظت {a} من {b} سورة",hzTap:"اضغط على رقم السورة لتحديدها كمحفوظة",hzMarked:"سورة {s}: محفوظة",hzUnmarked:"سورة {s}: غير محفوظة",hzTitle:"وضع الحفظ",hzFrom:"من آية",hzTo:"إلى آية",hzRv:"تكرار كل آية",hzRr:"تكرار المقطع",hzHide:"إخفاء نص الآية (اضغط عليه لإظهاره)",hzDone:"حفظت هذه السورة كاملة",hzStart:"ابدأ التكرار",hzStop:"إيقاف",hzMode:"وضع الحفظ",hzStat:"الآية {a} · التكرار {v} من {rv} · المقطع {r} من {rr}",pmTitle:"خيارات التشغيل",pmSpeed:"سرعة التلاوة",pmSleep:"مؤقّت النوم",minShort:"د",pmEnd:"نهاية السورة",pmRepS:"تكرار السورة",pmRepV:"تكرار الآية الحالية",sleepDone:"توقفت التلاوة بسبب مؤقّت النوم",wirdT:"ورد اليوم",wirdPages:"قرأت {a} صفحة اليوم",streak:"أيام متتالية: {n}",wirdGoal:"هدفك اليومي",pagesN:"{n} صفحة",goalDone:"أتممت ورد اليوم، بارك الله فيك",tfEmpty:"تفسير هذه الآية مذكور مع الآيات المجاورة في هذا التفسير.",tfFail:"تعذر تحميل التفسير. تأكد من اتصالك بالإنترنت.",shareImg:"مشاركة كصورة",shareRef:"سورة {s} · الآية {a}",shareFail:"تعذر إنشاء الصورة",shareSaved:"تم حفظ الصورة",sBook:"عرض الصفحات كالكتاب",sFit:"ملاءمة النص مع الصفحة",sAnim:"حركة قلب الصفحة",adhT:"الأذان",adhOn:"تشغيل الأذان تلقائياً في وقت كل صلاة",adhSrc:"صوت الأذان",adhSrcNet:"أذان جاهز (يحتاج إنترنت مرة واحدة)",adhSrcFile:"ملف من جهازي",adhSrcNone:"تنبيه فقط بدون صوت",adhReady:"تم تجهيز الأذان للعمل بدون إنترنت",adhDlFail:"تعذر تحميل الأذان الجاهز",adhFail:"تعذر تشغيل الأذان. اضغط «تجربة الأذان» مرة واحدة ثم أعد المحاولة.",clockT:"شاشة الساعة للأذان",clockNote:"اترك الهاتف على الشاحن والتطبيق مفتوحاً على هذه الشاشة، فيشتغل الأذان تلقائياً عند كل صلاة. الشاشة تبقى مضاءة بإضاءة هادئة وتتحرك الساعة قليلاً لحماية الشاشة.",clockOpen:"فتح شاشة الساعة",clockExit:"اضغط في أي مكان للخروج",adhFile:"اختيار ملف الأذان",adhFileOk:"الملف المختار: {n}",adhNoFile:"لم يُختر ملف، سيظهر تنبيه فقط.",adhTest:"تجربة الأذان",adhNote:"الأذان يعمل تلقائياً في كل وقت صلاة طالما التطبيق مفتوح. الآيفون يوقف التطبيقات المغلقة، لذلك للتأكد استخدم «شاشة الساعة» أثناء الشحن، أو تنبيهات التقويم.",adhTime:"حان وقت صلاة {p}",calT:"تنبيهات الصلاة في التقويم",calBtn:"تنزيل تنبيهات ٣٠ يوماً",calNote:"يضيف مواعيد الصلاة إلى تقويم هاتفك مع تنبيه عند كل صلاة، حتى لو كان التطبيق مغلقاً.",calFail:"تعذر إنشاء التنبيهات. تأكد من الاتصال وتحديد موقعك.",calPray:"صلاة {p}",smFail:"تعذر تحميل ملف السورة، تم التحويل إلى آية بآية.",sEngine:"طريقة التلاوة المتواصلة",eSurah:"ملف السورة كاملاً (بدون فواصل)",eAyah:"آية بآية",smOkL:"تلاوة السورة الكاملة: تعمل",smNoL:"تلاوة السورة الكاملة: غير متاحة، يُستخدم آية بآية",smUnkL:"تلاوة السورة الكاملة: لم تُختبر بعد",pfOk:"التحميل المسبق للآيات: يعمل",pfNo:"التحميل المسبق للآيات: غير متاح مع هذه الشبكة أو هذا القارئ",pfUnk:"التحميل المسبق للآيات: لم يُختبر بعد، شغّل آية أولاً",nowAt:"الوقت الآن حسب موقعك:",tzDiff:"تنبيه: توقيت هذا الموقع يختلف عن توقيت هاتفك، والعدّاد يحسب حسب توقيت الموقع.",qLocating:"جارٍ تحديد موقعك…",qDeny:"لم يُسمح باستخدام البوصلة. اضغط «تشغيل البوصلة» ثم اختر «سماح»، أو أعد تحميل الصفحة وحاول مرة أخرى.",qTitle:"تحديد القبلة",qGps:"موقعي (GPS)",qCity:"اختيار مدينة",qCityPh:"اختر المدينة",qDist:"المسافة إلى الكعبة: {n} كم",qHead:"اتجاهك: {n}°",qOk:"أنت باتجاه القبلة",qRight:"أدر الهاتف يميناً {n}°",qLeft:"أدر الهاتف يساراً {n}°",qNoLoc:"حدّد موقعك أولاً لمعرفة اتجاه القبلة.",qEntryNo:"اضغط لتحديد اتجاه القبلة",qCalib:"إذا كانت القراءة غير دقيقة، حرّك الهاتف على شكل ٨ لمعايرة البوصلة.",listenOne:"استماع لهذه الآية فقط",listenFrom:"تشغيل متواصل من هنا"},
-en:{title:"The Noble Quran",ph:"Search a surah or a word in the verses",tS:"Surahs",tA:"Adhkar",tP:"Prayer",tK:"Khatma",tB:"Saved",juz:"Juz",juzN:"Juz {n}",juzStart:"Starts at {s}, verse {a}",meccan:"Meccan",medinan:"Medinan",ayahs:"{n} verses",offTitle:"Offline reading",offDone:"The full Quran is saved on your device",dlSmall:"For offline reading",dlTitle:"Download the full Quran",dlProg:"Downloading",dlInc:"Some surahs did not finish. Try again with a better connection.",resume:"Continue reading",resumeAt:"Verse {a}",searchIn:"Search for “{q}” in the verses",noRes:"No results.",searching:"Searching…",searchFail:"Search failed. Check your connection.",loading:"Loading…",netFail:"Could not load. Check your connection.",retry:"Try again",surahFail:"Could not load this surah. Check your connection.",page:"Page {n}",tafsir:"Al-Tafsir Al-Muyassar (Arabic)",transH:"Translation",reciter:"Reciter",listen:"Listen",save:"Save",unsave:"Remove",copy:"Copy",copied:"Copied",copyFail:"Could not copy",noMarks:"Nothing saved yet.<br>Tap any verse, then choose “Save”.",markName:"{s} - Verse {a}",audioFail:"Could not play the recitation. Check your connection or change the reciter.",note:"Text: Uthmani script (Hafs from Asim). Tafsir: Al-Muyassar, King Fahd Complex for the Printing of the Holy Quran.",adhM:"Morning adhkar",adhE:"Evening adhkar",rep:"Repeat: {n}",once:"Once",resetC:"Reset counter",adhNote:"Tap a dhikr to count down. Adhkar are from Hisn al-Muslim; Ayat al-Kursi and the Mu'awwidhat come from the Quran text.",needNet:"Needs an internet connection or the downloaded Quran.",calc:"Calculation method",mUmm:"Umm al-Qura (Makkah)",mMwl:"Muslim World League",mEgy:"Egyptian General Authority of Survey",locBtn:"Find my location",locUpd:"Update my location",geoUn:"Location is not supported",geoFail:"Could not get your location. Allow location access for your browser.",locHint:"Tap “Find my location” to see prayer times and the qibla direction.",ptFail:"Could not load prayer times. Check your connection.",next:"Next prayer: {p}",ptNote:"A web page cannot play the adhan while closed. Use your phone alarm for reminders.",p_Fajr:"Fajr",p_Sunrise:"Sunrise",p_Dhuhr:"Dhuhr",p_Asr:"Asr",p_Maghrib:"Maghrib",p_Isha:"Isha",am:"AM",pm:"PM",qibla:"Qibla direction",deg:"{n}° from north",cmpOn:"Start compass",cmpRun:"Compass running",cmpNote:"Hold the phone flat, away from metal. The arrow points to the qibla.",cmpFail:"The compass is not available on this device",khPlan:"Khatma plan",khQ:"In how many days do you want to finish the Quran?",days:"{n} days",khStart:"Start",khDay:"Day {d} of {t} ({n} verses)",khFrom:"From {s}, verse {a}",khTo:"To {s}, verse {a}",khGo:"Start here",khDone:"The plan has ended",khProg:"Your progress, based on your last reading position",khCancel:"Cancel plan",set:"Settings",sLang:"Language",sTheme:"Appearance",thL:"Light",thD:"Dark",thA:"Auto",sFont:"Quran font",sSize:"Text size",sTrans:"Translation of the meanings",sInline:"Show translation under each verse",sPg:"Show page and juz markers",sWake:"Keep the screen on while reading",sAuto:"Play the next verse automatically",sReset:"Delete saved data",sResetQ:"This will delete your saved verses, the downloaded Quran and your settings. Continue?",off:"Off",sPage:"Reading background",tapHint:"Tap any verse to hear it on its own, start continuous playback from it, or read its tafsir",modeOne:"Single verse",modeCont:"Continuous",listenAll:"Continuous playback",preparing:"Preparing…",tM:"More",mSaved:"Saved verses",mSavedS:"{n} verses",mTasbih:"Tasbih counter",mTasbihS:"Dhikr counter",mHijri:"Hijri calendar",mHifz:"Memorization",mHifzS:"{n} surahs memorized",mInstall:"Add to Home Screen",mInstallS:"Works like an app, even offline",insIos:"On iPhone: open the link in Safari, tap Share, then “Add to Home Screen”.",insAnd:"On Android: open the browser menu, then choose “Install app” or “Add to Home screen”.",insNow:"Install now",okK:"OK",tReset:"Reset counter",tDone:"Target reached",tToday:"Total today: {n}",hAH:"AH",hNote:"Umm al-Qura calendar. Dates may differ by a day depending on moon sighting in your country.",hOcc:"This month",hFast:"Fasting on Mondays and Thursdays is recommended.",o_new:"Islamic New Year",o_tas:"Tasu'a (fasting recommended)",o_ash:"Ashura (fasting recommended)",o_ram:"Start of Ramadan",o_last:"Last ten days of Ramadan",o_fit:"Eid al-Fitr",o_ten:"First ten days of Dhul-Hijjah",o_arf:"Day of Arafah",o_adh:"Eid al-Adha",o_tash:"Days of Tashreeq",o_white:"White days (fasting recommended)",hzProg:"You memorized {a} of {b} surahs",hzTap:"Tap a surah number to mark it as memorized",hzMarked:"Surah {s}: memorized",hzUnmarked:"Surah {s}: not memorized",hzTitle:"Memorization mode",hzFrom:"From verse",hzTo:"To verse",hzRv:"Repeat each verse",hzRr:"Repeat the passage",hzHide:"Hide the verse text (tap it to reveal)",hzDone:"I memorized this whole surah",hzStart:"Start repeating",hzStop:"Stop",hzMode:"Memorization",hzStat:"Verse {a} · Repeat {v} of {rv} · Passage {r} of {rr}",pmTitle:"Playback options",pmSpeed:"Speed",pmSleep:"Sleep timer",minShort:"m",pmEnd:"End of surah",pmRepS:"Repeat the surah",pmRepV:"Repeat current verse",sleepDone:"Playback stopped by the sleep timer",wirdT:"Daily reading",wirdPages:"Pages read today: {a}",streak:"Streak: {n} days",wirdGoal:"Daily goal",pagesN:"{n} pages",goalDone:"Daily goal complete, well done",tfEmpty:"This verse is explained together with its neighboring verses in this tafsir.",tfFail:"Could not load the tafsir. Check your connection.",shareImg:"Share as image",shareRef:"Surah {s} · Verse {a}",shareFail:"Could not create the image",shareSaved:"Image saved",sBook:"Book-style pages",sFit:"Fit text to the page",sAnim:"Page-turn animation",adhT:"Adhan",adhOn:"Play the adhan automatically at each prayer time",adhSrc:"Adhan sound",adhSrcNet:"Built-in adhan (needs internet once)",adhSrcFile:"A file from my device",adhSrcNone:"Alert only, no sound",adhReady:"Adhan saved for offline use",adhDlFail:"Could not download the built-in adhan",adhFail:"Could not play the adhan. Tap “Test adhan” once, then try again.",clockT:"Adhan clock screen",clockNote:"Leave the phone charging with the app open on this screen and the adhan plays automatically at each prayer. The screen stays on, dim, and the clock drifts slightly to protect it.",clockOpen:"Open clock screen",clockExit:"Tap anywhere to exit",adhFile:"Choose adhan audio file",adhFileOk:"Selected file: {n}",adhNoFile:"No file chosen; only an alert will appear.",adhTest:"Test adhan",adhNote:"The adhan plays automatically at every prayer time while the app is open. iPhone pauses closed apps, so use the clock screen while charging, or the calendar alerts.",adhTime:"It is time for {p} prayer",calT:"Prayer alerts in Calendar",calBtn:"Download 30 days of alerts",calNote:"Adds prayer times to your phone calendar with an alert at each prayer, even when the app is closed.",calFail:"Could not create the alerts. Check your connection and location.",calPray:"{p} prayer",smFail:"Could not load the surah audio; switched to verse by verse.",sEngine:"Continuous playback method",eSurah:"Whole-surah file (no gaps)",eAyah:"Verse by verse",smOkL:"Whole-surah playback: working",smNoL:"Whole-surah playback: not available, using verse by verse",smUnkL:"Whole-surah playback: not tested yet",pfOk:"Verse preloading: working",pfNo:"Verse preloading: not available on this network or reciter",pfUnk:"Verse preloading: not tested yet, play a verse first",nowAt:"Current time at your location:",tzDiff:"Note: this location uses a different time zone from your phone. The countdown follows the location time.",qLocating:"Finding your location…",qDeny:"Compass access was not allowed. Tap “Start compass” and choose Allow, or reload the page and try again.",qTitle:"Find the Qibla",qGps:"My location (GPS)",qCity:"Choose a city",qCityPh:"Select a city",qDist:"Distance to the Kaaba: {n} km",qHead:"Your heading: {n}°",qOk:"You are facing the Qibla",qRight:"Turn right {n}°",qLeft:"Turn left {n}°",qNoLoc:"Set your location first to find the Qibla direction.",qEntryNo:"Tap to find the Qibla direction",qCalib:"If the reading is off, move the phone in a figure 8 to calibrate the compass.",listenOne:"Listen to this verse only",listenFrom:"Play continuously from here"}
+ar:{title:"القرآن الكريم",ph:"ابحث عن سورة أو كلمة من آية",tS:"السور",tA:"الأذكار",tP:"الصلاة",tK:"الختمة",tB:"المحفوظات",juz:"الأجزاء",juzN:"الجزء {n}",juzStart:"يبدأ من سورة {s}، الآية {a}",meccan:"مكية",medinan:"مدنية",ayahs:"{n} آية",offTitle:"القراءة بدون إنترنت",offDone:"المصحف كاملاً محمّل على جهازك",dlSmall:"للقراءة بدون إنترنت",dlTitle:"تحميل المصحف كاملاً",dlProg:"جارٍ التحميل",dlInc:"لم تكتمل بعض السور. أعد المحاولة عند توفر اتصال أفضل.",resume:"متابعة القراءة",resumeAt:"الآية {a}",searchIn:"ابحث عن «{q}» داخل الآيات",noRes:"لا توجد نتائج.",searching:"جارٍ البحث…",searchFail:"تعذر البحث. تأكد من اتصالك بالإنترنت.",loading:"جارٍ التحميل…",netFail:"تعذر التحميل. تأكد من اتصالك بالإنترنت.",retry:"إعادة المحاولة",surahFail:"تعذر تحميل السورة. تأكد من اتصالك بالإنترنت.",page:"صفحة {n}",tafsir:"التفسير الميسر",transH:"الترجمة",reciter:"القارئ",listen:"استماع",save:"حفظ",unsave:"إزالة الحفظ",copy:"نسخ",copied:"تم النسخ",copyFail:"تعذر النسخ",noMarks:"لا توجد آيات محفوظة بعد.<br>اضغط على أي آية ثم اختر «حفظ».",markName:"{s} - الآية {a}",audioFail:"تعذر تشغيل التلاوة. تأكد من الاتصال أو غيّر القارئ.",note:"النص: المصحف العثماني (برواية حفص عن عاصم). التفسير: التفسير الميسر، مجمع الملك فهد لطباعة المصحف الشريف.",adhM:"أذكار الصباح",adhE:"أذكار المساء",rep:"التكرار: {n}",once:"مرة واحدة",resetC:"إعادة العدّاد",adhNote:"اضغط على الذكر لإنقاص العدّاد. الأذكار من حصن المسلم، وآية الكرسي والمعوذات من نص المصحف.",needNet:"يتطلب اتصالاً بالإنترنت أو تحميل المصحف.",calc:"طريقة الحساب",mUmm:"أم القرى (مكة المكرمة)",mMwl:"رابطة العالم الإسلامي",mEgy:"الهيئة المصرية العامة للمساحة",locBtn:"تحديد موقعي",locUpd:"تحديث موقعي",geoUn:"المتصفح لا يدعم تحديد الموقع",geoFail:"تعذر تحديد الموقع. اسمح للمتصفح بالوصول إلى موقعك.",locHint:"اضغط «تحديد موقعي» لعرض أوقات الصلاة واتجاه القبلة.",ptFail:"تعذر جلب الأوقات. تأكد من اتصالك بالإنترنت.",next:"الصلاة القادمة: {p}",ptNote:"لا يمكن لصفحة ويب إصدار الأذان وهي مغلقة، فاستخدم منبّه الهاتف للتنبيه.",p_Fajr:"الفجر",p_Sunrise:"الشروق",p_Dhuhr:"الظهر",p_Asr:"العصر",p_Maghrib:"المغرب",p_Isha:"العشاء",am:"ص",pm:"م",qibla:"اتجاه القبلة",deg:"{n}° من الشمال",cmpOn:"تشغيل البوصلة",cmpRun:"البوصلة تعمل",cmpNote:"ضع الهاتف أفقياً بعيداً عن المعادن. السهم يشير إلى القبلة.",cmpFail:"تعذر تشغيل البوصلة على هذا الجهاز",khPlan:"خطة الختمة",khQ:"في كم يوماً تريد أن تختم القرآن؟",days:"{n} يوماً",khStart:"ابدأ الختمة",khDay:"ورد اليوم {d} من {t} ({n} آية)",khFrom:"من {s} آية {a}",khTo:"إلى {s} آية {a}",khGo:"ابدأ من هنا",khDone:"انتهت مدة الخطة",khProg:"تقدمك في المصحف حسب آخر موضع قرأته",khCancel:"إلغاء الخطة",set:"الإعدادات",sLang:"اللغة",sTheme:"المظهر",thL:"فاتح",thD:"داكن",thA:"تلقائي",sFont:"خط المصحف",sSize:"حجم الخط",sTrans:"ترجمة معاني القرآن",sInline:"عرض الترجمة تحت كل آية",sPg:"إظهار أرقام الصفحات والأجزاء",sWake:"إبقاء الشاشة مضاءة أثناء القراءة",sAuto:"الانتقال تلقائياً للآية التالية عند التلاوة",sReset:"حذف البيانات المحفوظة",sResetQ:"سيتم حذف المحفوظات والمصحف المحمّل والإعدادات. هل تريد المتابعة؟",off:"بدون",sPage:"خلفية القراءة",tapHint:"اضغط على أي آية لتسمعها وحدها، أو لتبدأ القراءة المتواصلة منها، أو لتقرأ تفسيرها",modeOne:"آية واحدة",modeCont:"متواصل",listenAll:"استماع متواصل",preparing:"جارٍ التحضير…",tM:"المزيد",mSaved:"الآيات المحفوظة",mSavedS:"{n} آية",mTasbih:"السبحة",mTasbihS:"عدّاد التسبيح",mHijri:"التقويم الهجري",mHifz:"الحفظ",mHifzS:"{n} سورة محفوظة",mInstall:"إضافة التطبيق للشاشة الرئيسية",mInstallS:"يعمل كتطبيق وبدون إنترنت",insIos:"على الآيفون: افتح الرابط في Safari، اضغط زر المشاركة، ثم «إضافة إلى الشاشة الرئيسية».",insAnd:"على أندرويد: افتح قائمة المتصفح ثم اختر «تثبيت التطبيق» أو «إضافة إلى الشاشة الرئيسية».",insNow:"تثبيت الآن",okK:"حسناً",tReset:"تصفير العدّاد",tDone:"اكتمل العدد",tToday:"إجمالي اليوم: {n}",hAH:"هـ",hNote:"التقويم حسب أم القرى، وقد تختلف التواريخ بيوم حسب رؤية الهلال في بلدك.",hOcc:"مناسبات هذا الشهر",hFast:"يُستحب صيام الإثنين والخميس من كل أسبوع.",o_new:"رأس السنة الهجرية",o_tas:"تاسوعاء (يُستحب صيامه)",o_ash:"عاشوراء (يُستحب صيامه)",o_ram:"بداية شهر رمضان",o_last:"العشر الأواخر من رمضان",o_fit:"عيد الفطر",o_ten:"العشر الأول من ذي الحجة",o_arf:"يوم عرفة",o_adh:"عيد الأضحى",o_tash:"أيام التشريق",o_white:"الأيام البيض (يُستحب صيامها)",hzProg:"حفظت {a} من {b} سورة",hzTap:"اضغط على رقم السورة لتحديدها كمحفوظة",hzMarked:"سورة {s}: محفوظة",hzUnmarked:"سورة {s}: غير محفوظة",hzTitle:"وضع الحفظ",hzFrom:"من آية",hzTo:"إلى آية",hzRv:"تكرار كل آية",hzRr:"تكرار المقطع",hzHide:"إخفاء نص الآية (اضغط عليه لإظهاره)",hzDone:"حفظت هذه السورة كاملة",hzStart:"ابدأ التكرار",hzStop:"إيقاف",hzMode:"وضع الحفظ",hzStat:"الآية {a} · التكرار {v} من {rv} · المقطع {r} من {rr}",pmTitle:"خيارات التشغيل",pmSpeed:"سرعة التلاوة",pmSleep:"مؤقّت النوم",minShort:"د",pmEnd:"نهاية السورة",pmRepS:"تكرار السورة",pmRepV:"تكرار الآية الحالية",sleepDone:"توقفت التلاوة بسبب مؤقّت النوم",wirdT:"ورد اليوم",wirdPages:"قرأت {a} صفحة اليوم",streak:"أيام متتالية: {n}",wirdGoal:"هدفك اليومي",pagesN:"{n} صفحة",goalDone:"أتممت ورد اليوم، بارك الله فيك",tfEmpty:"تفسير هذه الآية مذكور مع الآيات المجاورة في هذا التفسير.",tfFail:"تعذر تحميل التفسير. تأكد من اتصالك بالإنترنت.",shareImg:"مشاركة كصورة",shareRef:"سورة {s} · الآية {a}",shareFail:"تعذر إنشاء الصورة",shareSaved:"تم حفظ الصورة",sBook:"عرض الصفحات كالكتاب",sFit:"ملاءمة النص مع الصفحة",sAnim:"حركة قلب الصفحة",adhT:"الأذان",buffering:"جارٍ التحميل…",stallN:"مرات توقف الصوت لانتظار الشبكة في هذه الجلسة: {n}",audBtn:"اختبار الصوت والشبكة",audOk:"التحميل المسبق يعمل. سرعة الاتصال تقريباً {k} كيلوبايت في الثانية.",audSlow:"الشبكة بطيئة، لذلك سيحمّل التطبيق عدداً أكبر من الآيات مسبقاً.",audFail:"تعذر الاتصال بخادم الصوت. جرّب شبكة أخرى أو أعد المحاولة.",adhOn:"تشغيل الأذان تلقائياً في وقت كل صلاة",adhSrc:"صوت الأذان",adhSrcNet:"أذان جاهز (يحتاج إنترنت مرة واحدة)",adhSrcFile:"ملف من جهازي",adhSrcNone:"تنبيه فقط بدون صوت",adhReady:"تم تجهيز الأذان للعمل بدون إنترنت",adhDlFail:"تعذر تحميل الأذان الجاهز",adhFail:"تعذر تشغيل الأذان. اضغط «تجربة الأذان» مرة واحدة ثم أعد المحاولة.",clockT:"شاشة الساعة للأذان",clockNote:"اترك الهاتف على الشاحن والتطبيق مفتوحاً على هذه الشاشة، فيشتغل الأذان تلقائياً عند كل صلاة. الشاشة تبقى مضاءة بإضاءة هادئة وتتحرك الساعة قليلاً لحماية الشاشة.",clockOpen:"فتح شاشة الساعة",clockExit:"اضغط في أي مكان للخروج",adhFile:"اختيار ملف الأذان",adhFileOk:"الملف المختار: {n}",adhNoFile:"لم يُختر ملف، سيظهر تنبيه فقط.",adhTest:"تجربة الأذان",adhNote:"الأذان يعمل تلقائياً في كل وقت صلاة طالما التطبيق مفتوح. الآيفون يوقف التطبيقات المغلقة، لذلك للتأكد استخدم «شاشة الساعة» أثناء الشحن، أو تنبيهات التقويم.",adhTime:"حان وقت صلاة {p}",calT:"تنبيهات الصلاة في التقويم",calBtn:"تنزيل تنبيهات ٣٠ يوماً",calNote:"يضيف مواعيد الصلاة إلى تقويم هاتفك مع تنبيه عند كل صلاة، حتى لو كان التطبيق مغلقاً.",calFail:"تعذر إنشاء التنبيهات. تأكد من الاتصال وتحديد موقعك.",calPray:"صلاة {p}",smFail:"تعذر تحميل ملف السورة، تم التحويل إلى آية بآية.",sEngine:"طريقة التلاوة المتواصلة",eSurah:"ملف السورة كاملاً (موصى به، بلا فواصل)",eAyah:"آية بآية (احتياطي)",smOkL:"تلاوة السورة الكاملة: تعمل",smNoL:"تلاوة السورة الكاملة: غير متاحة، يُستخدم آية بآية",smUnkL:"تلاوة السورة الكاملة: لم تُختبر بعد",pfOk:"التحميل المسبق للآيات: يعمل",pfNo:"التحميل المسبق للآيات: غير متاح مع هذه الشبكة أو هذا القارئ",pfUnk:"التحميل المسبق للآيات: لم يُختبر بعد، شغّل آية أولاً",nowAt:"الوقت الآن حسب موقعك:",tzDiff:"تنبيه: توقيت هذا الموقع يختلف عن توقيت هاتفك، والعدّاد يحسب حسب توقيت الموقع.",qLocating:"جارٍ تحديد موقعك…",qDeny:"لم يُسمح باستخدام البوصلة. اضغط «تشغيل البوصلة» ثم اختر «سماح»، أو أعد تحميل الصفحة وحاول مرة أخرى.",qTitle:"تحديد القبلة",qGps:"موقعي (GPS)",qCity:"اختيار مدينة",qCityPh:"اختر المدينة",qDist:"المسافة إلى الكعبة: {n} كم",qHead:"اتجاهك: {n}°",qOk:"أنت باتجاه القبلة",qRight:"أدر الهاتف يميناً {n}°",qLeft:"أدر الهاتف يساراً {n}°",qNoLoc:"حدّد موقعك أولاً لمعرفة اتجاه القبلة.",qEntryNo:"اضغط لتحديد اتجاه القبلة",qCalib:"إذا كانت القراءة غير دقيقة، حرّك الهاتف على شكل ٨ لمعايرة البوصلة.",listenOne:"استماع لهذه الآية فقط",listenFrom:"تشغيل متواصل من هنا"},
+en:{title:"The Noble Quran",ph:"Search a surah or a word in the verses",tS:"Surahs",tA:"Adhkar",tP:"Prayer",tK:"Khatma",tB:"Saved",juz:"Juz",juzN:"Juz {n}",juzStart:"Starts at {s}, verse {a}",meccan:"Meccan",medinan:"Medinan",ayahs:"{n} verses",offTitle:"Offline reading",offDone:"The full Quran is saved on your device",dlSmall:"For offline reading",dlTitle:"Download the full Quran",dlProg:"Downloading",dlInc:"Some surahs did not finish. Try again with a better connection.",resume:"Continue reading",resumeAt:"Verse {a}",searchIn:"Search for “{q}” in the verses",noRes:"No results.",searching:"Searching…",searchFail:"Search failed. Check your connection.",loading:"Loading…",netFail:"Could not load. Check your connection.",retry:"Try again",surahFail:"Could not load this surah. Check your connection.",page:"Page {n}",tafsir:"Al-Tafsir Al-Muyassar (Arabic)",transH:"Translation",reciter:"Reciter",listen:"Listen",save:"Save",unsave:"Remove",copy:"Copy",copied:"Copied",copyFail:"Could not copy",noMarks:"Nothing saved yet.<br>Tap any verse, then choose “Save”.",markName:"{s} - Verse {a}",audioFail:"Could not play the recitation. Check your connection or change the reciter.",note:"Text: Uthmani script (Hafs from Asim). Tafsir: Al-Muyassar, King Fahd Complex for the Printing of the Holy Quran.",adhM:"Morning adhkar",adhE:"Evening adhkar",rep:"Repeat: {n}",once:"Once",resetC:"Reset counter",adhNote:"Tap a dhikr to count down. Adhkar are from Hisn al-Muslim; Ayat al-Kursi and the Mu'awwidhat come from the Quran text.",needNet:"Needs an internet connection or the downloaded Quran.",calc:"Calculation method",mUmm:"Umm al-Qura (Makkah)",mMwl:"Muslim World League",mEgy:"Egyptian General Authority of Survey",locBtn:"Find my location",locUpd:"Update my location",geoUn:"Location is not supported",geoFail:"Could not get your location. Allow location access for your browser.",locHint:"Tap “Find my location” to see prayer times and the qibla direction.",ptFail:"Could not load prayer times. Check your connection.",next:"Next prayer: {p}",ptNote:"A web page cannot play the adhan while closed. Use your phone alarm for reminders.",p_Fajr:"Fajr",p_Sunrise:"Sunrise",p_Dhuhr:"Dhuhr",p_Asr:"Asr",p_Maghrib:"Maghrib",p_Isha:"Isha",am:"AM",pm:"PM",qibla:"Qibla direction",deg:"{n}° from north",cmpOn:"Start compass",cmpRun:"Compass running",cmpNote:"Hold the phone flat, away from metal. The arrow points to the qibla.",cmpFail:"The compass is not available on this device",khPlan:"Khatma plan",khQ:"In how many days do you want to finish the Quran?",days:"{n} days",khStart:"Start",khDay:"Day {d} of {t} ({n} verses)",khFrom:"From {s}, verse {a}",khTo:"To {s}, verse {a}",khGo:"Start here",khDone:"The plan has ended",khProg:"Your progress, based on your last reading position",khCancel:"Cancel plan",set:"Settings",sLang:"Language",sTheme:"Appearance",thL:"Light",thD:"Dark",thA:"Auto",sFont:"Quran font",sSize:"Text size",sTrans:"Translation of the meanings",sInline:"Show translation under each verse",sPg:"Show page and juz markers",sWake:"Keep the screen on while reading",sAuto:"Play the next verse automatically",sReset:"Delete saved data",sResetQ:"This will delete your saved verses, the downloaded Quran and your settings. Continue?",off:"Off",sPage:"Reading background",tapHint:"Tap any verse to hear it on its own, start continuous playback from it, or read its tafsir",modeOne:"Single verse",modeCont:"Continuous",listenAll:"Continuous playback",preparing:"Preparing…",tM:"More",mSaved:"Saved verses",mSavedS:"{n} verses",mTasbih:"Tasbih counter",mTasbihS:"Dhikr counter",mHijri:"Hijri calendar",mHifz:"Memorization",mHifzS:"{n} surahs memorized",mInstall:"Add to Home Screen",mInstallS:"Works like an app, even offline",insIos:"On iPhone: open the link in Safari, tap Share, then “Add to Home Screen”.",insAnd:"On Android: open the browser menu, then choose “Install app” or “Add to Home screen”.",insNow:"Install now",okK:"OK",tReset:"Reset counter",tDone:"Target reached",tToday:"Total today: {n}",hAH:"AH",hNote:"Umm al-Qura calendar. Dates may differ by a day depending on moon sighting in your country.",hOcc:"This month",hFast:"Fasting on Mondays and Thursdays is recommended.",o_new:"Islamic New Year",o_tas:"Tasu'a (fasting recommended)",o_ash:"Ashura (fasting recommended)",o_ram:"Start of Ramadan",o_last:"Last ten days of Ramadan",o_fit:"Eid al-Fitr",o_ten:"First ten days of Dhul-Hijjah",o_arf:"Day of Arafah",o_adh:"Eid al-Adha",o_tash:"Days of Tashreeq",o_white:"White days (fasting recommended)",hzProg:"You memorized {a} of {b} surahs",hzTap:"Tap a surah number to mark it as memorized",hzMarked:"Surah {s}: memorized",hzUnmarked:"Surah {s}: not memorized",hzTitle:"Memorization mode",hzFrom:"From verse",hzTo:"To verse",hzRv:"Repeat each verse",hzRr:"Repeat the passage",hzHide:"Hide the verse text (tap it to reveal)",hzDone:"I memorized this whole surah",hzStart:"Start repeating",hzStop:"Stop",hzMode:"Memorization",hzStat:"Verse {a} · Repeat {v} of {rv} · Passage {r} of {rr}",pmTitle:"Playback options",pmSpeed:"Speed",pmSleep:"Sleep timer",minShort:"m",pmEnd:"End of surah",pmRepS:"Repeat the surah",pmRepV:"Repeat current verse",sleepDone:"Playback stopped by the sleep timer",wirdT:"Daily reading",wirdPages:"Pages read today: {a}",streak:"Streak: {n} days",wirdGoal:"Daily goal",pagesN:"{n} pages",goalDone:"Daily goal complete, well done",tfEmpty:"This verse is explained together with its neighboring verses in this tafsir.",tfFail:"Could not load the tafsir. Check your connection.",shareImg:"Share as image",shareRef:"Surah {s} · Verse {a}",shareFail:"Could not create the image",shareSaved:"Image saved",sBook:"Book-style pages",sFit:"Fit text to the page",sAnim:"Page-turn animation",adhT:"Adhan",buffering:"Loading…",stallN:"Times the audio waited for the network this session: {n}",audBtn:"Test audio and network",audOk:"Preloading works. Connection speed is about {k} KB per second.",audSlow:"The network is slow, so the app will preload more verses.",audFail:"Could not reach the audio server. Try another network or try again.",adhOn:"Play the adhan automatically at each prayer time",adhSrc:"Adhan sound",adhSrcNet:"Built-in adhan (needs internet once)",adhSrcFile:"A file from my device",adhSrcNone:"Alert only, no sound",adhReady:"Adhan saved for offline use",adhDlFail:"Could not download the built-in adhan",adhFail:"Could not play the adhan. Tap “Test adhan” once, then try again.",clockT:"Adhan clock screen",clockNote:"Leave the phone charging with the app open on this screen and the adhan plays automatically at each prayer. The screen stays on, dim, and the clock drifts slightly to protect it.",clockOpen:"Open clock screen",clockExit:"Tap anywhere to exit",adhFile:"Choose adhan audio file",adhFileOk:"Selected file: {n}",adhNoFile:"No file chosen; only an alert will appear.",adhTest:"Test adhan",adhNote:"The adhan plays automatically at every prayer time while the app is open. iPhone pauses closed apps, so use the clock screen while charging, or the calendar alerts.",adhTime:"It is time for {p} prayer",calT:"Prayer alerts in Calendar",calBtn:"Download 30 days of alerts",calNote:"Adds prayer times to your phone calendar with an alert at each prayer, even when the app is closed.",calFail:"Could not create the alerts. Check your connection and location.",calPray:"{p} prayer",smFail:"Could not load the surah audio; switched to verse by verse.",sEngine:"Continuous playback method",eSurah:"Whole-surah file (recommended, no gaps)",eAyah:"Verse by verse (backup)",smOkL:"Whole-surah playback: working",smNoL:"Whole-surah playback: not available, using verse by verse",smUnkL:"Whole-surah playback: not tested yet",pfOk:"Verse preloading: working",pfNo:"Verse preloading: not available on this network or reciter",pfUnk:"Verse preloading: not tested yet, play a verse first",nowAt:"Current time at your location:",tzDiff:"Note: this location uses a different time zone from your phone. The countdown follows the location time.",qLocating:"Finding your location…",qDeny:"Compass access was not allowed. Tap “Start compass” and choose Allow, or reload the page and try again.",qTitle:"Find the Qibla",qGps:"My location (GPS)",qCity:"Choose a city",qCityPh:"Select a city",qDist:"Distance to the Kaaba: {n} km",qHead:"Your heading: {n}°",qOk:"You are facing the Qibla",qRight:"Turn right {n}°",qLeft:"Turn left {n}°",qNoLoc:"Set your location first to find the Qibla direction.",qEntryNo:"Tap to find the Qibla direction",qCalib:"If the reading is off, move the phone in a figure 8 to calibrate the compass.",listenOne:"Listen to this verse only",listenFrom:"Play continuously from here"}
 };
 const t=(k,v)=>{let s=(T[S.lang]&&T[S.lang][k])||T.ar[k]||k;if(v)for(const x in v)s=s.replace("{"+x+"}",v[x]);return s};
 const N=n=>S.lang==="ar"?AR(n):String(n);
@@ -578,14 +579,18 @@ const ELS=[audio,new Audio()];
 ELS.forEach(e=>{e.preload="auto"});
 const IC_PLAY='<path d="M8 5v14l11-7z" fill="currentColor" stroke="none"/>',IC_PAUSE='<path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor" stroke="none"/>';
 const cumA=()=>CUMc||(CUMc=cum());
-const urlG=(g,a)=>`${CDN}${BR[a]}/${S.rec}/${g}.mp3`;
+const urlG=(g,a)=>a===0?`https://cdn.islamic.app/quran/audio/${S.rec}/${g}.mp3`:`${CDN}${BR[a-1]}/${S.rec}/${g}.mp3`;
 const pkey=g=>S.rec+":"+g;
 const preP={},preU={};
+let buffering=false,stallCount=0,lastSpeed=0;
+const aheadN=()=>lastSpeed&&lastSpeed<80?10:6;
+function prefetchAhead(g){for(let i=2;i<=aheadN();i++)getBlob(g+i,att)}
 function getBlob(g,a){
   const k=pkey(g);
   if(g<1||g>6236)return Promise.resolve(false);
   if(!preP[k]){
-    preP[k]=fetch(urlG(g,a)).then(r=>{if(!r.ok)throw 0;return r.blob()}).then(b=>{const u=URL.createObjectURL(b);preU[k]=u;pfState=1;return u})
+    const t0=performance.now();
+    preP[k]=fetch(urlG(g,a)).then(r=>{if(!r.ok)throw 0;return r.blob()}).then(b=>{const u=URL.createObjectURL(b);preU[k]=u;pfState=1;const sec=Math.max(.05,(performance.now()-t0)/1000);lastSpeed=Math.round(b.size/1024/sec);return u})
       .catch(()=>{preU[k]=false;if(pfState!==1)pfState=2;try{fetch(urlG(g,a),{mode:"no-cors"}).catch(()=>{})}catch(e){}return false});
   }
   return preP[k];
@@ -620,7 +625,7 @@ function updPlayer(){
   $("#pStartT").textContent=t("listenAll");
   $("#pStartS").textContent=(RECS.find(r=>r[0]===S.rec)||[])[1]||"";
   let name=cur?cur.name:"",lab="";
-  if(playingG&&surahs.length){const lc=locOf(playingG,cumA());name=sname(surahs[lc.s-1].name);lab=`${t("resumeAt",{a:N(lc.a)})}<span class="mode">${hz&&hz.on?t("hzMode"):single?t("modeOne"):t("modeCont")}${(sleepAt||sleepEnd)?" ☾":""}</span>`}
+  if(playingG&&surahs.length){const lc=locOf(playingG,cumA());name=sname(surahs[lc.s-1].name);lab=`${t("resumeAt",{a:N(lc.a)})}<span class="mode">${hz&&hz.on?t("hzMode"):single?t("modeOne"):t("modeCont")}${(sleepAt||sleepEnd)?" ☾":""}</span>${buffering?`<span class="mode">${t("buffering")}</span>`:""}`}
   if(smLoading)lab=t("preparing");
   $("#pname").textContent=name;$("#plab").innerHTML=lab;
 }
@@ -673,7 +678,7 @@ function swapNext(){
   o.play().catch(()=>{if(playingG===g)startAtG(g,att)});
   setTimeout(()=>{if(old!==ELS[ai])old.pause()},300);
   syncUI(g);
-  setTimeout(()=>{if(playingG===g&&!single){stageNext(g+1);getBlob(g+2,att)}},350);
+  setTimeout(()=>{if(playingG===g&&!single){stageNext(g+1);prefetchAhead(g)}},350);
   clearPre(g);
   scheduleSwap();
   return true;
@@ -692,7 +697,7 @@ function startAtG(g,a,user){
   el.play().catch(()=>{});
   if(user)unlockAll(el);
   syncUI(g);
-  if(!single){stageNext(g+1);getBlob(g+2,att)}
+  if(!single){stageNext(g+1);prefetchAhead(g)}
   clearPre(g);
 }
 function stop(){hz=null;smTok++;smLoading=false;smStop();clearTimeout(swapT);ELS.forEach(e=>e.pause());playingG=0;stagedG=0;stagedWarm=false;single=false;playing=-1;markAy(-1);updPlayer();setBar(0);{const e=$("#ptm");if(e)e.textContent=""}}
@@ -730,9 +735,14 @@ ELS.forEach((el,i)=>{
   };
   el.onerror=()=>{
     if(i!==ai||!playingG)return;
-    if(att<BR.length-1)startAtG(playingG,att+1);
+    if(att<BR.length)startAtG(playingG,att+1);
     else{toast(t("audioFail"));stop()}
   };
+});
+ELS.forEach((el,i)=>{
+  el.onwaiting=()=>{if(i===ai&&playingG&&!el.paused&&!String(el.src).startsWith("data:")){buffering=true;stallCount++;updPlayer()}};
+  el.onplaying=()=>{if(i===ai&&buffering){buffering=false;updPlayer()}};
+  el.oncanplay=()=>{if(i===ai&&buffering){buffering=false;updPlayer()}};
 });
 $("#pPlay").onclick=playPause;
 $("#pStart").onclick=playPause;
@@ -749,7 +759,7 @@ let smOn=false,sai=0,sm=null,smPoll=null,smSwapT=null,smFailT=0,smTok=0,smLoadin
 const CAm={};
 const act=()=>smOn?SM[sai]:ELS[ai];
 const gOf=(s,a)=>cumA()[s-1]+a;
-const smBad=()=>S.engine==="ayah"||(smFailT&&Date.now()-smFailT<300000);
+const smBad=()=>S.engine==="ayah"||!!noSurah[S.rec]||(smFailT&&Date.now()-smFailT<300000);
 const withTO=(p,ms)=>Promise.race([p,new Promise((_,rej)=>setTimeout(()=>rej(0),ms))]);
 function prime(e){try{e.muted=false;e.src=SILENT;e.play().catch(()=>{})}catch(x){}}
 function unlockAll(except){
@@ -768,24 +778,47 @@ async function qrId(rec){
   c[rec]=m[0].id;ls.set("q_rid",c);
   return m[0].id;
 }
+const noSurah=ls.get("q_nosurah",{});
 async function chapterAudio(rec,n){
   const key=rec+":"+n;
   if(CAm[key])return CAm[key];
-  const id=await qrId(rec);
-  const ck=`ca:${id}:${n}`;
-  let d=await idb.get(ck);
-  if(!d){
-    const r=await fetch(`${QAPI}/chapter_recitations/${id}/${n}?segments=true`);
-    if(!r.ok)throw 0;
-    const j=await r.json(),af=j&&j.audio_file;
-    if(!af||!af.audio_url||!Array.isArray(af.timestamps))throw 0;
-    let url=af.audio_url;if(url.startsWith("//"))url="https:"+url;if(!/^https?:/.test(url))throw 0;
-    const ts=af.timestamps.map(x=>({from:x.timestamp_from/1000}));
-    if(ts.length!==surahs[n-1].numberOfAyahs||ts.some(x=>!isFinite(x.from)))throw 0;
-    d={url,ts};await idb.set(ck,d);
+  if(noSurah[rec])throw 0;
+  const url=`https://cdn.islamic.app/quran/audio-surah/${rec}/${n}.mp3`;
+  let total=await idb.get(`sz0:${rec}:${n}`);
+  if(total===undefined){
+    const r=await fetch(url,{method:"HEAD"});
+    if(!r.ok){if(r.status===404){noSurah[rec]=1;ls.set("q_nosurah",noSurah)}throw 0}
+    total=+r.headers.get("content-length")||0;
+    await idb.set(`sz0:${rec}:${n}`,total);
   }
+  const d={url,total,fr:null,ts:null,ready:null};
   CAm[key]=d;return d;
 }
+function ensureTimeline(d,rec,n){
+  if(d.ready)return d.ready;
+  d.ready=(async()=>{
+    const cnt=surahs[n-1].numberOfAyahs,g0=gOf(n,1);
+    let sizes=await idb.get(`sz:${rec}:${n}`);
+    if(!sizes){
+      sizes=new Array(cnt).fill(0);let nx=0;
+      const worker=async()=>{while(nx<cnt){const i=nx++;try{const r=await fetch(`https://cdn.islamic.app/quran/audio/${rec}/${g0+i}.mp3`,{method:"HEAD"});sizes[i]=r.ok?(+r.headers.get("content-length")||0):0}catch(e){sizes[i]=0}}};
+      await Promise.all(Array.from({length:Math.min(10,cnt)},worker));
+      if(sizes.every(x=>x>0))await idb.set(`sz:${rec}:${n}`,sizes);
+    }
+    const sum=sizes.reduce((a,b)=>a+b,0);
+    let w=sizes;
+    const exact=sum>0&&d.total>0&&sizes.every(x=>x>0)&&Math.abs(sum-d.total)/d.total<=0.02;
+    if(!exact){
+      try{const dd=await getJSON(`${API}/surah/${n}/editions/quran-uthmani,ar.muyassar`,"q_s"+n);w=dd[0].ayahs.map(a=>a.text.length+1)}
+      catch(e){w=new Array(cnt).fill(1)}
+    }
+    const tot=w.reduce((a,b)=>a+b,0);let c=0;
+    d.fr=w.map(x=>{const f=c/tot;c+=x;return f});
+    return d;
+  })();
+  return d.ready;
+}
+function fixTs(d,dur){if(d.fr&&isFinite(dur)&&dur>0)d.ts=d.fr.map(f=>({from:f*dur}))}
 function warmSM(n){
   if(n<1||n>114||smBad()||!surahs.length)return;
   chapterAudio(S.rec,n).catch(()=>{});
@@ -799,21 +832,23 @@ async function startCont(g,user){
   let d=CAm[S.rec+":"+lc.s];
   if(!d){
     try{d=await withTO(chapterAudio(S.rec,lc.s),8000)}
-    catch(e){if(tok===smTok){smLoading=false;smFailT=Date.now();toast(t("smFail"));startAtG(g,0,false)}return}
+    catch(e){if(tok===smTok){smLoading=false;if(!noSurah[S.rec]){smFailT=Date.now();toast(t("smFail"))}startAtG(g,0,false)}return}
   }
   if(tok!==smTok)return;
+  if(lc.a>1){try{await withTO(ensureTimeline(d,S.rec,lc.s),9000)}catch(e){}if(tok!==smTok)return}
+  else ensureTimeline(d,S.rec,lc.s).catch(()=>{});
   beginSM(lc.s,lc.a-1,d,tok);
 }
 function beginSM(n,k,d,tok){
   const el=SM[sai];
   SM[1-sai].pause();
   sm={n,d,k};smOn=true;playingG=gOf(n,k+1);
-  const t0=d.ts[k].from;
+  let t0=0;
   let done=false;
   const cleanup=()=>{el.removeEventListener("loadedmetadata",onMeta);el.removeEventListener("seeked",onSeeked);el.removeEventListener("playing",onPlaying);clearTimeout(failT)};
   const good=()=>{if(done)return;done=true;cleanup();el.muted=false;smLoading=false;smOk=true;syncUI(playingG);smPollStart();smSchedule();smStage(n);updPlayer()};
   const bad=()=>{if(done)return;done=true;cleanup();el.pause();if(tok!==smTok)return;smLoading=false;smFailT=Date.now();smOn=false;sm=null;toast(t("smFail"));startAtG(gOf(n,k+1),0,false)};
-  const onMeta=()=>{if(t0>0.05){try{el.currentTime=t0}catch(e){}}};
+  const onMeta=()=>{fixTs(d,el.duration);if(d.ts)t0=d.ts[k].from;if(t0>0.05){try{el.currentTime=t0}catch(e){}}};
   const onSeeked=()=>{if(tok!==smTok){done=true;cleanup();return}if(Math.abs(el.currentTime-t0)<3)good();else bad()};
   const onPlaying=()=>{if(tok===smTok&&Math.abs(el.currentTime-t0)<3&&(t0<=0.05||el.currentTime>0.05))good()};
   const failT=setTimeout(bad,15000);
@@ -822,7 +857,7 @@ function beginSM(n,k,d,tok){
   el.addEventListener("seeked",onSeeked);
   el.addEventListener("playing",onPlaying);
   if(el._u!==d.url){el._u=d.url;el.src=d.url}
-  else{try{el.currentTime=t0}catch(e){}}
+  else{if(!d.ts)fixTs(d,el.duration);if(d.ts)t0=d.ts[k].from;try{el.currentTime=t0}catch(e){}}
   el.play().catch(()=>{});
 }
 function smStage(n){
@@ -839,7 +874,9 @@ function smPollStart(){
   clearInterval(smPoll);
   smPoll=setInterval(()=>{
     if(!smOn||!sm)return;
-    const el=SM[sai],ts=sm.d.ts,tm=el.currentTime;
+    const el=SM[sai];
+    if(!sm.d.ts){if(sm.d.fr&&isFinite(el.duration)&&el.duration)fixTs(sm.d,el.duration);else return}
+    const ts=sm.d.ts,tm=el.currentTime;
     let k=sm.k;
     if(tm<ts[k].from-0.05||(k+1<ts.length&&tm>=ts[k+1].from)){k=0;for(let i=0;i<ts.length;i++){if(ts[i].from<=tm+0.05)k=i;else break}}
     if(k!==sm.k){sm.k=k;playingG=gOf(sm.n,k+1);syncUI(playingG)}
@@ -866,7 +903,7 @@ async function smNext(){
     if(!nd){try{nd=await withTO(chapterAudio(S.rec,n),6000)}catch(e){smStop();startAtG(gOf(n,1),0,false);return}}
     if(!smOn)return;
     const old=SM[sai],o=SM[1-sai];
-    sai=1-sai;sm={n,d:nd,k:0};
+    sai=1-sai;sm={n,d:nd,k:0};ensureTimeline(nd,S.rec,n).catch(()=>{});
     o.muted=false;
     if(o._u!==nd.url){o._u=nd.url;o.src=nd.url}else{try{o.currentTime=0}catch(e){}}
     o.play().catch(()=>{});
@@ -879,8 +916,11 @@ async function smNext(){
 function smSeek(g){
   const lc=locOf(g,cumA());
   if(sm&&sm.n===lc.s){
-    const el=SM[sai];sm.k=lc.a-1;playingG=g;
-    try{el.currentTime=sm.d.ts[lc.a-1].from}catch(e){}
+    const el=SM[sai];
+    if(!sm.d.ts&&sm.d.fr)fixTs(sm.d,el.duration);
+    if(!sm.d.ts){const dd=sm.d,nn=sm.n;ensureTimeline(dd,S.rec,nn).then(()=>{if(sm&&sm.d===dd){fixTs(dd,SM[sai].duration);smSeek(g)}}).catch(()=>{});return}
+    sm.k=lc.a-1;playingG=g;
+    if(sm.d.ts){try{el.currentTime=sm.d.ts[lc.a-1].from}catch(e){}}
     if(el.paused)el.play().catch(()=>{});
     syncUI(g);smSchedule();
   }else startCont(g,true);
@@ -1347,6 +1387,22 @@ adhanSchedule();
 
 
 
+async function audioTest(){
+  const out=$("#audRes");if(!out)return;
+  out.textContent=t("loading");
+  try{
+    const t0=performance.now();let bytes=0;
+    for(let g=1;g<=3;g++){
+      const r=await fetch(`https://cdn.islamic.app/quran/audio/${S.rec}/${g}.mp3?_=${Date.now()}`,{cache:"no-store"});
+      if(!r.ok)throw 0;
+      bytes+=(await r.blob()).size;
+    }
+    const kb=Math.round(bytes/1024/Math.max(.05,(performance.now()-t0)/1000));
+    lastSpeed=kb;pfState=1;
+    out.textContent=t("audOk",{k:N(kb)})+(kb<80?" "+t("audSlow"):"");
+  }catch(e){pfState=2;out.textContent=t("audFail")}
+}
+
 /* ---------- شريط التقدم السلس ---------- */
 const fmtT=x=>{x=Math.max(0,Math.floor(x||0));const h=Math.floor(x/3600),m=Math.floor(x%3600/60),sc=x%60;return (h?h+":"+pad(m):m)+":"+pad(sc)};
 function setBar(r){const b=$("#pbar");if(b)b.style.transform=`scaleX(${Math.max(0,Math.min(1,r||0))})`}
@@ -1725,7 +1781,7 @@ function openSettings(){
   <div class="card"><label style="margin-top:0">${t("sTrans")}</label><select id="sTrans">${opt(trOpts,S.trans)}</select>
   ${sw("sInline",t("sInline"),S.inline)}</div>
   <div class="card">${sw("sPg",t("sPg"),S.pg)}${sw("sBook",t("sBook"),S.book)}${sw("sFit",t("sFit"),S.fit)}${sw("sAnim",t("sAnim"),S.anim)}${sw("sWake",t("sWake"),S.wake)}
-  <label>${t("reciter")}</label><select id="sRec">${opt(RECS,S.rec)}</select><label>${t("sEngine")}</label><select id="sEngine"><option value="surah" ${S.engine==="surah"?"selected":""}>${t("eSurah")}</option><option value="ayah" ${S.engine==="ayah"?"selected":""}>${t("eAyah")}</option></select><div class="note" style="text-align:start;padding:8px 0 0">${t(smOk?"smOkL":(smFailT?"smNoL":"smUnkL"))}<br>${t(pfState===1?"pfOk":pfState===2?"pfNo":"pfUnk")}</div></div>
+  <label>${t("reciter")}</label><select id="sRec">${opt(RECS,S.rec)}</select><label>${t("sEngine")}</label><select id="sEngine"><option value="surah" ${S.engine==="surah"?"selected":""}>${t("eSurah")}</option><option value="ayah" ${S.engine==="ayah"?"selected":""}>${t("eAyah")}</option></select><div class="note" style="text-align:start;padding:8px 0 0">${t(smOk?"smOkL":(smFailT?"smNoL":"smUnkL"))}<br>${t(pfState===1?"pfOk":pfState===2?"pfNo":"pfUnk")}<br>${t("stallN",{n:N(stallCount)})}</div><button class="btnl" id="audTest" style="width:100%">${t("audBtn")}</button><div class="note" id="audRes" style="text-align:start"></div></div>
   <button class="btnl" id="sReset" style="width:100%;color:#B3392F">${t("sReset")}</button>`;
   const mark=()=>document.querySelectorAll("#sTh button").forEach(b=>b.classList.toggle("on",b.dataset.v===S.theme));
   mark();
@@ -1737,6 +1793,7 @@ function openSettings(){
   const markP=()=>document.querySelectorAll("#sPage button").forEach(b=>b.classList.toggle("on",b.dataset.v===S.page));markP();
   document.querySelectorAll("#sPage button").forEach(b=>b.onclick=()=>{S.page=b.dataset.v;saveS();document.documentElement.dataset.page=S.page;markP()});
   [["sInline","inline"],["sPg","pg"],["sBook","book"],["sFit","fit"],["sAnim","anim"],["sWake","wake"]].forEach(([id,k])=>$("#"+id).onchange=e=>{S[k]=e.target.checked;saveS()});
+  $("#audTest").onclick=audioTest;
   $("#sEngine").onchange=e=>{S.engine=e.target.value;saveS();if(playingG){const g=playingG;stop();startCont(g,true)}};
   $("#sRec").onchange=e=>{S.rec=e.target.value;saveS();if(playingG){single?startAtG(playingG,0,true):startCont(playingG,true)}else updPlayer()};
   $("#sReset").onclick=async()=>{
