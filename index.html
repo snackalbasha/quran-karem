@@ -360,7 +360,7 @@ async clear(){try{const d=await this.open();await new Promise(res=>{const t=d.tr
 
 /* ---------- الإعدادات ---------- */
 const S=Object.assign({lang:"ar",theme:ls.get("q_theme","light"),font:"Amiri Quran",fs:ls.get("q_fs",30),trans:"none",inline:false,pg:true,rec:ls.get("q_rec","ar.alafasy"),wake:false,auto:true,page:"ivory",engine:"surah",book:true,fit:true,anim:true,rate:1,tafsir:"muyassar",goal:2,ev2:0},ls.get("q_set",{}));
-const APP_V="2026.10.12-c";
+const APP_V="2026.10.15-audio";
 const saveS=()=>ls.set("q_set",S);
 if(!S.ev3){S.engine="surah";S.ev3=1;saveS()}
 const T={
@@ -785,34 +785,16 @@ async function chapterAudio(rec,n){
   if(CAm[key])return CAm[key];
   if(noSurah[rec])throw 0;
   const url=`https://cdn.islamic.app/quran/audio-surah/${rec}/${n}.mp3`;
-  let total=await idb.get(`sz0:${rec}:${n}`);
-  if(total===undefined){
-    const r=await fetch(url,{method:"HEAD"});
-    if(!r.ok){if(r.status===404){noSurah[rec]=1;ls.set("q_nosurah",noSurah)}throw 0}
-    total=+r.headers.get("content-length")||0;
-    await idb.set(`sz0:${rec}:${n}`,total);
-  }
-  const d={url,total,fr:null,ts:null,ready:null};
+  const d={url,total:0,fr:null,ts:null,ready:null};
   CAm[key]=d;return d;
 }
 function ensureTimeline(d,rec,n){
   if(d.ready)return d.ready;
   d.ready=(async()=>{
-    const cnt=surahs[n-1].numberOfAyahs,g0=gOf(n,1);
-    let sizes=await idb.get(`sz:${rec}:${n}`);
-    if(!sizes){
-      sizes=new Array(cnt).fill(0);let nx=0;
-      const worker=async()=>{while(nx<cnt){const i=nx++;try{const r=await fetch(`https://cdn.islamic.app/quran/audio/${rec}/${g0+i}.mp3`,{method:"HEAD"});sizes[i]=r.ok?(+r.headers.get("content-length")||0):0}catch(e){sizes[i]=0}}};
-      await Promise.all(Array.from({length:Math.min(10,cnt)},worker));
-      if(sizes.every(x=>x>0))await idb.set(`sz:${rec}:${n}`,sizes);
-    }
-    const sum=sizes.reduce((a,b)=>a+b,0);
-    let w=sizes;
-    const exact=sum>0&&d.total>0&&sizes.every(x=>x>0)&&Math.abs(sum-d.total)/d.total<=0.02;
-    if(!exact){
-      try{const dd=await getJSON(`${API}/surah/${n}/editions/quran-uthmani,ar.muyassar`,"q_s"+n);w=dd[0].ayahs.map(a=>a.text.length+1)}
-      catch(e){w=new Array(cnt).fill(1)}
-    }
+    const cnt=surahs[n-1].numberOfAyahs;
+    let w;
+    try{const dd=await getJSON(`${API}/surah/${n}/editions/quran-uthmani,ar.muyassar`,"q_s"+n);w=dd[0].ayahs.map(a=>a.text.replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g,"").length*1.0+a.text.length*0.35+4)}
+    catch(e){w=new Array(cnt).fill(1)}
     const tot=w.reduce((a,b)=>a+b,0);let c=0;
     d.fr=w.map(x=>{const f=c/tot;c+=x;return f});
     return d;
@@ -1782,7 +1764,7 @@ function openSettings(){
   <div class="card"><label style="margin-top:0">${t("sTrans")}</label><select id="sTrans">${opt(trOpts,S.trans)}</select>
   ${sw("sInline",t("sInline"),S.inline)}</div>
   <div class="card">${sw("sPg",t("sPg"),S.pg)}${sw("sBook",t("sBook"),S.book)}${sw("sFit",t("sFit"),S.fit)}${sw("sAnim",t("sAnim"),S.anim)}${sw("sWake",t("sWake"),S.wake)}
-  <label>${t("reciter")}</label><select id="sRec">${opt(RECS,S.rec)}</select><label>${t("sEngine")}</label><select id="sEngine"><option value="surah" ${S.engine==="surah"?"selected":""}>${t("eSurah")}</option><option value="ayah" ${S.engine==="ayah"?"selected":""}>${t("eAyah")}</option></select><div class="note" style="text-align:start;padding:8px 0 0">${t(smOk?"smOkL":(smFailT?"smNoL":"smUnkL"))}<br>${t(pfState===1?"pfOk":pfState===2?"pfNo":"pfUnk")}<br>${t("stallN",{n:N(stallCount)})}</div><button class="btnl" id="audTest" style="width:100%">${t("audBtn")}</button><div class="note" id="audRes" style="text-align:start"></div></div>
+  <label>${t("reciter")}</label><select id="sRec">${opt(RECS,S.rec)}</select><label>${t("sEngine")}</label><select id="sEngine"><option value="surah" ${S.engine==="surah"?"selected":""}>${t("eSurah")}</option><option value="ayah" ${S.engine==="ayah"?"selected":""}>${t("eAyah")}</option></select><div class="note" style="text-align:start;padding:8px 0 0">${t(smOk?"smOkL":(smFailT?"smNoL":"smUnkL"))}${(smOk&&S.engine==="surah")?"":"<br>"+t(pfState===1?"pfOk":pfState===2?"pfNo":"pfUnk")}<br>${t("stallN",{n:N(stallCount)})}</div><button class="btnl" id="audTest" style="width:100%">${t("audBtn")}</button><div class="note" id="audRes" style="text-align:start"></div></div>
   <button class="btnl" id="sUpd" style="width:100%">${t("updBtn")}</button>
   <button class="btnl" id="sReset" style="width:100%;color:#B3392F">${t("sReset")}</button>
   <div class="note">${t("verL",{v:APP_V})}</div>`;
