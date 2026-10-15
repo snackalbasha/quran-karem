@@ -360,7 +360,7 @@ async clear(){try{const d=await this.open();await new Promise(res=>{const t=d.tr
 
 /* ---------- الإعدادات ---------- */
 const S=Object.assign({lang:"ar",theme:ls.get("q_theme","light"),font:"Amiri Quran",fs:ls.get("q_fs",30),trans:"none",inline:false,pg:true,rec:ls.get("q_rec","ar.alafasy"),wake:false,auto:true,page:"ivory",engine:"surah",book:true,fit:true,anim:true,rate:1,tafsir:"muyassar",goal:2,ev2:0},ls.get("q_set",{}));
-const APP_V="2026.10.15-audio";
+const APP_V="2026.10.15-audio3";
 const saveS=()=>ls.set("q_set",S);
 if(!S.ev3){S.engine="surah";S.ev3=1;saveS()}
 const T={
@@ -792,16 +792,42 @@ function ensureTimeline(d,rec,n){
   if(d.ready)return d.ready;
   d.ready=(async()=>{
     const cnt=surahs[n-1].numberOfAyahs;
-    let w;
-    try{const dd=await getJSON(`${API}/surah/${n}/editions/quran-uthmani,ar.muyassar`,"q_s"+n);w=dd[0].ayahs.map(a=>a.text.replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g,"").length*1.0+a.text.length*0.35+4)}
-    catch(e){w=new Array(cnt).fill(1)}
+    let w=null;
+    const du=await idb.get(`du:${rec}:${n}`);
+    if(du&&du.length===cnt&&du.every(x=>x>0)){w=du;d.exact=true}
+    if(!w){
+      try{const dd=await getJSON(`${API}/surah/${n}/editions/quran-uthmani,ar.muyassar`,"q_s"+n);w=dd[0].ayahs.map(a=>a.text.replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g,"").length+a.text.length*0.35+4)}
+      catch(e){w=new Array(cnt).fill(1)}
+      setTimeout(()=>refineTimeline(d,rec,n).catch(()=>{}),2500);
+    }
     const tot=w.reduce((a,b)=>a+b,0);let c=0;
     d.fr=w.map(x=>{const f=c/tot;c+=x;return f});
     return d;
   })();
   return d.ready;
 }
-function fixTs(d,dur){if(d.fr&&isFinite(dur)&&dur>0)d.ts=d.fr.map(f=>({from:f*dur}))}
+async function refineTimeline(d,rec,n){
+  if(d.refining||d.exact)return;d.refining=true;
+  const cnt=surahs[n-1].numberOfAyahs,g0=gOf(n,1);
+  const du=new Array(cnt).fill(0);let nx=0;
+  const one=i=>new Promise(res=>{
+    const a=new Audio();a.preload="metadata";
+    const fin=x=>{clearTimeout(to);try{a.onloadedmetadata=a.onerror=null;a.removeAttribute("src");a.load()}catch(e){}res(x)};
+    const to=setTimeout(()=>fin(0),15000);
+    a.onloadedmetadata=()=>fin(isFinite(a.duration)?a.duration:0);
+    a.onerror=()=>fin(0);
+    a.src=`https://cdn.islamic.app/quran/audio/${rec}/${g0+i}.mp3`;
+  });
+  const worker=async()=>{while(nx<cnt){const i=nx++;du[i]=await one(i)}};
+  await Promise.all(Array.from({length:Math.min(2,cnt)},worker));
+  if(!du.every(x=>x>0))return;
+  const sum=du.reduce((a,b)=>a+b,0);
+  if(!d.dur||Math.abs(sum-d.dur)/d.dur>0.05)return;
+  await idb.set(`du:${rec}:${n}`,du);
+  let c=0;d.fr=du.map(x=>{const f=c/sum;c+=x;return f});d.exact=true;
+  fixTs(d,d.dur);
+}
+function fixTs(d,dur){if(d.fr&&isFinite(dur)&&dur>0){d.dur=dur;d.ts=d.fr.map(f=>({from:f*dur}))}}
 function warmSM(n){
   if(n<1||n>114||smBad()||!surahs.length)return;
   chapterAudio(S.rec,n).catch(()=>{});
@@ -918,6 +944,12 @@ SM.forEach((el,i)=>{
     if(i!==sai||!smOn||String(el.src).startsWith("data:"))return;
     const g=playingG;smFailT=Date.now();smStop();toast(t("smFail"));startAtG(g,0,false);
   };
+});
+
+SM.forEach((el,i)=>{
+  el.onwaiting=()=>{if(i===sai&&smOn&&!el.paused&&!String(el.src).startsWith("data:")){buffering=true;stallCount++;updPlayer()}};
+  el.onplaying=()=>{if(i===sai&&buffering){buffering=false;updPlayer()}};
+  el.oncanplay=()=>{if(i===sai&&buffering){buffering=false;updPlayer()}};
 });
 
 /* ======================== أدوات إضافية ======================== */
@@ -1390,6 +1422,11 @@ async function audioTest(){
 const fmtT=x=>{x=Math.max(0,Math.floor(x||0));const h=Math.floor(x/3600),m=Math.floor(x%3600/60),sc=x%60;return (h?h+":"+pad(m):m)+":"+pad(sc)};
 function setBar(r){const b=$("#pbar");if(b)b.style.transform=`scaleX(${Math.max(0,Math.min(1,r||0))})`}
 let barBase=0,barStamp=0,barLast=-1,scrub=false,lastTm="";
+function seg(el){
+  const D=el.duration;
+  if(smOn&&sm&&sm.d.ts&&sm.d.ts[sm.k]){const a=sm.d.ts[sm.k].from,b=sm.d.ts[sm.k+1]?sm.d.ts[sm.k+1].from:D;return{a,len:Math.max(0.1,b-a)}}
+  return{a:0,len:D};
+}
 function barTick(now){
   requestAnimationFrame(barTick);
   if(scrub)return;
@@ -1399,8 +1436,9 @@ function barTick(now){
   if(ct!==barLast){barLast=ct;barBase=ct;barStamp=now}
   let est=ct;
   if(!el.paused&&el.readyState>=3){est=Math.min(el.duration,barBase+((now-barStamp)/1000)*S.rate);if(est>ct+0.45)est=ct+0.45}
-  setBar(est/el.duration);
-  const tm=fmtT(est)+" / "+fmtT(el.duration);
+  const sg=seg(el),rel=Math.max(0,Math.min(sg.len,est-sg.a));
+  setBar(rel/sg.len);
+  const tm=fmtT(rel)+" / "+fmtT(sg.len);
   if(tm!==lastTm){lastTm=tm;const e=$("#ptm");if(e)e.textContent=tm}
 }
 requestAnimationFrame(barTick);
@@ -1408,11 +1446,11 @@ requestAnimationFrame(barTick);
   const pb=$("#pbarBox");if(!pb)return;
   const rxp=e=>{const r=pb.getBoundingClientRect();let x=(e.clientX-r.left)/(r.width||1);if(document.documentElement.dir==="rtl")x=1-x;return Math.max(0,Math.min(1,x))};
   pb.addEventListener("pointerdown",e=>{if(!playingG)return;scrub=true;pb.classList.add("on");try{pb.setPointerCapture(e.pointerId)}catch(x){}setBar(rxp(e))});
-  pb.addEventListener("pointermove",e=>{if(!scrub)return;const r=rxp(e);setBar(r);const el=act();if(el.duration){const q=$("#ptm");if(q)q.textContent=fmtT(r*el.duration)+" / "+fmtT(el.duration)}});
+  pb.addEventListener("pointermove",e=>{if(!scrub)return;const r=rxp(e);setBar(r);const el=act();if(el.duration){const sg=seg(el),q=$("#ptm");if(q)q.textContent=fmtT(r*sg.len)+" / "+fmtT(sg.len)}});
   pb.addEventListener("pointerup",e=>{
     if(!scrub)return;scrub=false;pb.classList.remove("on");
     const el=act();
-    if(el.duration){try{el.currentTime=rxp(e)*el.duration}catch(x){}barLast=-1;if(smOn)smSchedule()}
+    if(el.duration){const sg=seg(el);try{el.currentTime=sg.a+rxp(e)*sg.len}catch(x){}barLast=-1;if(smOn)smSchedule()}
   });
   pb.addEventListener("pointercancel",()=>{scrub=false;pb.classList.remove("on")});
 })();
