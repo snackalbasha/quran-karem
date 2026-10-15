@@ -360,7 +360,7 @@ async clear(){try{const d=await this.open();await new Promise(res=>{const t=d.tr
 
 /* ---------- الإعدادات ---------- */
 const S=Object.assign({lang:"ar",theme:ls.get("q_theme","light"),font:"Amiri Quran",fs:ls.get("q_fs",30),trans:"none",inline:false,pg:true,rec:ls.get("q_rec","ar.alafasy"),wake:false,auto:true,page:"ivory",engine:"surah",book:true,fit:true,anim:true,rate:1,tafsir:"muyassar",goal:2,ev2:0},ls.get("q_set",{}));
-const APP_V="2026.10.15-audio3";
+const APP_V="2026.10.15-audio4";
 const saveS=()=>ls.set("q_set",S);
 if(!S.ev3){S.engine="surah";S.ev3=1;saveS()}
 const T={
@@ -757,7 +757,7 @@ const RMATCH={"ar.alafasy":/afasy|afasi|العفاسي/i,"ar.abdurrahmaansudais"
 const SM=[new Audio(),new Audio()];
 SM.forEach(e=>{e.preload="auto"});
 let smOn=false,sai=0,sm=null,smPoll=null,smSwapT=null,smFailT=0,smTok=0,smLoading=false,smOk=false,smSwitching=false,QR=null;
-const CAm={};
+const CAm={};let TLD="—";
 const act=()=>smOn?SM[sai]:ELS[ai];
 const gOf=(s,a)=>cumA()[s-1]+a;
 const smBad=()=>S.engine==="ayah"||!!noSurah[S.rec]||(smFailT&&Date.now()-smFailT<300000);
@@ -793,12 +793,12 @@ function ensureTimeline(d,rec,n){
   d.ready=(async()=>{
     const cnt=surahs[n-1].numberOfAyahs;
     let w=null;
-    const du=await idb.get(`du:${rec}:${n}`);
-    if(du&&du.length===cnt&&du.every(x=>x>0)){w=du;d.exact=true}
+    const du=await idb.get(`du2:${rec}:${n}`);
+    if(du&&du.length===cnt&&du.every(x=>x>0)){w=du;d.exact=true;TLD="دقيق (محفوظ)"}
     if(!w){
       try{const dd=await getJSON(`${API}/surah/${n}/editions/quran-uthmani,ar.muyassar`,"q_s"+n);w=dd[0].ayahs.map(a=>a.text.replace(/[\u064B-\u065F\u0670\u06D6-\u06ED]/g,"").length+a.text.length*0.35+4)}
       catch(e){w=new Array(cnt).fill(1)}
-      setTimeout(()=>refineTimeline(d,rec,n).catch(()=>{}),2500);
+      TLD="تقريبي (جاري القياس)";setTimeout(()=>refineTimeline(d,rec,n).catch(e=>{TLD="تقريبي (فشل القياس)"}),2500);
     }
     const tot=w.reduce((a,b)=>a+b,0);let c=0;
     d.fr=w.map(x=>{const f=c/tot;c+=x;return f});
@@ -820,12 +820,17 @@ async function refineTimeline(d,rec,n){
   });
   const worker=async()=>{while(nx<cnt){const i=nx++;du[i]=await one(i)}};
   await Promise.all(Array.from({length:Math.min(2,cnt)},worker));
-  if(!du.every(x=>x>0))return;
-  const sum=du.reduce((a,b)=>a+b,0);
-  if(!d.dur||Math.abs(sum-d.dur)/d.dur>0.05)return;
-  await idb.set(`du:${rec}:${n}`,du);
+  if(!du.every(x=>x>0)){TLD="تقريبي (تعذّر قياس بعض الآيات)";return}
+  if(!d.dur){TLD="تقريبي (مدة السورة غير معروفة)";return}
+  let sum=du.reduce((a,b)=>a+b,0);
+  const lead=d.dur-sum;
+  if(n!==1&&n!==9&&lead>0.8&&lead<15){du[0]+=lead;sum+=lead}
+  const diff=Math.abs(sum-d.dur);
+  if(diff/d.dur>0.03){TLD=`تقريبي (فرق ${diff.toFixed(1)} ثانية بين الآيات والسورة)`;return}
+  await idb.set(`du2:${rec}:${n}`,du);
   let c=0;d.fr=du.map(x=>{const f=c/sum;c+=x;return f});d.exact=true;
   fixTs(d,d.dur);
+  TLD=`دقيق (فرق ${diff.toFixed(1)} ث)`;
 }
 function fixTs(d,dur){if(d.fr&&isFinite(dur)&&dur>0){d.dur=dur;d.ts=d.fr.map(f=>({from:f*dur}))}}
 function warmSM(n){
@@ -1802,7 +1807,7 @@ function openSettings(){
   <div class="card"><label style="margin-top:0">${t("sTrans")}</label><select id="sTrans">${opt(trOpts,S.trans)}</select>
   ${sw("sInline",t("sInline"),S.inline)}</div>
   <div class="card">${sw("sPg",t("sPg"),S.pg)}${sw("sBook",t("sBook"),S.book)}${sw("sFit",t("sFit"),S.fit)}${sw("sAnim",t("sAnim"),S.anim)}${sw("sWake",t("sWake"),S.wake)}
-  <label>${t("reciter")}</label><select id="sRec">${opt(RECS,S.rec)}</select><label>${t("sEngine")}</label><select id="sEngine"><option value="surah" ${S.engine==="surah"?"selected":""}>${t("eSurah")}</option><option value="ayah" ${S.engine==="ayah"?"selected":""}>${t("eAyah")}</option></select><div class="note" style="text-align:start;padding:8px 0 0">${t(smOk?"smOkL":(smFailT?"smNoL":"smUnkL"))}${(smOk&&S.engine==="surah")?"":"<br>"+t(pfState===1?"pfOk":pfState===2?"pfNo":"pfUnk")}<br>${t("stallN",{n:N(stallCount)})}</div><button class="btnl" id="audTest" style="width:100%">${t("audBtn")}</button><div class="note" id="audRes" style="text-align:start"></div></div>
+  <label>${t("reciter")}</label><select id="sRec">${opt(RECS,S.rec)}</select><label>${t("sEngine")}</label><select id="sEngine"><option value="surah" ${S.engine==="surah"?"selected":""}>${t("eSurah")}</option><option value="ayah" ${S.engine==="ayah"?"selected":""}>${t("eAyah")}</option></select><div class="note" style="text-align:start;padding:8px 0 0">${t(smOk?"smOkL":(smFailT?"smNoL":"smUnkL"))}${(smOk&&S.engine==="surah")?"":"<br>"+t(pfState===1?"pfOk":pfState===2?"pfNo":"pfUnk")}<br>${t("stallN",{n:N(stallCount)})}<br>توقيت الآيات: ${TLD}</div><button class="btnl" id="audTest" style="width:100%">${t("audBtn")}</button><div class="note" id="audRes" style="text-align:start"></div></div>
   <button class="btnl" id="sUpd" style="width:100%">${t("updBtn")}</button>
   <button class="btnl" id="sReset" style="width:100%;color:#B3392F">${t("sReset")}</button>
   <div class="note">${t("verL",{v:APP_V})}</div>`;
