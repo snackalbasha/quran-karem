@@ -360,7 +360,7 @@ async clear(){try{const d=await this.open();await new Promise(res=>{const t=d.tr
 
 /* ---------- الإعدادات ---------- */
 const S=Object.assign({lang:"ar",theme:ls.get("q_theme","light"),font:"Amiri Quran",fs:ls.get("q_fs",30),trans:"none",inline:false,pg:true,rec:ls.get("q_rec","ar.alafasy"),wake:false,auto:true,page:"ivory",engine:"surah",book:true,fit:true,anim:true,rate:1,tafsir:"muyassar",goal:2,ev2:0},ls.get("q_set",{}));
-const APP_V="2026.10.15-audio13";
+const APP_V="2026.10.15-audio14";
 const saveS=()=>ls.set("q_set",S);
 if(!S.ev3){S.engine="surah";S.ev3=1;saveS()}
 const T={
@@ -854,6 +854,8 @@ async function chapterAudio(rec,n){
     if(noSurah[rec])throw 0;
     d={url:`https://cdn.islamic.app/quran/audio-surah/${rec}/${n}.mp3`,total:0,fr:null,ts:null,ready:null};
   }
+  const pv=PREFACE[rec+":"+n];
+  if(pv){d.hl=pv;d.hs="يدوي";if(!d.q)TLD+=" · إزاحة البداية "+pv+" ث"}
   CAm[key]=d;return d;
 }
 function ensureTimeline(d,rec,n){
@@ -966,7 +968,8 @@ function smPollStart(){
     let k=sm.k;
     if(tm<ts[k].from-0.05||(k+1<ts.length&&tm>=ts[k+1].from)){k=0;for(let i=0;i<ts.length;i++){if(ts[i].from<=tm+0.05)k=i;else break}}
     const pre=k===0&&sm.d.hl>0&&tm<sm.d.hl-0.05;
-    if(pre!==!!sm.pre){sm.pre=pre;if(pre)document.querySelectorAll(".ay.playing").forEach(e=>e.classList.remove("playing"));else syncUI(playingG)}
+    if(pre)document.querySelectorAll(".ay.playing").forEach(e=>e.classList.remove("playing"));
+    if(pre!==!!sm.pre){sm.pre=pre;if(!pre)syncUI(playingG)}
     if(k!==sm.k){sm.k=k;playingG=gOf(sm.n,k+1);if(!pre)syncUI(playingG)}
   },120);
 }
