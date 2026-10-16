@@ -360,7 +360,7 @@ async clear(){try{const d=await this.open();await new Promise(res=>{const t=d.tr
 
 /* ---------- الإعدادات ---------- */
 const S=Object.assign({lang:"ar",theme:ls.get("q_theme","light"),font:"Amiri Quran",fs:ls.get("q_fs",30),trans:"none",inline:false,pg:true,rec:ls.get("q_rec","ar.alafasy"),wake:false,auto:true,page:"ivory",engine:"surah",book:true,fit:true,anim:true,rate:1,tafsir:"muyassar",goal:2,ev2:0},ls.get("q_set",{}));
-const APP_V="2026.10.15-audio6";
+const APP_V="2026.10.15-audio7";
 const saveS=()=>ls.set("q_set",S);
 if(!S.ev3){S.engine="surah";S.ev3=1;saveS()}
 const T={
@@ -780,19 +780,28 @@ async function qrId(rec){
   return m[0].id;
 }
 const noSurah=ls.get("q_nosurah",{});
+let QERR="";
 async function qChapter(rec,n){
   const k=`qts:${rec}:${n}`;
   let o=await idb.get(k);
   if(!o){
-    const id=await withTO(qrId(rec),6000);
-    const r=await withTO(fetch(`${QAPI}/chapter_recitations/${id}/${n}?segments=true`),7000);
-    if(!r.ok)throw 0;
-    const j=await r.json(),af=j&&j.audio_file;
-    if(!af||!af.audio_url||!af.timestamps||!af.timestamps.length)throw 0;
+    let id;
+    try{id=await withTO(qrId(rec),12000)}catch(e){throw "لم يُعرف القارئ"}
+    let r=null,lastE="";
+    for(let t=0;t<2&&!r;t++){
+      try{const x=await withTO(fetch(`${QAPI}/chapter_recitations/${id}/${n}?segments=true`),12000);if(x.ok)r=x;else lastE="HTTP "+x.status}
+      catch(e){lastE="تعذر الاتصال"}
+    }
+    if(!r)throw lastE||"فشل الطلب";
+    const j=await r.json();
+    const af=j&&(j.audio_file||(j.audio_files&&j.audio_files[0]));
+    if(!af||!af.audio_url)throw "لا يوجد ملف صوت";
+    if(!af.timestamps||!af.timestamps.length)throw "لا توجد توقيتات لهذه السورة";
     const cnt=surahs[n-1].numberOfAyahs,ts=new Array(cnt).fill(null);
     af.timestamps.forEach(t=>{const a=+String(t.verse_key).split(":")[1];if(a>=1&&a<=cnt&&isFinite(t.timestamp_from))ts[a-1]={from:t.timestamp_from/1000}});
-    if(ts.some(x=>!x))throw 0;
-    for(let i=1;i<cnt;i++)if(ts[i].from<ts[i-1].from)throw 0;
+    const miss=ts.filter(x=>!x).length;
+    if(miss)throw `توقيتات ناقصة (${miss} من ${cnt})`;
+    for(let i=1;i<cnt;i++)if(ts[i].from<ts[i-1].from)throw "ترتيب التوقيتات غير صحيح";
     let u=af.audio_url;if(!/^https?:/.test(u))u="https://verses.quran.com/"+u.replace(/^\/+/,"");
     o={url:u,ts};
     await idb.set(k,o);
@@ -803,7 +812,7 @@ async function chapterAudio(rec,n){
   const key=rec+":"+n;
   if(CAm[key])return CAm[key];
   let d=null;
-  try{d=await qChapter(rec,n);TLD="دقيق (توقيتات quran.com)"}catch(e){d=null}
+  try{d=await qChapter(rec,n);QERR="";TLD="دقيق (توقيتات quran.com)"}catch(e){d=null;QERR=typeof e==="string"?e:"خطأ غير معروف"}
   if(!d){
     if(noSurah[rec])throw 0;
     d={url:`https://cdn.islamic.app/quran/audio-surah/${rec}/${n}.mp3`,total:0,fr:null,ts:null,ready:null};
@@ -1833,7 +1842,7 @@ function openSettings(){
   <div class="card"><label style="margin-top:0">${t("sTrans")}</label><select id="sTrans">${opt(trOpts,S.trans)}</select>
   ${sw("sInline",t("sInline"),S.inline)}</div>
   <div class="card">${sw("sPg",t("sPg"),S.pg)}${sw("sBook",t("sBook"),S.book)}${sw("sFit",t("sFit"),S.fit)}${sw("sAnim",t("sAnim"),S.anim)}${sw("sWake",t("sWake"),S.wake)}
-  <label>${t("reciter")}</label><select id="sRec">${opt(RECS,S.rec)}</select><label>${t("sEngine")}</label><select id="sEngine"><option value="surah" ${S.engine==="surah"?"selected":""}>${t("eSurah")}</option><option value="ayah" ${S.engine==="ayah"?"selected":""}>${t("eAyah")}</option></select><div class="note" style="text-align:start;padding:8px 0 0">${t(smOk?"smOkL":(smFailT?"smNoL":"smUnkL"))}${(smOk&&S.engine==="surah")?"":"<br>"+t(pfState===1?"pfOk":pfState===2?"pfNo":"pfUnk")}<br>${t("stallN",{n:N(stallCount)})}<br>توقيت الآيات: ${TLD}</div><button class="btnl" id="audTest" style="width:100%">${t("audBtn")}</button><div class="note" id="audRes" style="text-align:start"></div></div>
+  <label>${t("reciter")}</label><select id="sRec">${opt(RECS,S.rec)}</select><label>${t("sEngine")}</label><select id="sEngine"><option value="surah" ${S.engine==="surah"?"selected":""}>${t("eSurah")}</option><option value="ayah" ${S.engine==="ayah"?"selected":""}>${t("eAyah")}</option></select><div class="note" style="text-align:start;padding:8px 0 0">${t(smOk?"smOkL":(smFailT?"smNoL":"smUnkL"))}${(smOk&&S.engine==="surah")?"":"<br>"+t(pfState===1?"pfOk":pfState===2?"pfNo":"pfUnk")}<br>${t("stallN",{n:N(stallCount)})}<br>توقيت الآيات: ${TLD}${QERR?"<br>quran.com: "+QERR:""}</div><button class="btnl" id="audTest" style="width:100%">${t("audBtn")}</button><div class="note" id="audRes" style="text-align:start"></div></div>
   <button class="btnl" id="sUpd" style="width:100%">${t("updBtn")}</button>
   <button class="btnl" id="sReset" style="width:100%;color:#B3392F">${t("sReset")}</button>
   <div class="note">${t("verL",{v:APP_V})}</div>`;
