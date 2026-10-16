@@ -361,7 +361,7 @@ async clear(){try{const d=await this.open();await new Promise(res=>{const t=d.tr
 
 /* ---------- الإعدادات ---------- */
 const S=Object.assign({lang:"ar",theme:ls.get("q_theme","light"),font:"Amiri Quran",fs:ls.get("q_fs",30),trans:"none",inline:false,pg:true,rec:ls.get("q_rec","ar.alafasy"),wake:false,auto:true,page:"ivory",engine:"surah",book:true,fit:true,anim:true,rate:1,tafsir:"muyassar",goal:2,ev2:0},ls.get("q_set",{}));
-const APP_V="2026.10.15-audio15";
+const APP_V="2026.10.15-audio16";
 const saveS=()=>ls.set("q_set",S);
 if(!S.ev3){S.engine="surah";S.ev3=1;saveS()}
 const T={
@@ -846,17 +846,22 @@ async function qChapter(rec,n){
   }
   return{url:o.url,total:0,fr:null,ts:o.ts,ready:null,exact:true,q:true,alt:o.alt,hl:o.hl||0,hs:o.hs||"",a2:o.a2||0};
 }
+const tldQ=d=>"دقيق (توقيتات quran.com"+(d.alt?"، صوت islamic.app":"، صوت quran.com")+") · بداية الآية ١: "+(d.hl>0?d.hl.toFixed(1)+" ث ("+d.hs+")":"صفر")+" · الآية ٢ عند "+(d.a2||0).toFixed(1)+" ث";
 async function chapterAudio(rec,n){
   const key=rec+":"+n;
   if(CAm[key])return CAm[key];
   let d=null;
-  try{d=await qChapter(rec,n);if(PREFACE[rec+":"+n]){d.hl=PREFACE[rec+":"+n];d.hs="يدوي"}QERR="";TLD="دقيق (توقيتات quran.com"+(d.alt?"، صوت islamic.app":"، صوت quran.com")+") · بداية الآية ١: "+(d.hl>0?d.hl.toFixed(1)+" ث ("+d.hs+")":"صفر، لم تُحدد")+" · الآية ٢ عند "+(d.a2||0).toFixed(1)+" ث"}catch(e){d=null;QERR=typeof e==="string"?e:"خطأ غير معروف"}
+  try{d=await qChapter(rec,n);QERR=""}catch(e){d=null;QERR=typeof e==="string"?e:"خطأ غير معروف"}
   if(!d){
     if(noSurah[rec])throw 0;
     d={url:`https://cdn.islamic.app/quran/audio-surah/${rec}/${n}.mp3`,total:0,fr:null,ts:null,ready:null};
   }
   const pv=PREFACE[rec+":"+n];
-  if(pv){d.hl=pv;d.hs="يدوي";if(!d.q)TLD+=" · إزاحة البداية "+pv+" ث"}
+  if(pv){
+    d.hl=pv;d.hs="يدوي";
+    if(d.q&&d.ts){d.ts=d.ts.map((x,i)=>({from:i?x.from+pv:x.from}));d.a2=(d.a2||0)+pv}
+  }
+  TLD=d.q?tldQ(d):TLD+(pv?" · إزاحة البداية "+pv+" ث":"");
   CAm[key]=d;return d;
 }
 function ensureTimeline(d,rec,n){
@@ -931,7 +936,7 @@ async function startCont(g,user){
 function beginSM(n,k,d,tok){
   const el=SM[sai];
   SM[1-sai].pause();
-  sm={n,d,k};smOn=true;playingG=gOf(n,k+1);
+  sm={n,d,k};smOn=true;playingG=gOf(n,k+1);document.body.classList.toggle("preHl",k===0&&d.hl>0);
   let t0=0;
   let done=false;
   const cleanup=()=>{el.removeEventListener("loadedmetadata",onMeta);el.removeEventListener("seeked",onSeeked);el.removeEventListener("playing",onPlaying);clearTimeout(failT)};
