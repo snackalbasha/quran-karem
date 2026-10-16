@@ -360,7 +360,7 @@ async clear(){try{const d=await this.open();await new Promise(res=>{const t=d.tr
 
 /* ---------- الإعدادات ---------- */
 const S=Object.assign({lang:"ar",theme:ls.get("q_theme","light"),font:"Amiri Quran",fs:ls.get("q_fs",30),trans:"none",inline:false,pg:true,rec:ls.get("q_rec","ar.alafasy"),wake:false,auto:true,page:"ivory",engine:"surah",book:true,fit:true,anim:true,rate:1,tafsir:"muyassar",goal:2,ev2:0},ls.get("q_set",{}));
-const APP_V="2026.10.15-audio8";
+const APP_V="2026.10.15-audio9";
 const saveS=()=>ls.set("q_set",S);
 if(!S.ev3){S.engine="surah";S.ev3=1;saveS()}
 const T={
@@ -782,9 +782,19 @@ async function qrId(rec){
   return m[0].id;
 }
 const noSurah=ls.get("q_nosurah",{});
+function probeDur(url){
+  return new Promise((res,rej)=>{
+    const a=new Audio();a.preload="metadata";
+    const fin=(f,x)=>{clearTimeout(to);try{a.onloadedmetadata=a.onerror=null;a.removeAttribute("src");a.load()}catch(e){}f(x)};
+    const to=setTimeout(()=>fin(rej,0),10000);
+    a.onloadedmetadata=()=>isFinite(a.duration)&&a.duration>0?fin(res,a.duration):fin(rej,0);
+    a.onerror=()=>fin(rej,0);
+    a.src=url;
+  });
+}
 let QERR="";
 async function qChapter(rec,n){
-  const k=`qts:${rec}:${n}`;
+  const k=`qts2:${rec}:${n}`;
   let o=await idb.get(k);
   if(!o){
     let id;
@@ -805,16 +815,25 @@ async function qChapter(rec,n){
     if(miss)throw `توقيتات ناقصة (${miss} من ${cnt})`;
     for(let i=1;i<cnt;i++)if(ts[i].from<ts[i-1].from)throw "ترتيب التوقيتات غير صحيح";
     let u=af.audio_url;if(!/^https?:/.test(u))u="https://verses.quran.com/"+u.replace(/^\/+/,"");
-    o={url:u,ts};
+    const last=af.timestamps[af.timestamps.length-1];
+    const end=last&&isFinite(last.timestamp_to)?last.timestamp_to/1000:0;
+    o={url:u,ts,alt:0};
+    if(end>0){
+      try{
+        const iu=`https://cdn.islamic.app/quran/audio-surah/${rec}/${n}.mp3`;
+        const dur=await probeDur(iu);
+        if(dur-end>=-1&&dur-end<=8){o.url=iu;o.alt=1}
+      }catch(e){}
+    }
     await idb.set(k,o);
   }
-  return{url:o.url,total:0,fr:null,ts:o.ts,ready:null,exact:true,q:true};
+  return{url:o.url,total:0,fr:null,ts:o.ts,ready:null,exact:true,q:true,alt:o.alt};
 }
 async function chapterAudio(rec,n){
   const key=rec+":"+n;
   if(CAm[key])return CAm[key];
   let d=null;
-  try{d=await qChapter(rec,n);QERR="";TLD="دقيق (توقيتات quran.com)"}catch(e){d=null;QERR=typeof e==="string"?e:"خطأ غير معروف"}
+  try{d=await qChapter(rec,n);QERR="";TLD="دقيق (توقيتات quran.com"+(d.alt?"، صوت islamic.app":"، صوت quran.com")+")"}catch(e){d=null;QERR=typeof e==="string"?e:"خطأ غير معروف"}
   if(!d){
     if(noSurah[rec])throw 0;
     d={url:`https://cdn.islamic.app/quran/audio-surah/${rec}/${n}.mp3`,total:0,fr:null,ts:null,ready:null};
