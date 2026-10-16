@@ -17,10 +17,10 @@
 <style>
 :root{--bg:#F1EFE7;--paper:#FFFFFF;--page:#FBF7EA;--ink:#16231F;--muted:#62736D;--green:#0A3B34;--green2:#14695F;--deep:#062B26;--gold:#A98228;--gold2:#E3C77F;--line:#E2DDCD;--hl:#E6F0EA;--numbg:#FFFFFF;--fs:30px;--qf:"Amiri Quran",serif;--gg:linear-gradient(135deg,#EBD38F,#B8923A 55%,#8F6F26);--sh:0 1px 2px rgba(10,59,52,.06)}
 :root[data-theme="dark"]{--bg:#050E0C;--paper:#0B1814;--page:#09130F;--ink:#ECE8DA;--muted:#93A79F;--green:#08302A;--green2:#2A9484;--deep:#041F1B;--gold:#D8B765;--gold2:#F0D690;--line:#1B2D27;--hl:rgba(216,183,101,.11);--numbg:#0B1814;--gg:linear-gradient(135deg,#F3DFA0,#D8B765 55%,#B08D3C);--sh:0 1px 2px rgba(0,0,0,.35)}
-:root{--pink:#1F2A25;--phl:#EFEBD6;--pline:#E3DCC4;--rbg:var(--bg)}
+:root{--pink:#1F2A25;--phl:rgba(196,160,70,.24);--pline:#E3DCC4;--rbg:var(--bg)}
 :root[data-theme="dark"]{--pink:#EDE7D2;--phl:rgba(216,183,101,.11);--pline:#1B2D27}
-:root[data-theme="light"][data-page="sage"]{--page:#EEF4EF;--pink:#12251F;--phl:#DCEBE2;--pline:#CFE0D5;--rbg:#E2EDE6}
-:root[data-theme="light"][data-page="sand"]{--page:#F6EEDC;--pink:#2B2112;--phl:#EBDDBC;--pline:#E1D2AE;--rbg:#EBE1CB}
+:root[data-theme="light"][data-page="sage"]{--page:#EEF4EF;--pink:#12251F;--phl:rgba(70,150,110,.22);--pline:#CFE0D5;--rbg:#E2EDE6}
+:root[data-theme="light"][data-page="sand"]{--page:#F6EEDC;--pink:#2B2112;--phl:rgba(190,150,60,.26);--pline:#E1D2AE;--rbg:#EBE1CB}
 :root[data-page="night"]{--page:#0C1B17;--pink:#EFE8D0;--phl:rgba(216,183,101,.14);--pline:#21362F;--rbg:#07110E}
 :root[data-page="black"]{--page:#000000;--pink:#E8E0C6;--phl:rgba(216,183,101,.14);--pline:#1E1E1B;--rbg:#000000}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -123,7 +123,7 @@ input[type=range]{width:100%;accent-color:var(--gold);margin:8px 0}
 .pgm:before,.pgm:after{content:"";flex:1;height:1px;background:var(--pline)}
 .pgm span+span:before{content:"✦";margin-inline-end:10px}
 .ay{border-radius:12px;padding:2px 0;cursor:pointer;transition:background .25s,box-shadow .25s}
-.ay.playing{background:var(--phl);box-shadow:0 0 0 5px var(--phl)}
+.ay.playing{background:var(--phl);box-shadow:none;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 #sheet{--numbg:var(--paper);position:fixed;inset-inline:0;bottom:0;background:var(--paper);border-radius:32px 32px 0 0;border-top:1.5px solid var(--gold);padding:14px 18px calc(18px + env(safe-area-inset-bottom,0px));z-index:20;max-height:82%;overflow:auto;transform:translateY(105%);transition:transform .3s cubic-bezier(.2,.8,.2,1);box-shadow:0 -24px 60px rgba(0,0,0,.3)}
 #sheet.open{transform:none}
 .grab{width:46px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 12px}
@@ -360,7 +360,7 @@ async clear(){try{const d=await this.open();await new Promise(res=>{const t=d.tr
 
 /* ---------- الإعدادات ---------- */
 const S=Object.assign({lang:"ar",theme:ls.get("q_theme","light"),font:"Amiri Quran",fs:ls.get("q_fs",30),trans:"none",inline:false,pg:true,rec:ls.get("q_rec","ar.alafasy"),wake:false,auto:true,page:"ivory",engine:"surah",book:true,fit:true,anim:true,rate:1,tafsir:"muyassar",goal:2,ev2:0},ls.get("q_set",{}));
-const APP_V="2026.10.15-audio7";
+const APP_V="2026.10.15-audio8";
 const saveS=()=>ls.set("q_set",S);
 if(!S.ev3){S.engine="surah";S.ev3=1;saveS()}
 const T={
@@ -768,10 +768,12 @@ function unlockAll(except){
   unlocked=true;
   [ELS[0],ELS[1],SM[0],SM[1]].forEach(e=>{if(e!==except)prime(e)});
 }
+const QID={"ar.alafasy":7};
 async function qrId(rec){
+  if(QID[rec])return QID[rec];
   const c=ls.get("q_rid",{});
   if(c[rec])return c[rec];
-  if(!QR)QR=fetch(`${QAPI}/resources/chapter_reciters`).then(r=>{if(!r.ok)throw 0;return r.json()}).then(j=>j.reciters||[]).catch(e=>{QR=null;throw e});
+  if(!QR)QR=fetch(`${QAPI}/resources/chapter_reciters`).then(r=>{if(!r.ok)throw "HTTP "+r.status;return r.json()}).then(j=>j.reciters||[]).catch(e=>{QR=null;throw e});
   const list=await QR;
   let m=list.filter(x=>RMATCH[rec].test((x.name||"")+" "+(x.arabic_name||"")));
   if(/minshawi|abdulbasit/.test(rec)){const mu=m.filter(x=>/murattal|مرتل/i.test((x.name||"")+" "+(x.arabic_name||"")+" "+(x.style||"")+" "+(x.relative_path||"")));if(mu.length)m=mu}
@@ -786,7 +788,7 @@ async function qChapter(rec,n){
   let o=await idb.get(k);
   if(!o){
     let id;
-    try{id=await withTO(qrId(rec),12000)}catch(e){throw "لم يُعرف القارئ"}
+    try{id=await withTO(qrId(rec),12000)}catch(e){throw typeof e==="string"?"قائمة القرّاء: "+e:"لم يُعرف القارئ"}
     let r=null,lastE="";
     for(let t=0;t<2&&!r;t++){
       try{const x=await withTO(fetch(`${QAPI}/chapter_recitations/${id}/${n}?segments=true`),12000);if(x.ok)r=x;else lastE="HTTP "+x.status}
