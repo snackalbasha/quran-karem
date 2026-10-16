@@ -360,7 +360,7 @@ async clear(){try{const d=await this.open();await new Promise(res=>{const t=d.tr
 
 /* ---------- الإعدادات ---------- */
 const S=Object.assign({lang:"ar",theme:ls.get("q_theme","light"),font:"Amiri Quran",fs:ls.get("q_fs",30),trans:"none",inline:false,pg:true,rec:ls.get("q_rec","ar.alafasy"),wake:false,auto:true,page:"ivory",engine:"surah",book:true,fit:true,anim:true,rate:1,tafsir:"muyassar",goal:2,ev2:0},ls.get("q_set",{}));
-const APP_V="2026.10.15-audio12";
+const APP_V="2026.10.15-audio13";
 const saveS=()=>ls.set("q_set",S);
 if(!S.ev3){S.engine="surah";S.ev3=1;saveS()}
 const T={
@@ -769,6 +769,8 @@ function unlockAll(except){
   [ELS[0],ELS[1],SM[0],SM[1]].forEach(e=>{if(e!==except)prime(e)});
 }
 const QID={"ar.alafasy":7};
+/* ثواني الاستعاذة قبل أول آية، تُضبط يدوياً: "القارئ:رقم السورة":ثواني */
+const PREFACE={"ar.alafasy:1":6};
 async function qrId(rec){
   if(QID[rec])return QID[rec];
   const c=ls.get("q_rid",{});
@@ -847,7 +849,7 @@ async function chapterAudio(rec,n){
   const key=rec+":"+n;
   if(CAm[key])return CAm[key];
   let d=null;
-  try{d=await qChapter(rec,n);QERR="";TLD="دقيق (توقيتات quran.com"+(d.alt?"، صوت islamic.app":"، صوت quran.com")+") · بداية الآية ١: "+(d.hl>0?d.hl.toFixed(1)+" ث ("+d.hs+")":"صفر، لم تُحدد")+" · الآية ٢ عند "+(d.a2||0).toFixed(1)+" ث"}catch(e){d=null;QERR=typeof e==="string"?e:"خطأ غير معروف"}
+  try{d=await qChapter(rec,n);if(PREFACE[rec+":"+n]){d.hl=PREFACE[rec+":"+n];d.hs="يدوي"}QERR="";TLD="دقيق (توقيتات quran.com"+(d.alt?"، صوت islamic.app":"، صوت quran.com")+") · بداية الآية ١: "+(d.hl>0?d.hl.toFixed(1)+" ث ("+d.hs+")":"صفر، لم تُحدد")+" · الآية ٢ عند "+(d.a2||0).toFixed(1)+" ث"}catch(e){d=null;QERR=typeof e==="string"?e:"خطأ غير معروف"}
   if(!d){
     if(noSurah[rec])throw 0;
     d={url:`https://cdn.islamic.app/quran/audio-surah/${rec}/${n}.mp3`,total:0,fr:null,ts:null,ready:null};
