@@ -360,7 +360,7 @@ async clear(){try{const d=await this.open();await new Promise(res=>{const t=d.tr
 
 /* ---------- الإعدادات ---------- */
 const S=Object.assign({lang:"ar",theme:ls.get("q_theme","light"),font:"Amiri Quran",fs:ls.get("q_fs",30),trans:"none",inline:false,pg:true,rec:ls.get("q_rec","ar.alafasy"),wake:false,auto:true,page:"ivory",engine:"surah",book:true,fit:true,anim:true,rate:1,tafsir:"muyassar",goal:2,ev2:0},ls.get("q_set",{}));
-const APP_V="2026.10.15-audio9";
+const APP_V="2026.10.15-audio10";
 const saveS=()=>ls.set("q_set",S);
 if(!S.ev3){S.engine="surah";S.ev3=1;saveS()}
 const T={
@@ -794,7 +794,7 @@ function probeDur(url){
 }
 let QERR="";
 async function qChapter(rec,n){
-  const k=`qts2:${rec}:${n}`;
+  const k=`qts3:${rec}:${n}`;
   let o=await idb.get(k);
   if(!o){
     let id;
@@ -817,7 +817,13 @@ async function qChapter(rec,n){
     let u=af.audio_url;if(!/^https?:/.test(u))u="https://verses.quran.com/"+u.replace(/^\/+/,"");
     const last=af.timestamps[af.timestamps.length-1];
     const end=last&&isFinite(last.timestamp_to)?last.timestamp_to/1000:0;
-    o={url:u,ts,alt:0};
+    let hl=0;
+    const v1=af.timestamps.find(t=>String(t.verse_key).split(":")[1]==="1");
+    if(v1&&Array.isArray(v1.segments)&&v1.segments.length&&Array.isArray(v1.segments[0])){
+      const sg=v1.segments[0],x=sg.length>=3?sg[sg.length-2]/1000:0;
+      if(isFinite(x)&&x>0.8&&x<(v1.timestamp_to/1000||1e9))hl=x;
+    }
+    o={url:u,ts,alt:0,hl};
     if(end>0){
       try{
         const iu=`https://cdn.islamic.app/quran/audio-surah/${rec}/${n}.mp3`;
@@ -827,7 +833,7 @@ async function qChapter(rec,n){
     }
     await idb.set(k,o);
   }
-  return{url:o.url,total:0,fr:null,ts:o.ts,ready:null,exact:true,q:true,alt:o.alt};
+  return{url:o.url,total:0,fr:null,ts:o.ts,ready:null,exact:true,q:true,alt:o.alt,hl:o.hl||0};
 }
 async function chapterAudio(rec,n){
   const key=rec+":"+n;
@@ -949,7 +955,9 @@ function smPollStart(){
     const ts=sm.d.ts,tm=el.currentTime;
     let k=sm.k;
     if(tm<ts[k].from-0.05||(k+1<ts.length&&tm>=ts[k+1].from)){k=0;for(let i=0;i<ts.length;i++){if(ts[i].from<=tm+0.05)k=i;else break}}
-    if(k!==sm.k){sm.k=k;playingG=gOf(sm.n,k+1);syncUI(playingG)}
+    const pre=k===0&&sm.d.hl>0&&tm<sm.d.hl-0.05;
+    if(pre!==!!sm.pre){sm.pre=pre;if(pre)document.querySelectorAll(".ay.playing").forEach(e=>e.classList.remove("playing"));else syncUI(playingG)}
+    if(k!==sm.k){sm.k=k;playingG=gOf(sm.n,k+1);if(!pre)syncUI(playingG)}
   },120);
 }
 function smSchedule(){
