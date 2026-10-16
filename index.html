@@ -360,7 +360,7 @@ async clear(){try{const d=await this.open();await new Promise(res=>{const t=d.tr
 
 /* ---------- الإعدادات ---------- */
 const S=Object.assign({lang:"ar",theme:ls.get("q_theme","light"),font:"Amiri Quran",fs:ls.get("q_fs",30),trans:"none",inline:false,pg:true,rec:ls.get("q_rec","ar.alafasy"),wake:false,auto:true,page:"ivory",engine:"surah",book:true,fit:true,anim:true,rate:1,tafsir:"muyassar",goal:2,ev2:0},ls.get("q_set",{}));
-const APP_V="2026.10.15-audio10";
+const APP_V="2026.10.15-audio12";
 const saveS=()=>ls.set("q_set",S);
 if(!S.ev3){S.engine="surah";S.ev3=1;saveS()}
 const T={
@@ -794,7 +794,7 @@ function probeDur(url){
 }
 let QERR="";
 async function qChapter(rec,n){
-  const k=`qts3:${rec}:${n}`;
+  const k=`qts5:${rec}:${n}`;
   let o=await idb.get(k);
   if(!o){
     let id;
@@ -823,7 +823,15 @@ async function qChapter(rec,n){
       const sg=v1.segments[0],x=sg.length>=3?sg[sg.length-2]/1000:0;
       if(isFinite(x)&&x>0.8&&x<(v1.timestamp_to/1000||1e9))hl=x;
     }
-    o={url:u,ts,alt:0,hl};
+    let hs=hl>0?"من بيانات الكلمات":"";
+    if(!hl&&cnt>1){
+      try{
+        const d1=await probeDur(`https://cdn.islamic.app/quran/audio/${rec}/${gOf(n,1)}.mp3`);
+        const x=ts[1].from-d1;
+        if(x>2.5&&x<45){hl=x;hs="تقدير من ملف الآية"}
+      }catch(e){}
+    }
+    o={url:u,ts,alt:0,hl,hs,a2:ts[1]?ts[1].from:0};
     if(end>0){
       try{
         const iu=`https://cdn.islamic.app/quran/audio-surah/${rec}/${n}.mp3`;
@@ -833,13 +841,13 @@ async function qChapter(rec,n){
     }
     await idb.set(k,o);
   }
-  return{url:o.url,total:0,fr:null,ts:o.ts,ready:null,exact:true,q:true,alt:o.alt,hl:o.hl||0};
+  return{url:o.url,total:0,fr:null,ts:o.ts,ready:null,exact:true,q:true,alt:o.alt,hl:o.hl||0,hs:o.hs||"",a2:o.a2||0};
 }
 async function chapterAudio(rec,n){
   const key=rec+":"+n;
   if(CAm[key])return CAm[key];
   let d=null;
-  try{d=await qChapter(rec,n);QERR="";TLD="دقيق (توقيتات quran.com"+(d.alt?"، صوت islamic.app":"، صوت quran.com")+")"}catch(e){d=null;QERR=typeof e==="string"?e:"خطأ غير معروف"}
+  try{d=await qChapter(rec,n);QERR="";TLD="دقيق (توقيتات quran.com"+(d.alt?"، صوت islamic.app":"، صوت quran.com")+") · بداية الآية ١: "+(d.hl>0?d.hl.toFixed(1)+" ث ("+d.hs+")":"صفر، لم تُحدد")+" · الآية ٢ عند "+(d.a2||0).toFixed(1)+" ث"}catch(e){d=null;QERR=typeof e==="string"?e:"خطأ غير معروف"}
   if(!d){
     if(noSurah[rec])throw 0;
     d={url:`https://cdn.islamic.app/quran/audio-surah/${rec}/${n}.mp3`,total:0,fr:null,ts:null,ready:null};
