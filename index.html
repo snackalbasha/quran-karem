@@ -361,7 +361,7 @@ async clear(){try{const d=await this.open();await new Promise(res=>{const t=d.tr
 
 /* ---------- الإعدادات ---------- */
 const S=Object.assign({lang:"ar",theme:ls.get("q_theme","light"),font:"Amiri Quran",fs:ls.get("q_fs",30),trans:"none",inline:false,pg:true,rec:ls.get("q_rec","ar.alafasy"),wake:false,auto:true,page:"ivory",engine:"surah",book:true,fit:true,anim:true,rate:1,tafsir:"muyassar",goal:2,ev2:0},ls.get("q_set",{}));
-const APP_V="2026.10.15-audio16";
+const APP_V="2026.10.15-audio17";
 const saveS=()=>ls.set("q_set",S);
 if(!S.ev3){S.engine="surah";S.ev3=1;saveS()}
 const T={
@@ -922,11 +922,12 @@ async function startCont(g,user){
   if(smBad()||single){startAtG(g,0,false);return}
   const lc=locOf(g,cumA()),tok=++smTok;
   clearTimeout(swapT);ELS.forEach(e=>e.pause());stagedG=0;stagedWarm=false;smPause();
+  document.body.classList.toggle("preHl",lc.a===1&&!!PREFACE[S.rec+":"+lc.s]);
   smOn=false;sm=null;playingG=g;smLoading=true;updPlayer();
   let d=CAm[S.rec+":"+lc.s];
   if(!d){
     try{d=await withTO(chapterAudio(S.rec,lc.s),8000)}
-    catch(e){if(tok===smTok){smLoading=false;if(!noSurah[S.rec]){smFailT=Date.now();toast(t("smFail"))}startAtG(g,0,false)}return}
+    catch(e){if(tok===smTok){document.body.classList.remove("preHl");smLoading=false;if(!noSurah[S.rec]){smFailT=Date.now();toast(t("smFail"))}startAtG(g,0,false)}return}
   }
   if(tok!==smTok)return;
   if(lc.a>1){try{await withTO(ensureTimeline(d,S.rec,lc.s),9000)}catch(e){}if(tok!==smTok)return}
@@ -941,7 +942,7 @@ function beginSM(n,k,d,tok){
   let done=false;
   const cleanup=()=>{el.removeEventListener("loadedmetadata",onMeta);el.removeEventListener("seeked",onSeeked);el.removeEventListener("playing",onPlaying);clearTimeout(failT)};
   const good=()=>{if(done)return;done=true;cleanup();el.muted=false;smLoading=false;smOk=true;syncUI(playingG);smPollStart();smSchedule();smStage(n);updPlayer()};
-  const bad=()=>{if(done)return;done=true;cleanup();el.pause();if(tok!==smTok)return;smLoading=false;smFailT=Date.now();smOn=false;sm=null;toast(t("smFail"));startAtG(gOf(n,k+1),0,false)};
+  const bad=()=>{if(done)return;done=true;cleanup();el.pause();if(tok!==smTok)return;document.body.classList.remove("preHl");smLoading=false;smFailT=Date.now();smOn=false;sm=null;toast(t("smFail"));startAtG(gOf(n,k+1),0,false)};
   const onMeta=()=>{fixTs(d,el.duration);if(d.ts)t0=d.ts[k].from;if(t0>0.05){try{el.currentTime=t0}catch(e){}}};
   const onSeeked=()=>{if(tok!==smTok){done=true;cleanup();return}if(Math.abs(el.currentTime-t0)<3)good();else bad()};
   const onPlaying=()=>{if(tok===smTok&&Math.abs(el.currentTime-t0)<3&&(t0<=0.05||el.currentTime>0.05))good()};
