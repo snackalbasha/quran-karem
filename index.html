@@ -123,8 +123,8 @@ input[type=range]{width:100%;accent-color:var(--gold);margin:8px 0}
 .pgm:before,.pgm:after{content:"";flex:1;height:1px;background:var(--pline)}
 .pgm span+span:before{content:"✦";margin-inline-end:10px}
 .ay{border-radius:12px;padding:2px 0;cursor:pointer;transition:background .25s,box-shadow .25s}
-body.preHl .ay.playing{background:transparent!important}
-:root{--hlh:56%;--hly:55%}
+body.preHl .ay.playing{background:transparent!important;transition:none!important}
+:root{--hlh:100%;--hly:50%}
 .ay.playing{background-color:transparent;background-image:linear-gradient(var(--phl),var(--phl));background-repeat:no-repeat;background-position:0 var(--hly);background-size:100% var(--hlh);box-shadow:none;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .ayb .ay.playing{background:var(--phl)}
 #sheet{--numbg:var(--paper);position:fixed;inset-inline:0;bottom:0;background:var(--paper);border-radius:32px 32px 0 0;border-top:1.5px solid var(--gold);padding:14px 18px calc(18px + env(safe-area-inset-bottom,0px));z-index:20;max-height:82%;overflow:auto;transform:translateY(105%);transition:transform .3s cubic-bezier(.2,.8,.2,1);box-shadow:0 -24px 60px rgba(0,0,0,.3)}
@@ -363,7 +363,7 @@ async clear(){try{const d=await this.open();await new Promise(res=>{const t=d.tr
 
 /* ---------- الإعدادات ---------- */
 const S=Object.assign({lang:"ar",theme:ls.get("q_theme","light"),font:"Amiri Quran",fs:ls.get("q_fs",30),trans:"none",inline:false,pg:true,rec:ls.get("q_rec","ar.alafasy"),wake:false,auto:true,page:"ivory",engine:"surah",book:true,fit:true,anim:true,rate:1,tafsir:"muyassar",goal:2,ev2:0},ls.get("q_set",{}));
-const APP_V="2026.10.15-audio18";
+const APP_V="2026.10.15-audio19";
 const saveS=()=>ls.set("q_set",S);
 if(!S.ev3){S.engine="surah";S.ev3=1;saveS()}
 const T={
@@ -968,7 +968,7 @@ function smStage(n){
   if(nd)apply(nd);else chapterAudio(S.rec,n+1).then(apply).catch(()=>{});
 }
 function smPollStart(){
-  clearInterval(smPoll);document.body.classList.remove("preHl");
+  clearInterval(smPoll);
   smPoll=setInterval(()=>{
     if(!smOn||!sm)return;
     const el=SM[sai];
