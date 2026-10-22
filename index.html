@@ -364,7 +364,7 @@ async clear(){try{const d=await this.open();await new Promise(res=>{const t=d.tr
 
 /* ---------- الإعدادات ---------- */
 const S=Object.assign({lang:"ar",theme:ls.get("q_theme","light"),font:"Amiri Quran",fs:ls.get("q_fs",30),trans:"none",inline:false,pg:true,rec:ls.get("q_rec","ar.alafasy"),wake:false,auto:true,page:"ivory",engine:"surah",book:true,fit:true,anim:true,rate:1,tafsir:"muyassar",goal:2,ev2:0},ls.get("q_set",{}));
-const APP_V="2026.10.22-audio26";
+const APP_V="2026.10.22-audio27";
 const saveS=()=>ls.set("q_set",S);
 if(!S.ev3){S.engine="surah";S.ev3=1;saveS()}
 const T={
@@ -584,6 +584,16 @@ async function adlDelete(){
   renderAdl();toast("انحذف الصوت المحمّل");
 }
 
+function adlTag(rec){
+  try{const c=adlStat(rec).c;return c>=114?" ✓ محمّل":c>0?" ("+N(c)+" من "+N(114)+")":""}catch(e){return ""}
+}
+function audFailMsg(){
+  if(navigator.onLine===false){
+    const ready=RECS.filter(r=>adlStat(r[0]).c>0).map(r=>r[1]+(adlStat(r[0]).c<114?" ("+N(adlStat(r[0]).c)+" من "+N(114)+")":""));
+    return ready.length?"أنت بدون إنترنت وهذا القارئ غير محمّل. المحمّل عندك: "+ready.join("، ")+".":"أنت بدون إنترنت ولا يوجد صوت محمّل. حمّل قارئاً من الإعدادات وأنت متصل.";
+  }
+  return t("audioFail");
+}
 /* ---------- القراءة ---------- */
 async function wakeOn(){try{if(S.wake&&navigator.wakeLock)wl=await navigator.wakeLock.request("screen")}catch(e){}}
 function wakeOff(){try{wl&&wl.release()}catch(e){}wl=null}
@@ -645,7 +655,7 @@ $("#scroll").addEventListener("scroll",()=>{
 });
 function saveLast(k){last={s:cur.n,a:cur.ayahs[k].i};ls.set("q_last",last)}
 function isMarked(k){return marks.some(b=>b.s===cur.n&&b.a===cur.ayahs[k].i)}
-function recSelect(){return `<h3>${t("reciter")}</h3><select id="recSel">${RECS.map(r=>`<option value="${r[0]}" ${r[0]===S.rec?"selected":""}>${r[1]}</option>`).join("")}</select>`}
+function recSelect(){return `<h3>${t("reciter")}</h3><select id="recSel">${RECS.map(r=>`<option value="${r[0]}" ${r[0]===S.rec?"selected":""}>${r[1]}${adlTag(r[0])}</option>`).join("")}</select>`}
 function bindRec(){$("#recSel").onchange=e=>{S.rec=e.target.value;saveS();if(playingG){single?startAtG(playingG,0,true):startCont(playingG,true)}else updPlayer()}}
 function openSheet(k){
   const a=cur.ayahs[k];saveLast(k);ls.set("q_tapped",true);document.querySelectorAll(".ay.hint").forEach(e=>e.classList.remove("hint"));
@@ -835,7 +845,7 @@ ELS.forEach((el,i)=>{
   el.onerror=()=>{
     if(i!==ai||!playingG)return;
     if(att<BR.length)startAtG(playingG,att+1);
-    else{toast(t("audioFail"));stop()}
+    else{toast(audFailMsg());stop()}
   };
 });
 ELS.forEach((el,i)=>{
@@ -1092,7 +1102,7 @@ async function startCont(g,user){
   let d=CAm[S.rec+":"+lc.s];
   if(!d){
     try{d=await withTO(chapterAudio(S.rec,lc.s),8000)}
-    catch(e){if(tok===smTok){document.body.classList.remove("preHl");smLoading=false;if(!noSurah[S.rec]){smFailT=Date.now();toast(t("smFail"))}startAtG(g,0,false)}return}
+    catch(e){if(tok===smTok){document.body.classList.remove("preHl");smLoading=false;if(!noSurah[S.rec]){smFailT=Date.now();(navigator.onLine!==false&&toast(t("smFail")))}startAtG(g,0,false)}return}
   }
   if(tok!==smTok)return;
   if(lc.a>1){try{await withTO(ensureTimeline(d,S.rec,lc.s),9000)}catch(e){}if(tok!==smTok)return}
@@ -1107,7 +1117,7 @@ function beginSM(n,k,d,tok){
   let done=false;
   const cleanup=()=>{el.removeEventListener("loadedmetadata",onMeta);el.removeEventListener("seeked",onSeeked);el.removeEventListener("playing",onPlaying);clearTimeout(failT)};
   const good=()=>{if(done)return;done=true;cleanup();el.muted=false;smLoading=false;smOk=true;syncUI(playingG);smPollStart();smSchedule();smStage(n);updPlayer()};
-  const bad=()=>{if(done)return;done=true;cleanup();el.pause();if(tok!==smTok)return;document.body.classList.remove("preHl");smLoading=false;smFailT=Date.now();smOn=false;sm=null;toast(t("smFail"));startAtG(gOf(n,k+1),0,false)};
+  const bad=()=>{if(done)return;done=true;cleanup();el.pause();if(tok!==smTok)return;document.body.classList.remove("preHl");smLoading=false;smFailT=Date.now();smOn=false;sm=null;(navigator.onLine!==false&&toast(t("smFail")));startAtG(gOf(n,k+1),0,false)};
   const onMeta=()=>{fixTs(d,el.duration);if(d.ts)t0=d.ts[k].from;if(t0>0.05){try{el.currentTime=t0}catch(e){}}};
   const onSeeked=()=>{if(tok!==smTok){done=true;cleanup();return}if(Math.abs(el.currentTime-t0)<3)good();else bad()};
   const onPlaying=()=>{if(tok===smTok&&Math.abs(el.currentTime-t0)<3&&(t0<=0.05||el.currentTime>0.05))good()};
@@ -1196,7 +1206,7 @@ SM.forEach((el,i)=>{
   el.onpause=()=>{if(i===sai&&smOn){clearTimeout(smSwapT);updPlayer()}};
   el.onerror=()=>{
     if(i!==sai||!smOn||String(el.src).startsWith("data:"))return;
-    const g=playingG;smFailT=Date.now();smStop();toast(t("smFail"));startAtG(g,0,false);
+    const g=playingG;smFailT=Date.now();smStop();(navigator.onLine!==false&&toast(t("smFail")));startAtG(g,0,false);
   };
 });
 
