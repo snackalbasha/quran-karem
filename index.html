@@ -364,7 +364,7 @@ async clear(){try{const d=await this.open();await new Promise(res=>{const t=d.tr
 
 /* ---------- الإعدادات ---------- */
 const S=Object.assign({lang:"ar",theme:ls.get("q_theme","light"),font:"Amiri Quran",fs:ls.get("q_fs",30),trans:"none",inline:false,pg:true,rec:ls.get("q_rec","ar.alafasy"),wake:false,auto:true,page:"ivory",engine:"surah",book:true,fit:true,anim:true,rate:1,tafsir:"muyassar",goal:2,ev2:0},ls.get("q_set",{}));
-const APP_V="2026.10.21-audio25";
+const APP_V="2026.10.22-audio26";
 const saveS=()=>ls.set("q_set",S);
 if(!S.ev3){S.engine="surah";S.ev3=1;saveS()}
 const T={
@@ -488,6 +488,100 @@ async function downloadAll(){
   let all=true;for(let n=1;n<=114;n++){if(!(await idb.get("q_s"+n))){all=false;break}}
   ls.set("q_off",all);renderMain();
   if(!all)toast(t("dlInc"));
+}
+
+/* ---------- تحميل صوت القارئ للاستخدام بدون إنترنت ---------- */
+const AK=(rec,n)=>`aud:${rec}:${n}`;
+const adlM=ls.get("q_audm",{});
+const adl={run:false,rec:null,n:0,got:0,ctl:null,stop:false,err:""};
+const adlVer={};
+const adlCan=rec=>!!TM[rec];
+const adlStat=rec=>{const m=adlM[rec]||{},k=Object.keys(m);return{c:k.length,b:k.reduce((a,x)=>a+m[x],0)}};
+const mbs=b=>(b/1048576).toFixed(b>1e8?0:1);
+async function idbDel(k){try{const d=await idb.open();await new Promise(res=>{const t=d.transaction("c","readwrite");t.objectStore("c").delete(k);t.oncomplete=res;t.onerror=res})}catch(e){}}
+function adlTick(){
+  const st=adlStat(adl.rec),tx=document.getElementById("adlTxt"),bar=document.getElementById("adlBar");
+  if(tx)tx.textContent=`جارٍ تحميل سورة ${N(adl.n)} · أُنجز ${N(st.c)} من ${N(114)} · ${mbs(st.b+adl.got)} ميغابايت`;
+  if(bar)bar.style.width=Math.min(100,(st.c+(adl.got?0.5:0))/114*100)+"%";
+}
+function renderAdl(){
+  const box=document.getElementById("adlBox");if(!box)return;
+  const rec=S.rec,st=adlStat(rec);
+  const note='<div class="note" style="text-align:start;padding:6px 0 10px">الحجم كبير (غالباً مئات الميغابايت)، فاستخدم الواي فاي. على الآيفون ثبّت التطبيق على الشاشة الرئيسية حتى لا يمسح سفاري الملفات.</div>';
+  if(!adlCan(rec)){box.innerHTML='<label>الصوت بدون إنترنت</label><div class="note" style="text-align:start;padding:6px 0 10px">التحميل غير متاح بعد لهذا القارئ.</div>';return}
+  let h='<label>الصوت بدون إنترنت لهذا القارئ</label>';
+  if(adl.run&&adl.rec===rec){
+    h+='<div id="adlTxt" style="margin:8px 0;font-weight:700"></div><div style="height:8px;background:var(--pline);border-radius:6px;overflow:hidden;margin:8px 0"><i id="adlBar" style="display:block;height:100%;width:0;background:#b8903a"></i></div><button class="btnl" id="adlStop" style="width:100%">إيقاف</button>';
+  }else{
+    h+=`<div style="margin:8px 0;font-weight:700">المحمّل: ${N(st.c)} من ${N(114)} سورة (${mbs(st.b)} ميغابايت)</div>`;
+    h+=`<div style="display:flex;gap:8px"><button class="btnl" id="adlGo" style="flex:1">${st.c?"إكمال التحميل":"تحميل كل سور القارئ"}</button>${st.c?'<button class="btnl" id="adlDel" style="flex:0 0 auto">حذف</button>':""}</div>`;
+    if(adl.err&&adl.rec===rec)h+=`<div class="note" style="text-align:start;color:#b3402a;padding:6px 0">${esc(adl.err)}</div>`;
+  }
+  box.innerHTML=h+note;
+  const g=document.getElementById("adlGo");if(g)g.onclick=adlStart;
+  const p=document.getElementById("adlStop");if(p)p.onclick=()=>{adl.stop=true;try{adl.ctl&&adl.ctl.abort()}catch(e){}};
+  const d=document.getElementById("adlDel");if(d)d.onclick=adlDelete;
+  if(adl.run)adlTick();
+}
+async function adlVerify(rec){
+  if(adlVer[rec]||adl.run)return;adlVer[rec]=1;
+  const m=adlM[rec]||{};let changed=false;
+  for(const n of Object.keys(m)){const b=await idb.get(AK(rec,n));if(!b||b.size!==m[n]){delete m[n];changed=true}}
+  if(changed){ls.set("q_audm",adlM);renderAdl()}
+}
+async function adlOne(rec,n){
+  const d=localQ(rec,n);if(!d)throw "لا يوجد ملف لهذه السورة";
+  adl.ctl=new AbortController();
+  const r=await fetch(d.url,{signal:adl.ctl.signal});
+  if(!r.ok)throw "HTTP "+r.status;
+  const len=+r.headers.get("content-length")||0;
+  let blob;
+  if(r.body&&r.body.getReader){
+    const rd=r.body.getReader(),parts=[];let got=0,last=0;
+    for(;;){
+      const x=await rd.read();if(x.done)break;
+      parts.push(x.value);got+=x.value.length;adl.got=got;
+      const now=Date.now();if(now-last>400){last=now;adlTick()}
+    }
+    if(len&&got<len)throw "انقطع تحميل سورة "+n;
+    blob=new Blob(parts,{type:"audio/mpeg"});
+  }else blob=new Blob([await r.blob()],{type:"audio/mpeg"});
+  await idb.set(AK(rec,n),blob);
+  const chk=await idb.get(AK(rec,n));
+  if(!chk||chk.size!==blob.size)throw "ما قدر الجهاز يحفظ الملف (المساحة ممتلئة؟)";
+  (adlM[rec]||(adlM[rec]={}))[n]=blob.size;ls.set("q_audm",adlM);
+  adl.got=0;
+}
+async function adlStart(){
+  const rec=S.rec;
+  if(!adlCan(rec)||adl.run)return;
+  if(!confirm("تحميل صوت هذا القارئ كاملاً ممكن ياخد مئات الميغابايت من مساحة الجهاز. تأكد إنك على واي فاي. متابعة؟"))return;
+  try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+  adl.run=true;adl.rec=rec;adl.stop=false;adl.err="";renderAdl();
+  for(let n=1;n<=114&&!adl.stop;n++){
+    if(adlM[rec]&&adlM[rec][n])continue;
+    adl.n=n;adl.got=0;let ok=false;
+    for(let t=0;t<3&&!ok&&!adl.stop;t++){
+      try{await adlOne(rec,n);ok=true}
+      catch(e){
+        if(e&&e.name==="AbortError")break;
+        adl.err=typeof e==="string"?e:"تعذّر تحميل سورة "+n;
+        await new Promise(r=>setTimeout(r,1500*(t+1)));
+      }
+    }
+    if(!ok){if(!adl.stop)adl.err=(adl.err||"فشل التحميل")+" — توقف عند سورة "+n+". اضغط «إكمال التحميل» لاحقاً.";break}
+    adl.err="";adlTick();
+  }
+  adl.run=false;adl.ctl=null;renderAdl();
+  if(adlStat(rec).c===114)toast("اكتمل تحميل الصوت");
+}
+async function adlDelete(){
+  const rec=S.rec;
+  if(adl.run||!confirm("حذف الصوت المحمّل لهذا القارئ من الجهاز؟"))return;
+  for(let n=1;n<=114;n++)await idbDel(AK(rec,n));
+  delete adlM[rec];ls.set("q_audm",adlM);
+  Object.keys(CAm).filter(k=>k.startsWith(rec+":")).forEach(k=>delete CAm[k]);
+  renderAdl();toast("انحذف الصوت المحمّل");
 }
 
 /* ---------- القراءة ---------- */
@@ -916,7 +1010,7 @@ async function qChapter(rec,n){
   if(o.hl>0&&!PREFACE[rec+":"+n]){const c=ls.get("q_pre",{});c[rec+":"+n]=o.hl;ls.set("q_pre",c)}
   return{url:o.url,total:0,fr:null,ts:o.ts,ready:null,exact:true,q:true,alt:o.alt,hl:o.hl||0,hs:o.hs||"",a2:o.a2||0};
 }
-const tldQ=d=>d.local?"دقيق (توقيتات مدمجة بالتطبيق، بدون إنترنت)"+(d.hl>0?" · بداية الآية ١: "+d.hl.toFixed(1)+" ث":""):"دقيق (توقيتات quran.com"+(d.alt?"، صوت islamic.app":"، صوت quran.com")+") · بداية الآية ١: "+(d.hl>0?d.hl.toFixed(1)+" ث ("+d.hs+")":"صفر")+" · الآية ٢ عند "+(d.a2||0).toFixed(1)+" ث";
+const tldQ=d=>d.local?"دقيق (توقيتات مدمجة بالتطبيق، بدون إنترنت)"+(d.offline?" · الصوت من الجهاز":" · الصوت من الإنترنت")+(d.hl>0?" · بداية الآية ١: "+d.hl.toFixed(1)+" ث":""):"دقيق (توقيتات quran.com"+(d.alt?"، صوت islamic.app":"، صوت quran.com")+") · بداية الآية ١: "+(d.hl>0?d.hl.toFixed(1)+" ث ("+d.hs+")":"صفر")+" · الآية ٢ عند "+(d.a2||0).toFixed(1)+" ث";
 async function chapterAudio(rec,n){
   const key=rec+":"+n;
   if(CAm[key])return CAm[key];
@@ -931,6 +1025,7 @@ async function chapterAudio(rec,n){
     d.hl=pv;d.hs="يدوي";
     if(d.q&&d.ts){d.ts=d.ts.map((x,i)=>({from:i?x.from+pv:x.from}));d.a2=(d.a2||0)+pv}
   }
+  if(d.q){try{const bl=await idb.get(AK(rec,n));if(bl&&bl.size>5000){d.url=URL.createObjectURL(bl);d.offline=1}}catch(e){}}
   TLD=d.q?tldQ(d):TLD+(pv?" · إزاحة البداية "+pv+" ث":"");
   CAm[key]=d;return d;
 }
@@ -1961,11 +2056,11 @@ function openSettings(){
   <div class="card"><label style="margin-top:0">${t("sTrans")}</label><select id="sTrans">${opt(trOpts,S.trans)}</select>
   ${sw("sInline",t("sInline"),S.inline)}</div>
   <div class="card">${sw("sPg",t("sPg"),S.pg)}${sw("sBook",t("sBook"),S.book)}${sw("sFit",t("sFit"),S.fit)}${sw("sAnim",t("sAnim"),S.anim)}${sw("sWake",t("sWake"),S.wake)}
-  <label>${t("reciter")}</label><select id="sRec">${opt(RECS,S.rec)}</select><label>${t("sEngine")}</label><select id="sEngine"><option value="surah" ${S.engine==="surah"?"selected":""}>${t("eSurah")}</option><option value="ayah" ${S.engine==="ayah"?"selected":""}>${t("eAyah")}</option></select><div class="note" style="text-align:start;padding:8px 0 0">${t(smOk?"smOkL":(smFailT?"smNoL":"smUnkL"))}${(smOk&&S.engine==="surah")?"":"<br>"+t(pfState===1?"pfOk":pfState===2?"pfNo":"pfUnk")}<br>${t("stallN",{n:N(stallCount)})}<br>توقيت الآيات: ${TLD}${QERR?"<br>quran.com: "+QERR:""}</div><label>تقديم التظليل على الصوت لهذا القارئ (بالثواني)</label><div id="hloV" style="margin:8px 0;font-weight:700">—</div><div style="display:flex;gap:8px"><input id="hloI" type="text" inputmode="decimal" dir="ltr" placeholder="0.05" style="flex:1;min-width:0;padding:12px;border:1px solid var(--pline);border-radius:12px;background:transparent;color:inherit;font:inherit;text-align:center"><button class="btnl" id="hloOk" style="flex:0 0 auto">تطبيق</button><button class="btnl" id="hloDef" style="flex:0 0 auto">الافتراضي</button></div><div class="note" style="text-align:start;padding:6px 0 10px">اكتب الرقم بالثواني واضغط تطبيق. موجب (+0.05) يقدّم التظليل إذا كان متأخراً، وسالب (-0.05) يأخّره إذا كان سابقاً. انتبه: 0.05 هي خمسة أجزاء من مئة من الثانية، أما الرقم 5 فمعناه خمس ثواني كاملة.</div><button class="btnl" id="audTest" style="width:100%">${t("audBtn")}</button><div class="note" id="audRes" style="text-align:start"></div></div>
+  <label>${t("reciter")}</label><select id="sRec">${opt(RECS,S.rec)}</select><label>${t("sEngine")}</label><select id="sEngine"><option value="surah" ${S.engine==="surah"?"selected":""}>${t("eSurah")}</option><option value="ayah" ${S.engine==="ayah"?"selected":""}>${t("eAyah")}</option></select><div class="note" style="text-align:start;padding:8px 0 0">${t(smOk?"smOkL":(smFailT?"smNoL":"smUnkL"))}${(smOk&&S.engine==="surah")?"":"<br>"+t(pfState===1?"pfOk":pfState===2?"pfNo":"pfUnk")}<br>${t("stallN",{n:N(stallCount)})}<br>توقيت الآيات: ${TLD}${QERR?"<br>quran.com: "+QERR:""}</div><label>تقديم التظليل على الصوت لهذا القارئ (بالثواني)</label><div id="hloV" style="margin:8px 0;font-weight:700">—</div><div style="display:flex;gap:8px"><input id="hloI" type="text" inputmode="decimal" dir="ltr" placeholder="0.05" style="flex:1;min-width:0;padding:12px;border:1px solid var(--pline);border-radius:12px;background:transparent;color:inherit;font:inherit;text-align:center"><button class="btnl" id="hloOk" style="flex:0 0 auto">تطبيق</button><button class="btnl" id="hloDef" style="flex:0 0 auto">الافتراضي</button></div><div class="note" style="text-align:start;padding:6px 0 10px">اكتب الرقم بالثواني واضغط تطبيق. موجب (+0.05) يقدّم التظليل إذا كان متأخراً، وسالب (-0.05) يأخّره إذا كان سابقاً. انتبه: 0.05 هي خمسة أجزاء من مئة من الثانية، أما الرقم 5 فمعناه خمس ثواني كاملة.</div><div id="adlBox"></div><button class="btnl" id="audTest" style="width:100%">${t("audBtn")}</button><div class="note" id="audRes" style="text-align:start"></div></div>
   <button class="btnl" id="sUpd" style="width:100%">${t("updBtn")}</button>
   <button class="btnl" id="sReset" style="width:100%;color:#B3392F">${t("sReset")}</button>
   <div class="note">${t("verL",{v:APP_V})}</div>`;
-  showHlo();$("#hloOk").onclick=applyHlo;$("#hloDef").onclick=resetHlo;$("#hloI").onkeydown=e=>{if(e.key==="Enter")applyHlo()};
+  renderAdl();adlVerify(S.rec);showHlo();$("#hloOk").onclick=applyHlo;$("#hloDef").onclick=resetHlo;$("#hloI").onkeydown=e=>{if(e.key==="Enter")applyHlo()};
   const mark=()=>document.querySelectorAll("#sTh button").forEach(b=>b.classList.toggle("on",b.dataset.v===S.theme));
   mark();
   document.querySelectorAll("#sTh button").forEach(b=>b.onclick=()=>{S.theme=b.dataset.v;saveS();applyTheme();mark()});
