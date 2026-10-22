@@ -364,7 +364,7 @@ async clear(){try{const d=await this.open();await new Promise(res=>{const t=d.tr
 
 /* ---------- الإعدادات ---------- */
 const S=Object.assign({lang:"ar",theme:ls.get("q_theme","light"),font:"Amiri Quran",fs:ls.get("q_fs",30),trans:"none",inline:false,pg:true,rec:ls.get("q_rec","ar.alafasy"),wake:false,auto:true,page:"ivory",engine:"surah",book:true,fit:true,anim:true,rate:1,tafsir:"muyassar",goal:2,ev2:0},ls.get("q_set",{}));
-const APP_V="2026.10.22-audio27";
+const APP_V="2026.10.22-audio28";
 const saveS=()=>ls.set("q_set",S);
 if(!S.ev3){S.engine="surah";S.ev3=1;saveS()}
 const T={
@@ -1118,7 +1118,7 @@ function beginSM(n,k,d,tok){
   const cleanup=()=>{el.removeEventListener("loadedmetadata",onMeta);el.removeEventListener("seeked",onSeeked);el.removeEventListener("playing",onPlaying);clearTimeout(failT)};
   const good=()=>{if(done)return;done=true;cleanup();el.muted=false;smLoading=false;smOk=true;syncUI(playingG);smPollStart();smSchedule();smStage(n);updPlayer()};
   const bad=()=>{if(done)return;done=true;cleanup();el.pause();if(tok!==smTok)return;document.body.classList.remove("preHl");smLoading=false;smFailT=Date.now();smOn=false;sm=null;(navigator.onLine!==false&&toast(t("smFail")));startAtG(gOf(n,k+1),0,false)};
-  const onMeta=()=>{fixTs(d,el.duration);if(d.ts)t0=d.ts[k].from;if(t0>0.05){try{el.currentTime=t0}catch(e){}}};
+  const onMeta=()=>{fixTs(d,el.duration);if(d.ts)t0=d.ts[k].from;if(t0>0.05){if(sm&&sm.n===n)sm.hold={k,t:t0};try{el.currentTime=t0}catch(e){}seekFix(el,t0)}};
   const onSeeked=()=>{if(tok!==smTok){done=true;cleanup();return}if(Math.abs(el.currentTime-t0)<3)good();else bad()};
   const onPlaying=()=>{if(tok===smTok&&Math.abs(el.currentTime-t0)<3&&(t0<=0.05||el.currentTime>0.05))good()};
   const failT=setTimeout(bad,15000);
@@ -1148,7 +1148,8 @@ function smPollStart(){
     if(!sm.d.ts){if(sm.d.fr&&isFinite(el.duration)&&el.duration)fixTs(sm.d,el.duration);else return}
     const ts=sm.d.ts,tm=el.currentTime+HLOFF();
     let k=sm.k;
-    if(tm<ts[k].from-0.05||(k+1<ts.length&&tm>=ts[k+1].from)){k=0;for(let i=0;i<ts.length;i++){if(ts[i].from<=tm+0.05)k=i;else break}}
+    if(sm.hold){const h=sm.hold,ct=el.currentTime;if(ct>=h.t+0.8||ct<h.t-2||(h.k+1<ts.length&&ct>=ts[h.k+1].from))sm.hold=null;else k=h.k}
+    if(!sm.hold&&(tm<ts[k].from-0.05||(k+1<ts.length&&tm>=ts[k+1].from))){k=0;for(let i=0;i<ts.length;i++){if(ts[i].from<=tm+0.05)k=i;else break}}
     const pre=k===0&&sm.d.hl>0&&tm<sm.d.hl-0.05;
     document.body.classList.toggle("preHl",pre);
     sm.pre=pre;
@@ -1186,6 +1187,15 @@ async function smNext(){
     setTimeout(()=>{if(smOn&&sm&&sm.n===n)smStage(n)},400);
   }finally{smSwitching=false}
 }
+let SEEKD="—";
+function seekFix(el,target,tries){
+  tries=tries||0;
+  el.addEventListener("seeked",()=>{
+    const d=el.currentTime-target;
+    SEEKD=`طلبت ${target.toFixed(2)} ووصل ${el.currentTime.toFixed(2)} (انحراف ${(d>=0?"+":"")+d.toFixed(2)} ث)`;
+    if(Math.abs(d)>0.3&&tries<2){try{el.currentTime=target}catch(e){}seekFix(el,target,tries+1)}
+  },{once:true});
+}
 function smSeek(g){
   const lc=locOf(g,cumA());
   if(sm&&sm.n===lc.s){
@@ -1193,7 +1203,7 @@ function smSeek(g){
     if(!sm.d.ts&&sm.d.fr)fixTs(sm.d,el.duration);
     if(!sm.d.ts){const dd=sm.d,nn=sm.n;ensureTimeline(dd,S.rec,nn).then(()=>{if(sm&&sm.d===dd){fixTs(dd,SM[sai].duration);smSeek(g)}}).catch(()=>{});return}
     sm.k=lc.a-1;playingG=g;
-    if(sm.d.ts){try{el.currentTime=sm.d.ts[lc.a-1].from}catch(e){}}
+    if(sm.d.ts){const tg=sm.d.ts[lc.a-1].from;sm.hold={k:lc.a-1,t:tg};try{el.currentTime=tg}catch(e){}seekFix(el,tg)}
     if(el.paused)el.play().catch(()=>{});
     syncUI(g);smSchedule();
   }else startCont(g,true);
@@ -2066,7 +2076,7 @@ function openSettings(){
   <div class="card"><label style="margin-top:0">${t("sTrans")}</label><select id="sTrans">${opt(trOpts,S.trans)}</select>
   ${sw("sInline",t("sInline"),S.inline)}</div>
   <div class="card">${sw("sPg",t("sPg"),S.pg)}${sw("sBook",t("sBook"),S.book)}${sw("sFit",t("sFit"),S.fit)}${sw("sAnim",t("sAnim"),S.anim)}${sw("sWake",t("sWake"),S.wake)}
-  <label>${t("reciter")}</label><select id="sRec">${opt(RECS,S.rec)}</select><label>${t("sEngine")}</label><select id="sEngine"><option value="surah" ${S.engine==="surah"?"selected":""}>${t("eSurah")}</option><option value="ayah" ${S.engine==="ayah"?"selected":""}>${t("eAyah")}</option></select><div class="note" style="text-align:start;padding:8px 0 0">${t(smOk?"smOkL":(smFailT?"smNoL":"smUnkL"))}${(smOk&&S.engine==="surah")?"":"<br>"+t(pfState===1?"pfOk":pfState===2?"pfNo":"pfUnk")}<br>${t("stallN",{n:N(stallCount)})}<br>توقيت الآيات: ${TLD}${QERR?"<br>quran.com: "+QERR:""}</div><label>تقديم التظليل على الصوت لهذا القارئ (بالثواني)</label><div id="hloV" style="margin:8px 0;font-weight:700">—</div><div style="display:flex;gap:8px"><input id="hloI" type="text" inputmode="decimal" dir="ltr" placeholder="0.05" style="flex:1;min-width:0;padding:12px;border:1px solid var(--pline);border-radius:12px;background:transparent;color:inherit;font:inherit;text-align:center"><button class="btnl" id="hloOk" style="flex:0 0 auto">تطبيق</button><button class="btnl" id="hloDef" style="flex:0 0 auto">الافتراضي</button></div><div class="note" style="text-align:start;padding:6px 0 10px">اكتب الرقم بالثواني واضغط تطبيق. موجب (+0.05) يقدّم التظليل إذا كان متأخراً، وسالب (-0.05) يأخّره إذا كان سابقاً. انتبه: 0.05 هي خمسة أجزاء من مئة من الثانية، أما الرقم 5 فمعناه خمس ثواني كاملة.</div><div id="adlBox"></div><button class="btnl" id="audTest" style="width:100%">${t("audBtn")}</button><div class="note" id="audRes" style="text-align:start"></div></div>
+  <label>${t("reciter")}</label><select id="sRec">${opt(RECS,S.rec)}</select><label>${t("sEngine")}</label><select id="sEngine"><option value="surah" ${S.engine==="surah"?"selected":""}>${t("eSurah")}</option><option value="ayah" ${S.engine==="ayah"?"selected":""}>${t("eAyah")}</option></select><div class="note" style="text-align:start;padding:8px 0 0">${t(smOk?"smOkL":(smFailT?"smNoL":"smUnkL"))}${(smOk&&S.engine==="surah")?"":"<br>"+t(pfState===1?"pfOk":pfState===2?"pfNo":"pfUnk")}<br>${t("stallN",{n:N(stallCount)})}<br>توقيت الآيات: ${TLD}<br>آخر قفزة: ${SEEKD}${QERR?"<br>quran.com: "+QERR:""}</div><label>تقديم التظليل على الصوت لهذا القارئ (بالثواني)</label><div id="hloV" style="margin:8px 0;font-weight:700">—</div><div style="display:flex;gap:8px"><input id="hloI" type="text" inputmode="decimal" dir="ltr" placeholder="0.05" style="flex:1;min-width:0;padding:12px;border:1px solid var(--pline);border-radius:12px;background:transparent;color:inherit;font:inherit;text-align:center"><button class="btnl" id="hloOk" style="flex:0 0 auto">تطبيق</button><button class="btnl" id="hloDef" style="flex:0 0 auto">الافتراضي</button></div><div class="note" style="text-align:start;padding:6px 0 10px">اكتب الرقم بالثواني واضغط تطبيق. موجب (+0.05) يقدّم التظليل إذا كان متأخراً، وسالب (-0.05) يأخّره إذا كان سابقاً. انتبه: 0.05 هي خمسة أجزاء من مئة من الثانية، أما الرقم 5 فمعناه خمس ثواني كاملة.</div><div id="adlBox"></div><button class="btnl" id="audTest" style="width:100%">${t("audBtn")}</button><div class="note" id="audRes" style="text-align:start"></div></div>
   <button class="btnl" id="sUpd" style="width:100%">${t("updBtn")}</button>
   <button class="btnl" id="sReset" style="width:100%;color:#B3392F">${t("sReset")}</button>
   <div class="note">${t("verL",{v:APP_V})}</div>`;
