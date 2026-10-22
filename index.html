@@ -124,6 +124,7 @@ input[type=range]{width:100%;accent-color:var(--gold);margin:8px 0}
 .pgm span+span:before{content:"✦";margin-inline-end:10px}
 .ay{border-radius:12px;padding:2px 0;cursor:pointer;transition:background .25s,box-shadow .25s}
 body.preHl .ay.playing{background:transparent!important;transition:none!important}
+.ay.playing{transition:none!important}
 :root{--hlh:100%;--hly:50%}
 .ay.playing{background-color:transparent;background-image:linear-gradient(var(--phl),var(--phl));background-repeat:no-repeat;background-position:0 var(--hly);background-size:100% var(--hlh);box-shadow:none;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .ayb .ay.playing{background:var(--phl)}
@@ -363,7 +364,7 @@ async clear(){try{const d=await this.open();await new Promise(res=>{const t=d.tr
 
 /* ---------- الإعدادات ---------- */
 const S=Object.assign({lang:"ar",theme:ls.get("q_theme","light"),font:"Amiri Quran",fs:ls.get("q_fs",30),trans:"none",inline:false,pg:true,rec:ls.get("q_rec","ar.alafasy"),wake:false,auto:true,page:"ivory",engine:"surah",book:true,fit:true,anim:true,rate:1,tafsir:"muyassar",goal:2,ev2:0},ls.get("q_set",{}));
-const APP_V="2026.10.20-audio22";
+const APP_V="2026.10.21-audio24";
 const saveS=()=>ls.set("q_set",S);
 if(!S.ev3){S.engine="surah";S.ev3=1;saveS()}
 const T={
@@ -777,7 +778,7 @@ const QURL={"ar.alafasy":/afasy|afasi/i,"ar.abdurrahmaansudais":/sudais|sudays|s
 const QBADSTYLE=/mujawwad|muallim|teacher/i;
 const preOf=(rec,n)=>PREFACE[rec+":"+n]||(ls.get("q_pre",{})[rec+":"+n])||0;
 /* ثواني الاستعاذة قبل أول آية، تُضبط يدوياً: "القارئ:رقم السورة":ثواني */
-const PREFACE={"ar.alafasy:1":6};
+const PREFACE={};
 async function qrId(rec,skip){
   if(!skip&&QID[rec])return QID[rec];
   const c=ls.get("q_rid",{});
@@ -791,10 +792,12 @@ async function qrId(rec,skip){
   return m[0].id;
 }
 const noSurah=ls.get("q_nosurah",{});
-const hloMap=ls.get("q_hlo",{});
-const HLOFF=()=>hloMap[S.rec]||0;
+const hloMap=ls.get("q_hlo2",{});
+/* القيم مقاسة من تحليل الصوت: وسيط التأخير + 0.1 ث للرسم والصوت. السديس والشريم ما انقاسوا فلهم القيمة العامة */
+const HLDEFS={"ar.alafasy":0.06,"ar.husary":-0.17,"ar.minshawi":-0.20,"ar.abdulbasitmurattal":-0.38};
+const HLOFF=()=>hloMap[S.rec]!==undefined?hloMap[S.rec]:(HLDEFS[S.rec]!==undefined?HLDEFS[S.rec]:0.1);
 function showHlo(){const e=document.getElementById("hloV");if(e){const v=HLOFF();e.textContent=(v>0?"+":"")+v.toFixed(2)+" ث"}}
-function setHlo(d){hloMap[S.rec]=Math.max(-3,Math.min(5,Math.round(((hloMap[S.rec]||0)+d)*100)/100));ls.set("q_hlo",hloMap);showHlo()}
+function setHlo(d){hloMap[S.rec]=Math.max(-3,Math.min(5,Math.round((HLOFF()+d)*100)/100));ls.set("q_hlo2",hloMap);showHlo()}
 function probeDur(url){
   return new Promise((res,rej)=>{
     const a=new Audio();a.preload="metadata";
@@ -1028,7 +1031,7 @@ function smPollStart(){
     document.body.classList.toggle("preHl",pre);
     sm.pre=pre;
     if(k!==sm.k){sm.k=k;playingG=gOf(sm.n,k+1);if(!pre)syncUI(playingG)}
-  },120);
+  },50);
 }
 function smSchedule(){
   clearTimeout(smSwapT);
@@ -1941,11 +1944,11 @@ function openSettings(){
   <div class="card"><label style="margin-top:0">${t("sTrans")}</label><select id="sTrans">${opt(trOpts,S.trans)}</select>
   ${sw("sInline",t("sInline"),S.inline)}</div>
   <div class="card">${sw("sPg",t("sPg"),S.pg)}${sw("sBook",t("sBook"),S.book)}${sw("sFit",t("sFit"),S.fit)}${sw("sAnim",t("sAnim"),S.anim)}${sw("sWake",t("sWake"),S.wake)}
-  <label>${t("reciter")}</label><select id="sRec">${opt(RECS,S.rec)}</select><label>${t("sEngine")}</label><select id="sEngine"><option value="surah" ${S.engine==="surah"?"selected":""}>${t("eSurah")}</option><option value="ayah" ${S.engine==="ayah"?"selected":""}>${t("eAyah")}</option></select><div class="note" style="text-align:start;padding:8px 0 0">${t(smOk?"smOkL":(smFailT?"smNoL":"smUnkL"))}${(smOk&&S.engine==="surah")?"":"<br>"+t(pfState===1?"pfOk":pfState===2?"pfNo":"pfUnk")}<br>${t("stallN",{n:N(stallCount)})}<br>توقيت الآيات: ${TLD}${QERR?"<br>quran.com: "+QERR:""}</div><label>تقديم التظليل على الصوت لهذا القارئ</label><div style="display:flex;gap:8px;align-items:center;margin-top:6px"><button class="btnl" id="hloM" style="flex:1">−</button><div id="hloV" style="flex:2;text-align:center;font-weight:700">0.00 ث</div><button class="btnl" id="hloP" style="flex:1">+</button></div><div class="note" style="text-align:start;padding:6px 0 10px">إذا كان التظليل متأخراً عن الصوت اضغط +، وإذا كان سابقاً اضغط −. كل ضغطة ربع ثانية.</div><button class="btnl" id="audTest" style="width:100%">${t("audBtn")}</button><div class="note" id="audRes" style="text-align:start"></div></div>
+  <label>${t("reciter")}</label><select id="sRec">${opt(RECS,S.rec)}</select><label>${t("sEngine")}</label><select id="sEngine"><option value="surah" ${S.engine==="surah"?"selected":""}>${t("eSurah")}</option><option value="ayah" ${S.engine==="ayah"?"selected":""}>${t("eAyah")}</option></select><div class="note" style="text-align:start;padding:8px 0 0">${t(smOk?"smOkL":(smFailT?"smNoL":"smUnkL"))}${(smOk&&S.engine==="surah")?"":"<br>"+t(pfState===1?"pfOk":pfState===2?"pfNo":"pfUnk")}<br>${t("stallN",{n:N(stallCount)})}<br>توقيت الآيات: ${TLD}${QERR?"<br>quran.com: "+QERR:""}</div><label>تقديم التظليل على الصوت لهذا القارئ</label><div id="hloV" style="text-align:center;font-weight:700;margin:8px 0">0.00 ث</div><div style="display:flex;gap:6px"><button class="btnl" id="hloM5" style="flex:1">−٠٫٥</button><button class="btnl" id="hloM1" style="flex:1">−٠٫١</button><button class="btnl" id="hloP1" style="flex:1">+٠٫١</button><button class="btnl" id="hloP5" style="flex:1">+٠٫٥</button></div><div class="note" style="text-align:start;padding:6px 0 10px">التظليل متأخر؟ اضغط +. التظليل سابق؟ اضغط −. الأزرار الكبيرة نص ثانية، والصغيرة عُشر ثانية.</div><button class="btnl" id="audTest" style="width:100%">${t("audBtn")}</button><div class="note" id="audRes" style="text-align:start"></div></div>
   <button class="btnl" id="sUpd" style="width:100%">${t("updBtn")}</button>
   <button class="btnl" id="sReset" style="width:100%;color:#B3392F">${t("sReset")}</button>
   <div class="note">${t("verL",{v:APP_V})}</div>`;
-  showHlo();$("#hloM").onclick=()=>setHlo(-0.25);$("#hloP").onclick=()=>setHlo(0.25);
+  showHlo();$("#hloM5").onclick=()=>setHlo(-0.5);$("#hloM1").onclick=()=>setHlo(-0.1);$("#hloP1").onclick=()=>setHlo(0.1);$("#hloP5").onclick=()=>setHlo(0.5);
   const mark=()=>document.querySelectorAll("#sTh button").forEach(b=>b.classList.toggle("on",b.dataset.v===S.theme));
   mark();
   document.querySelectorAll("#sTh button").forEach(b=>b.onclick=()=>{S.theme=b.dataset.v;saveS();applyTheme();mark()});
